@@ -19,64 +19,28 @@ DATA = os.path.join(RAIZ, "data", "empresas.json")
 AVISO = os.path.join(RAIZ, "AVISO.md")
 OUT = os.path.join(RAIZ, "index.html")
 
-TIPOLOGIA_ES = {
-    "PRODUCTO": "Producto propio",
-    "FACTORIA": "Factoría / nearshore",
-    "CONSULTORA": "Consultora",
-    "INTEGRADOR": "Integrador ERP/CRM",
-    "DATA_IA": "Datos / IA",
-    "VIDEOJUEGOS": "Videojuegos",
-    "DESARROLLO": "Desarrollo",
-    "IT_GENERALISTA": "IT generalista",
-    "ETT_TECNOLOGICA": "ETT tecnológica",
-    "TELCO": "Telco",
-}
-
 
 def esc(s):
     return htmlmod.escape(str(s)) if s else ""
 
 
-def estrellas(n):
-    return "★" * round(n) if n else ""
-
-
 def card(e):
-    tip = " · ".join(TIPOLOGIA_ES.get(t, t) for t in (e.get("tipologias") or []))
-    if not tip:
-        tip = "sin clasificar"
-
     if e.get("web"):
         web = f'<a class="chip" href="{esc(e["web"])}" rel="noopener" target="_blank">{esc(e["web"][:42])}</a>'
     else:
         web = '<span class="chip off">sin web</span>'
 
-    act = ""
-    if e.get("criterio_actividad") == "RESENA_12M":
-        act = (f'<span class="chip ok" title="Reseña publicada en los últimos 12 meses">'
-               f'activa · {esc(e.get("resena_mas_reciente"))}</span>')
-    elif e.get("criterio_actividad") == "WEB_VIVA":
-        act = '<span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span>'
-    else:
-        act = '<span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span>'
-
-    rat = ""
-    if e.get("google_rating"):
-        rat = (f'<span class="chip rate">{estrellas(e["google_rating"])} '
-               f'{e["google_rating"]} ({e.get("google_n_resenas") or 0})</span>')
-
     tel = f'<div class="tel">📞 {esc(e["telefono"])}</div>' if e.get("telefono") else ""
     dir_ = esc(e.get("direccion") or e.get("municipio") or "")
 
-    return f'''<article class="ficha" data-n="{e.get('numero')}" data-prov="{esc(e.get("ambito"))}" data-tip="{esc(" ".join(e.get("tipologias") or []))}">
+    return f'''<article class="ficha" data-n="{e.get('numero')}" data-prov="{esc(e.get("ambito"))}">
   <header>
     <span class="num">{e.get("numero")}</span>
     <h3>{esc(e["nombre"])}</h3>
   </header>
-  <p class="tip">{esc(tip)}</p>
   <p class="dir">{dir_}</p>
   {tel}
-  <div class="chips">{act}{rat}{web}</div>
+  <div class="chips">{web}</div>
 </article>'''
 
 
@@ -113,9 +77,6 @@ def main():
         "con_coords": len(con_coords),
         "sevilla": sum(1 for e in orden if e.get("ambito") == "SEVILLA"),
         "malaga": sum(1 for e in orden if e.get("ambito") == "MALAGA"),
-        "activas": sum(1 for e in orden if e.get("actividad_reciente")),
-        "resena12m": sum(1 for e in orden if e.get("criterio_actividad") == "RESENA_12M"),
-        "web_viva": sum(1 for e in orden if e.get("criterio_actividad") == "WEB_VIVA"),
         "generado": "2026-09-18",
     }
 

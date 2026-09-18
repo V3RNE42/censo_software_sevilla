@@ -27,16 +27,12 @@
   .ficha header { display:flex; gap:9px; align-items:baseline; }
   .num { color:var(--dim); font-size:12px; min-width:26px; }
   h3 { margin:0; font-size:15px; line-height:1.3; }
-  .tip { color:var(--acc); font-size:12px; margin:6px 0 4px; }
-  .dir { color:var(--dim); font-size:12px; margin:0 0 8px; }
+  .dir { color:var(--dim); font-size:12px; margin:6px 0 8px; }
   .tel { color:var(--dim); font-size:12px; margin-bottom:8px; }
   .chips { display:flex; gap:6px; flex-wrap:wrap; }
   .chip { font-size:11px; padding:3px 8px; border-radius:99px; border:1px solid var(--line);
           background:#12141c; color:var(--dim); text-decoration:none; }
-  .chip.ok { color:var(--ok); border-color:#1d4230; }
-  .chip.warn { color:var(--warn); border-color:#453718; }
   .chip.off { color:var(--off); }
-  .chip.rate { color:var(--warn); }
   .chip:hover { border-color:var(--acc); color:var(--acc); }
   .chip.off:hover { color:var(--off); border-color:var(--line); }
   details.aviso { padding:20px; color:var(--dim); font-size:13px; border-top:1px solid var(--line); }
@@ -111,1310 +107,1177 @@
   <input id="q" type="search" placeholder="Buscar por nombre o dirección…">
   <select id="prov"><option value="">Todas las provincias</option>
     <option value="SEVILLA">Sevilla</option><option value="MALAGA">Málaga</option></select>
-  <select id="act"><option value="">Cualquier actividad</option>
-    <option value="RESENA_12M">Reseña &lt;12 meses</option>
-    <option value="WEB_VIVA">Solo web viva</option></select>
 </div>
 
-<main class="grid" id="grid"><article class="ficha" data-n="1" data-prov="SEVILLA" data-tip="DATA_IA">
+<main class="grid" id="grid"><article class="ficha" data-n="1" data-prov="SEVILLA">
   <header>
     <span class="num">1</span>
     <h3>4i.ai</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="https://4i.ai/" rel="noopener" target="_blank">https://4i.ai/</a></div>
+  <div class="chips"><a class="chip" href="https://4i.ai/" rel="noopener" target="_blank">https://4i.ai/</a></div>
 </article>
-<article class="ficha" data-n="2" data-prov="SEVILLA" data-tip="DATA_IA INTEGRADOR DESARROLLO">
+<article class="ficha" data-n="2" data-prov="SEVILLA">
   <header>
     <span class="num">2</span>
     <h3>Accenture</h3>
   </header>
-  <p class="tip">Datos / IA · Integrador ERP/CRM · Desarrollo</p>
   <p class="dir">Parque Científico y Tecnológico Cartuja - Edificio, C. Isaac Newton, 3, 41092 Bluenet, Sevilla, España</p>
   <div class="tel">📞 954 46 81 50</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-16</span><span class="chip rate">★★★★ 4.4 (112)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="3" data-prov="SEVILLA" data-tip="DATA_IA CONSULTORA IT_GENERALISTA">
+<article class="ficha" data-n="3" data-prov="SEVILLA">
   <header>
     <span class="num">3</span>
     <h3>Accenture</h3>
   </header>
-  <p class="tip">Datos / IA · Consultora · IT generalista</p>
   <p class="dir">Calle Isaac Newton, 3, Sevilla, 41092</p>
   <div class="tel">📞 954 46 81 50</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-16</span><span class="chip rate">★★★★ 4.4 (112)</span><a class="chip" href="https://www.accenture.com/es-es" rel="noopener" target="_blank">https://www.accenture.com/es-es</a></div>
+  <div class="chips"><a class="chip" href="https://www.accenture.com/es-es" rel="noopener" target="_blank">https://www.accenture.com/es-es</a></div>
 </article>
-<article class="ficha" data-n="4" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="4" data-prov="SEVILLA">
   <header>
     <span class="num">4</span>
     <h3>Acciparte</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 608 29 46 63</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="https://acciparte.es/" rel="noopener" target="_blank">https://acciparte.es/</a></div>
+  <div class="chips"><a class="chip" href="https://acciparte.es/" rel="noopener" target="_blank">https://acciparte.es/</a></div>
 </article>
-<article class="ficha" data-n="5" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="5" data-prov="SEVILLA">
   <header>
     <span class="num">5</span>
     <h3>Active Business &amp; Technology</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Calle calle Gonzalo Jiménez de Quesada, 2, Sevilla, 41092</p>
   <div class="tel">📞 955 26 00 74</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4 (14)</span><a class="chip" href="http://grupoactive.es" rel="noopener" target="_blank">http://grupoactive.es</a></div>
+  <div class="chips"><a class="chip" href="http://grupoactive.es" rel="noopener" target="_blank">http://grupoactive.es</a></div>
 </article>
-<article class="ficha" data-n="6" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="6" data-prov="MALAGA">
   <header>
     <span class="num">6</span>
     <h3>Aibe Formación</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. de la Vega, 1, 2ª planta, 29200 Antequera, Málaga, España</p>
   <div class="tel">📞 951 70 16 77</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-18</span><span class="chip rate">★★ 1.7 (29)</span><a class="chip" href="https://www.aibeformacion.com/" rel="noopener" target="_blank">https://www.aibeformacion.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.aibeformacion.com/" rel="noopener" target="_blank">https://www.aibeformacion.com/</a></div>
 </article>
-<article class="ficha" data-n="7" data-prov="SEVILLA" data-tip="CONSULTORA IT_GENERALISTA DESARROLLO">
+<article class="ficha" data-n="7" data-prov="SEVILLA">
   <header>
     <span class="num">7</span>
     <h3>Aiknow Developing Future</h3>
   </header>
-  <p class="tip">Consultora · IT generalista · Desarrollo</p>
   <p class="dir">Avda. Juan López Peñalver, 21 (BIC - Euronova)</p>
   <div class="tel">📞 954 91 70 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-18</span><span class="chip rate">★★★★★ 4.6 (7172)</span><a class="chip" href="https://www.aiknow.io" rel="noopener" target="_blank">https://www.aiknow.io</a></div>
+  <div class="chips"><a class="chip" href="https://www.aiknow.io" rel="noopener" target="_blank">https://www.aiknow.io</a></div>
 </article>
-<article class="ficha" data-n="8" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="8" data-prov="SEVILLA">
   <header>
     <span class="num">8</span>
     <h3>Airbus</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. Maestranza Aérea, 41011 Sevilla, España</p>
   <div class="tel">📞 954 59 44 44</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-26</span><span class="chip rate">★★★★ 4.5 (220)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="9" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="9" data-prov="SEVILLA">
   <header>
     <span class="num">9</span>
     <h3>alGenio Markenting Online S.L</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci , 18, Sevilla, 41092</p>
   <div class="tel">📞 955 28 48 10</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-03</span><span class="chip rate">★★★★★ 4.7 (70)</span><a class="chip" href="http://algenio.com" rel="noopener" target="_blank">http://algenio.com</a></div>
+  <div class="chips"><a class="chip" href="http://algenio.com" rel="noopener" target="_blank">http://algenio.com</a></div>
 </article>
-<article class="ficha" data-n="10" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="10" data-prov="SEVILLA">
   <header>
     <span class="num">10</span>
     <h3>angelmicelti</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Penaflor Sevilla</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="https://angelmicelti.github.io" rel="noopener" target="_blank">https://angelmicelti.github.io</a></div>
+  <div class="chips"><a class="chip" href="https://angelmicelti.github.io" rel="noopener" target="_blank">https://angelmicelti.github.io</a></div>
 </article>
-<article class="ficha" data-n="11" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="11" data-prov="SEVILLA">
   <header>
     <span class="num">11</span>
     <h3>Apipana</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Avda. Carlos III s/n, Sevilla, 41092</p>
   <div class="tel">📞 623 92 49 50</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2025-12-13</span><span class="chip rate">★★★★★ 5 (4)</span><a class="chip" href="https://apipana.io/" rel="noopener" target="_blank">https://apipana.io/</a></div>
+  <div class="chips"><a class="chip" href="https://apipana.io/" rel="noopener" target="_blank">https://apipana.io/</a></div>
 </article>
-<article class="ficha" data-n="12" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="12" data-prov="SEVILLA">
   <header>
     <span class="num">12</span>
     <h3>Appian</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 13, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2025-11-03</span><span class="chip rate">★★★★★ 5 (7)</span><a class="chip" href="http://www.appian.com" rel="noopener" target="_blank">http://www.appian.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.appian.com" rel="noopener" target="_blank">http://www.appian.com</a></div>
 </article>
-<article class="ficha" data-n="13" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="13" data-prov="SEVILLA">
   <header>
     <span class="num">13</span>
     <h3>archietechnologies.es</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 627 30 45 85</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://archietechnologies.es" rel="noopener" target="_blank">http://archietechnologies.es</a></div>
+  <div class="chips"><a class="chip" href="http://archietechnologies.es" rel="noopener" target="_blank">http://archietechnologies.es</a></div>
 </article>
-<article class="ficha" data-n="14" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="14" data-prov="MALAGA">
   <header>
     <span class="num">14</span>
     <h3>Arelance</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">C. de Marie Curie, 3, Campanillas, 29590 Málaga, España</p>
   <div class="tel">📞 952 02 85 85</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2025-10-14</span><span class="chip rate">★★★★ 4.4 (16)</span><a class="chip" href="https://www.arelance.com/" rel="noopener" target="_blank">https://www.arelance.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.arelance.com/" rel="noopener" target="_blank">https://www.arelance.com/</a></div>
 </article>
-<article class="ficha" data-n="15" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="15" data-prov="SEVILLA">
   <header>
     <span class="num">15</span>
     <h3>Ascendia</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 4, Sevilla, 41092</p>
   <div class="tel">📞 954 29 82 01</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="http://ascendiarc.com" rel="noopener" target="_blank">http://ascendiarc.com</a></div>
+  <div class="chips"><a class="chip" href="http://ascendiarc.com" rel="noopener" target="_blank">http://ascendiarc.com</a></div>
 </article>
-<article class="ficha" data-n="16" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="16" data-prov="MALAGA">
   <header>
     <span class="num">16</span>
     <h3>ATech Advance Solutions S. A.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">plaza alcalde sánchez monteseirín, 2, Sevilla, 41092</p>
   <div class="tel">📞 951 09 48 49</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 4.9 (21)</span><a class="chip" href="http://www.ayesa.com" rel="noopener" target="_blank">http://www.ayesa.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.ayesa.com" rel="noopener" target="_blank">http://www.ayesa.com</a></div>
 </article>
-<article class="ficha" data-n="17" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="17" data-prov="SEVILLA">
   <header>
     <span class="num">17</span>
     <h3>AUTO ACCOUNTING &amp;amp; ADVISORY SL.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Plaza Pintor Amalio García del Moral, 6, 41005 Sevilla, España</p>
   <div class="tel">📞 954 64 81 18</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2025-11-12</span><span class="chip rate">★★★★★ 5 (2)</span><a class="chip" href="http://acasl.com/" rel="noopener" target="_blank">http://acasl.com/</a></div>
+  <div class="chips"><a class="chip" href="http://acasl.com/" rel="noopener" target="_blank">http://acasl.com/</a></div>
 </article>
-<article class="ficha" data-n="18" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="18" data-prov="MALAGA">
   <header>
     <span class="num">18</span>
     <h3>AUTOMARKETING MLG SL.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. Archidona, 14, 29640 Las Lagunas de Mijas, Málaga, España</p>
   <div class="tel">📞 604 49 40 01</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-27</span><span class="chip rate">★★★★★ 4.8 (26)</span><a class="chip" href="https://mlmotorluxury.com/contacto/" rel="noopener" target="_blank">https://mlmotorluxury.com/contacto/</a></div>
+  <div class="chips"><a class="chip" href="https://mlmotorluxury.com/contacto/" rel="noopener" target="_blank">https://mlmotorluxury.com/contacto/</a></div>
 </article>
-<article class="ficha" data-n="19" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="19" data-prov="SEVILLA">
   <header>
     <span class="num">19</span>
     <h3>Ayesa Digital</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. Marie Curie, 2, 41092 Sevilla, España</p>
   <div class="tel">📞 954 46 70 46</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-30</span><span class="chip rate">★★★★ 3.9 (138)</span><a class="chip" href="http://www.ayesa.com/" rel="noopener" target="_blank">http://www.ayesa.com/</a></div>
+  <div class="chips"><a class="chip" href="http://www.ayesa.com/" rel="noopener" target="_blank">http://www.ayesa.com/</a></div>
 </article>
-<article class="ficha" data-n="20" data-prov="MALAGA" data-tip="DESARROLLO DATA_IA">
+<article class="ficha" data-n="20" data-prov="MALAGA">
   <header>
     <span class="num">20</span>
     <h3>BCS DATA</h3>
   </header>
-  <p class="tip">Desarrollo · Datos / IA</p>
   <p class="dir">C/ Graham Bell, 6 - Local 2 (HEVIMAR)</p>
   <div class="tel">📞 951 44 13 33</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-13</span><span class="chip rate">★★★★★ 5 (202)</span><a class="chip" href="https://www.bcsdata.com" rel="noopener" target="_blank">https://www.bcsdata.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.bcsdata.com" rel="noopener" target="_blank">https://www.bcsdata.com</a></div>
 </article>
-<article class="ficha" data-n="21" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="21" data-prov="MALAGA">
   <header>
     <span class="num">21</span>
     <h3>BeSoccer</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">C. Horacio Quiroga, 19, Carretera de Cádiz, 29004 Málaga, España</p>
   <div class="tel">📞 618 99 10 62</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-04-12</span><span class="chip rate">★★★★ 3.8 (48)</span><a class="chip" href="https://es.besoccer.com/" rel="noopener" target="_blank">https://es.besoccer.com/</a></div>
+  <div class="chips"><a class="chip" href="https://es.besoccer.com/" rel="noopener" target="_blank">https://es.besoccer.com/</a></div>
 </article>
-<article class="ficha" data-n="22" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="22" data-prov="SEVILLA">
   <header>
     <span class="num">22</span>
     <h3>Best-tic S.L.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Camino de los Descubrimientos, 11, Sevilla, 41092</p>
   <div class="tel">📞 955 34 54 48</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (14)</span><a class="chip" href="http://www.best-tic.com" rel="noopener" target="_blank">http://www.best-tic.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.best-tic.com" rel="noopener" target="_blank">http://www.best-tic.com</a></div>
 </article>
-<article class="ficha" data-n="23" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="23" data-prov="SEVILLA">
   <header>
     <span class="num">23</span>
     <h3>Between Technology</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Charles Darwin  s/n, Barcelona, 08018</p>
   <div class="tel">📞 932 78 00 54</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="https://www.between.tech/contacto/" rel="noopener" target="_blank">https://www.between.tech/contacto/</a></div>
+  <div class="chips"><a class="chip" href="https://www.between.tech/contacto/" rel="noopener" target="_blank">https://www.between.tech/contacto/</a></div>
 </article>
-<article class="ficha" data-n="24" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="24" data-prov="SEVILLA">
   <header>
     <span class="num">24</span>
     <h3>BusinessGo</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci 18, 5ª PL. MOD. 5, Sevilla, 41092</p>
   <div class="tel">📞 954 23 96 03</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-04-04</span><span class="chip rate">★★★★ 3.8 (12)</span><a class="chip" href="http://businessgo.es" rel="noopener" target="_blank">http://businessgo.es</a></div>
+  <div class="chips"><a class="chip" href="http://businessgo.es" rel="noopener" target="_blank">http://businessgo.es</a></div>
 </article>
-<article class="ficha" data-n="25" data-prov="SEVILLA" data-tip="CONSULTORA IT_GENERALISTA">
+<article class="ficha" data-n="25" data-prov="SEVILLA">
   <header>
     <span class="num">25</span>
     <h3>Cajamar Tecnología</h3>
   </header>
-  <p class="tip">Consultora · IT generalista</p>
   <p class="dir">Av. de la Buhaira, 33, 41018 Sevilla, España</p>
   <div class="tel">📞 954 54 63 81</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-04</span><span class="chip rate">★★★★ 4.1 (37)</span><a class="chip" href="https://www.cajamar.es/es/comun/?utm_content=localizacion_oficina&amp;utm_source=google_gmb" rel="noopener" target="_blank">https://www.cajamar.es/es/comun/?utm_conte</a></div>
+  <div class="chips"><a class="chip" href="https://www.cajamar.es/es/comun/?utm_content=localizacion_oficina&amp;utm_source=google_gmb" rel="noopener" target="_blank">https://www.cajamar.es/es/comun/?utm_conte</a></div>
 </article>
-<article class="ficha" data-n="26" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="26" data-prov="SEVILLA">
   <header>
     <span class="num">26</span>
     <h3>Cajamar Tecnología</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. de la Buhaira, 33, 41018 Sevilla, España</p>
   <div class="tel">📞 954 54 63 81</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-04</span><span class="chip rate">★★★★ 4.1 (37)</span><a class="chip" href="https://www.cajamar.es/es/comun/?utm_content=localizacion_oficina&amp;utm_source=google_gmb" rel="noopener" target="_blank">https://www.cajamar.es/es/comun/?utm_conte</a></div>
+  <div class="chips"><a class="chip" href="https://www.cajamar.es/es/comun/?utm_content=localizacion_oficina&amp;utm_source=google_gmb" rel="noopener" target="_blank">https://www.cajamar.es/es/comun/?utm_conte</a></div>
 </article>
-<article class="ficha" data-n="27" data-prov="SEVILLA" data-tip="CONSULTORA DESARROLLO">
+<article class="ficha" data-n="27" data-prov="SEVILLA">
   <header>
     <span class="num">27</span>
     <h3>Capgemini</h3>
   </header>
-  <p class="tip">Consultora · Desarrollo</p>
   <p class="dir">Severo Ochoa, 61 (Edificio IS5)</p>
   <div class="tel">📞 912 15 37 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-07</span><span class="chip rate">★★★★★ 4.8 (30)</span><a class="chip" href="https://www.capgemini.com/es-es/sobre-nosotros/quienes-somos/nuestras-marcas/capgemini-engineering/" rel="noopener" target="_blank">https://www.capgemini.com/es-es/sobre-noso</a></div>
+  <div class="chips"><a class="chip" href="https://www.capgemini.com/es-es/sobre-nosotros/quienes-somos/nuestras-marcas/capgemini-engineering/" rel="noopener" target="_blank">https://www.capgemini.com/es-es/sobre-noso</a></div>
 </article>
-<article class="ficha" data-n="28" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="28" data-prov="SEVILLA">
   <header>
     <span class="num">28</span>
     <h3>CGI</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Américo Vespucio, 45, Sevilla, 41092</p>
   <div class="tel">📞 913 04 80 94</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="https://www.cgi.com/" rel="noopener" target="_blank">https://www.cgi.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.cgi.com/" rel="noopener" target="_blank">https://www.cgi.com/</a></div>
 </article>
-<article class="ficha" data-n="29" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="29" data-prov="SEVILLA">
   <header>
     <span class="num">29</span>
     <h3>Chakray Consulting</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">ruiz zorrilla, 2, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="http://www.chakray.com" rel="noopener" target="_blank">http://www.chakray.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.chakray.com" rel="noopener" target="_blank">http://www.chakray.com</a></div>
 </article>
-<article class="ficha" data-n="30" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="30" data-prov="SEVILLA">
   <header>
     <span class="num">30</span>
     <h3>Circet</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-10</span><span class="chip rate">★★★★ 3.7 (3)</span><a class="chip" href="http://www.circet.es" rel="noopener" target="_blank">http://www.circet.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.circet.es" rel="noopener" target="_blank">http://www.circet.es</a></div>
 </article>
-<article class="ficha" data-n="31" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="31" data-prov="SEVILLA">
   <header>
     <span class="num">31</span>
     <h3>Circet Infraestructura</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">(Sin dirección)</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-10</span><span class="chip rate">★★★★ 3.7 (3)</span><a class="chip" href="http://www.circet.es" rel="noopener" target="_blank">http://www.circet.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.circet.es" rel="noopener" target="_blank">http://www.circet.es</a></div>
 </article>
-<article class="ficha" data-n="32" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="32" data-prov="SEVILLA">
   <header>
     <span class="num">32</span>
     <h3>CIRCET SERVICIOS COMERCIALES</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">(Sin dirección)</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-10</span><span class="chip rate">★★★★ 3.7 (3)</span><a class="chip" href="http://www.circet.es" rel="noopener" target="_blank">http://www.circet.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.circet.es" rel="noopener" target="_blank">http://www.circet.es</a></div>
 </article>
-<article class="ficha" data-n="33" data-prov="SEVILLA" data-tip="CONSULTORA IT_GENERALISTA">
+<article class="ficha" data-n="33" data-prov="SEVILLA">
   <header>
     <span class="num">33</span>
     <h3>Consultoría Informática ACOFI</h3>
   </header>
-  <p class="tip">Consultora · IT generalista</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 954 23 96 03</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★ 3 (2)</span><a class="chip" href="http://www.businessgo.es" rel="noopener" target="_blank">http://www.businessgo.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.businessgo.es" rel="noopener" target="_blank">http://www.businessgo.es</a></div>
 </article>
-<article class="ficha" data-n="34" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="34" data-prov="SEVILLA">
   <header>
     <span class="num">34</span>
     <h3>ConXioN</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">41007, C. Joaquin Morales y Torres, 41003 Sevilla, España</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-18</span><span class="chip rate">★★★★ 4.1 (4931)</span><a class="chip" href="http://www.adif.es/es_ES/infraestructuras/estaciones/51003/informacion_000061.shtml" rel="noopener" target="_blank">http://www.adif.es/es_ES/infraestructuras/</a></div>
+  <div class="chips"><a class="chip" href="http://www.adif.es/es_ES/infraestructuras/estaciones/51003/informacion_000061.shtml" rel="noopener" target="_blank">http://www.adif.es/es_ES/infraestructuras/</a></div>
 </article>
-<article class="ficha" data-n="35" data-prov="SEVILLA" data-tip="IT_GENERALISTA DESARROLLO">
+<article class="ficha" data-n="35" data-prov="SEVILLA">
   <header>
     <span class="num">35</span>
     <h3>CoverManager</h3>
   </header>
-  <p class="tip">IT generalista · Desarrollo</p>
   <p class="dir">Pl. del Cabildo, 24, 4ª Planta, Casco Antiguo, 41001 Sevilla, España</p>
   <div class="tel">📞 911 23 26 27</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-11</span><span class="chip rate">★★★★ 4.3 (147)</span><a class="chip" href="https://www.covermanager.com/" rel="noopener" target="_blank">https://www.covermanager.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.covermanager.com/" rel="noopener" target="_blank">https://www.covermanager.com/</a></div>
 </article>
-<article class="ficha" data-n="36" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="36" data-prov="SEVILLA">
   <header>
     <span class="num">36</span>
     <h3>Crear Página e-web</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 623 05 42 64</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (15)</span><a class="chip" href="http://crearpaginaeweb.com" rel="noopener" target="_blank">http://crearpaginaeweb.com</a></div>
+  <div class="chips"><a class="chip" href="http://crearpaginaeweb.com" rel="noopener" target="_blank">http://crearpaginaeweb.com</a></div>
 </article>
-<article class="ficha" data-n="37" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="37" data-prov="SEVILLA">
   <header>
     <span class="num">37</span>
     <h3>Crypto Fund Trader</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Av. de la República Argentina, 25, 41011 Sevilla, España</p>
   <div class="tel">📞 614 28 98 62</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-17</span><span class="chip rate">★★★★ 4.4 (430)</span><a class="chip" href="https://tradersbusinessschool.com/" rel="noopener" target="_blank">https://tradersbusinessschool.com/</a></div>
+  <div class="chips"><a class="chip" href="https://tradersbusinessschool.com/" rel="noopener" target="_blank">https://tradersbusinessschool.com/</a></div>
 </article>
-<article class="ficha" data-n="38" data-prov="SEVILLA" data-tip="DATA_IA">
+<article class="ficha" data-n="38" data-prov="SEVILLA">
   <header>
     <span class="num">38</span>
     <h3>CTx Tech</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">n. Pabellón de la UE, C. Isaac Newton, 41092 Sevilla, España</p>
   <div class="tel">📞 671 56 28 47</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2025-12-05</span><span class="chip rate">★★★★ 4.2 (50)</span><a class="chip" href="http://www.sevillatechpark.es/" rel="noopener" target="_blank">http://www.sevillatechpark.es/</a></div>
+  <div class="chips"><a class="chip" href="http://www.sevillatechpark.es/" rel="noopener" target="_blank">http://www.sevillatechpark.es/</a></div>
 </article>
-<article class="ficha" data-n="39" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="39" data-prov="SEVILLA">
   <header>
     <span class="num">39</span>
     <h3>Cuántico Innovación, S.L.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 3, Sevilla, 41092</p>
   <div class="tel">📞 911 98 00 01</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="https://www.cuantico.io" rel="noopener" target="_blank">https://www.cuantico.io</a></div>
+  <div class="chips"><a class="chip" href="https://www.cuantico.io" rel="noopener" target="_blank">https://www.cuantico.io</a></div>
 </article>
-<article class="ficha" data-n="40" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="40" data-prov="SEVILLA">
   <header>
     <span class="num">40</span>
     <h3>DXC</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">c/ Charles Darwin s/n, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="https://dxc.com/es" rel="noopener" target="_blank">https://dxc.com/es</a></div>
+  <div class="chips"><a class="chip" href="https://dxc.com/es" rel="noopener" target="_blank">https://dxc.com/es</a></div>
 </article>
-<article class="ficha" data-n="41" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="41" data-prov="SEVILLA">
   <header>
     <span class="num">41</span>
     <h3>Elecnor Servicios y Proyectos</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Charles Darwin  s/n, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="https://www.elecnor.com/" rel="noopener" target="_blank">https://www.elecnor.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.elecnor.com/" rel="noopener" target="_blank">https://www.elecnor.com/</a></div>
 </article>
-<article class="ficha" data-n="42" data-prov="SEVILLA" data-tip="DATA_IA">
+<article class="ficha" data-n="42" data-prov="SEVILLA">
   <header>
     <span class="num">42</span>
     <h3>ENFOCA AI SL.</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">Parque Industrial Pisa, Calle Exposición 14,, Edificio Sodinur, 2º planta, modulo 24-A, 41927 Mairena del Aljarafe,, Sevilla, 41927 Mairena del Aljarafe, Sevilla, España</p>
   <div class="tel">📞 696 59 75 25</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-04-14</span><span class="chip rate">★ 1 (1)</span><a class="chip" href="http://www.enfocaconsultoria.es/" rel="noopener" target="_blank">http://www.enfocaconsultoria.es/</a></div>
+  <div class="chips"><a class="chip" href="http://www.enfocaconsultoria.es/" rel="noopener" target="_blank">http://www.enfocaconsultoria.es/</a></div>
 </article>
-<article class="ficha" data-n="43" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="43" data-prov="SEVILLA">
   <header>
     <span class="num">43</span>
     <h3>EonSea (El Cubo)</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Camino de los Descubrimientos, 17, Sevilla, 41092</p>
   <div class="tel">📞 954 05 54 88</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://eon-sea.com" rel="noopener" target="_blank">http://eon-sea.com</a></div>
+  <div class="chips"><a class="chip" href="http://eon-sea.com" rel="noopener" target="_blank">http://eon-sea.com</a></div>
 </article>
-<article class="ficha" data-n="44" data-prov="MALAGA" data-tip="IT_GENERALISTA DESARROLLO">
+<article class="ficha" data-n="44" data-prov="MALAGA">
   <header>
     <span class="num">44</span>
     <h3>EPAM</h3>
   </header>
-  <p class="tip">IT generalista · Desarrollo</p>
   <p class="dir">Av. Imperio Argentina, 19-21, 2º Planta, Carretera de Cádiz, 29004 Málaga, España</p>
   <div class="tel">📞 518 88 94 39</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-06</span><span class="chip rate">★★★★ 4.5 (131)</span><a class="chip" href="https://www.epam.com/" rel="noopener" target="_blank">https://www.epam.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.epam.com/" rel="noopener" target="_blank">https://www.epam.com/</a></div>
 </article>
-<article class="ficha" data-n="45" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="45" data-prov="SEVILLA">
   <header>
     <span class="num">45</span>
     <h3>Ericsson Network Services</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://ericsson.es" rel="noopener" target="_blank">http://ericsson.es</a></div>
+  <div class="chips"><a class="chip" href="http://ericsson.es" rel="noopener" target="_blank">http://ericsson.es</a></div>
 </article>
-<article class="ficha" data-n="46" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="46" data-prov="MALAGA">
   <header>
     <span class="num">46</span>
     <h3>ESAIL VITE</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Avda. Juan López Peñalver, 21 (BIC - Euronova)</p>
   <div class="tel">📞 952 00 44 81</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-24</span><span class="chip rate">★★★★★ 5 (10)</span><a class="chip" href="https://esail.es/" rel="noopener" target="_blank">https://esail.es/</a></div>
+  <div class="chips"><a class="chip" href="https://esail.es/" rel="noopener" target="_blank">https://esail.es/</a></div>
 </article>
-<article class="ficha" data-n="47" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="47" data-prov="SEVILLA">
   <header>
     <span class="num">47</span>
     <h3>EVA INSTRUMENTS SL.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. María Auxiliadora, 18, 41008 Sevilla, España</p>
   <div class="tel">📞 954 41 01 12</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-16</span><span class="chip rate">★★★★ 4 (1039)</span><a class="chip" href="https://www.cashconverters.es/tiendas/sevilla/maria-auxiliadora/" rel="noopener" target="_blank">https://www.cashconverters.es/tiendas/sevi</a></div>
+  <div class="chips"><a class="chip" href="https://www.cashconverters.es/tiendas/sevilla/maria-auxiliadora/" rel="noopener" target="_blank">https://www.cashconverters.es/tiendas/sevi</a></div>
 </article>
-<article class="ficha" data-n="48" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="48" data-prov="SEVILLA">
   <header>
     <span class="num">48</span>
     <h3>FLETERS SOLUTIONS SOCIEDAD LIMITADA.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. Pérez Hervás, 41003 Sevilla, España</p>
   <div class="tel">📞 607 83 52 69</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-11</span><span class="chip rate">★★★ 2.8 (16)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="49" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="49" data-prov="MALAGA">
   <header>
     <span class="num">49</span>
     <h3>Freepik</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. Molina Lario, 13, Piso 5º, Distrito Centro, 29015 Málaga, España</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-31</span><span class="chip rate">★★★★ 3.6 (82)</span><a class="chip" href="https://www.freepik.es/" rel="noopener" target="_blank">https://www.freepik.es/</a></div>
+  <div class="chips"><a class="chip" href="https://www.freepik.es/" rel="noopener" target="_blank">https://www.freepik.es/</a></div>
 </article>
-<article class="ficha" data-n="50" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="50" data-prov="MALAGA">
   <header>
     <span class="num">50</span>
     <h3>Fuerte Group Hotels</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Avda. Severo Ochoa, 28, 9º A Edificio Singlehome, 29603 Marbella, Málaga, España</p>
   <div class="tel">📞 917 94 12 84</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-03</span><span class="chip rate">★★★ 3.3 (4)</span><a class="chip" href="https://www.fuerte-group.com/" rel="noopener" target="_blank">https://www.fuerte-group.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.fuerte-group.com/" rel="noopener" target="_blank">https://www.fuerte-group.com/</a></div>
 </article>
-<article class="ficha" data-n="51" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="51" data-prov="SEVILLA">
   <header>
     <span class="num">51</span>
     <h3>Gamma</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 3, Sevilla, 41092</p>
   <div class="tel">📞 954 52 93 72</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-01</span><span class="chip rate">★★★★ 4.2 (89)</span><a class="chip" href="http://www.gammacom.es" rel="noopener" target="_blank">http://www.gammacom.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.gammacom.es" rel="noopener" target="_blank">http://www.gammacom.es</a></div>
 </article>
-<article class="ficha" data-n="52" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="52" data-prov="SEVILLA">
   <header>
     <span class="num">52</span>
     <h3>Getronics</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 3, Sevilla, 41092</p>
   <div class="tel">📞 954 74 66 00</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4.1 (11)</span><a class="chip" href="https://www.getronics.com" rel="noopener" target="_blank">https://www.getronics.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.getronics.com" rel="noopener" target="_blank">https://www.getronics.com</a></div>
 </article>
-<article class="ficha" data-n="53" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="53" data-prov="SEVILLA">
   <header>
     <span class="num">53</span>
     <h3>GMV</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">1, Edificio Insur Cartuja, C. Albert Einstein, s/n, 41092 Sevilla, España</p>
   <div class="tel">📞 954 08 80 60</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-25</span><span class="chip rate">★★★★ 4.4 (7)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="54" data-prov="SEVILLA" data-tip="IT_GENERALISTA">
+<article class="ficha" data-n="54" data-prov="SEVILLA">
   <header>
     <span class="num">54</span>
     <h3>GMV</h3>
   </header>
-  <p class="tip">IT generalista</p>
   <p class="dir">1, Edificio Insur Cartuja, C. Albert Einstein, s/n, 41092 Sevilla, España</p>
   <div class="tel">📞 954 08 80 60</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-25</span><span class="chip rate">★★★★ 4.4 (7)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="55" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="55" data-prov="SEVILLA">
   <header>
     <span class="num">55</span>
     <h3>GMV Soluciones Globales Internet S.A.U.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Albert Einstein, s/n,, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="http://www.gmv.com" rel="noopener" target="_blank">http://www.gmv.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.gmv.com" rel="noopener" target="_blank">http://www.gmv.com</a></div>
 </article>
-<article class="ficha" data-n="56" data-prov="SEVILLA" data-tip="TELCO">
+<article class="ficha" data-n="56" data-prov="SEVILLA">
   <header>
     <span class="num">56</span>
     <h3>GPRC Pymes Telecom 3.0 S.L.</h3>
   </header>
-  <p class="tip">Telco</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   <div class="tel">📞 854 72 91 08</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://www.gprctelecom.com" rel="noopener" target="_blank">http://www.gprctelecom.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.gprctelecom.com" rel="noopener" target="_blank">http://www.gprctelecom.com</a></div>
 </article>
-<article class="ficha" data-n="57" data-prov="MALAGA" data-tip="CONSULTORA">
+<article class="ficha" data-n="57" data-prov="MALAGA">
   <header>
     <span class="num">57</span>
     <h3>Greenaall Soluciones</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">calle Max Planck , 3, Sevilla, 41092</p>
   <div class="tel">📞 951 35 00 53</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://www.shsconsultores.es" rel="noopener" target="_blank">http://www.shsconsultores.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.shsconsultores.es" rel="noopener" target="_blank">http://www.shsconsultores.es</a></div>
 </article>
-<article class="ficha" data-n="58" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="58" data-prov="SEVILLA">
   <header>
     <span class="num">58</span>
     <h3>Grupo A3Satel</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Camino de los Descubrimientos, 11, Sevilla, 41092</p>
   <div class="tel">📞 954 26 96 92</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-03</span><span class="chip rate">★★★★ 4 (22)</span><a class="chip" href="http://www.a3satel.com" rel="noopener" target="_blank">http://www.a3satel.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.a3satel.com" rel="noopener" target="_blank">http://www.a3satel.com</a></div>
 </article>
-<article class="ficha" data-n="59" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="59" data-prov="SEVILLA">
   <header>
     <span class="num">59</span>
     <h3>Grupo Sermicro</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Polígono Industrial Pineda, C. A, Nave 2, 41013 Sevilla, España</p>
   <div class="tel">📞 954 68 03 53</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-14</span><span class="chip rate">★★★★★ 4.7 (18)</span><a class="chip" href="https://www.gruposermicro.com/" rel="noopener" target="_blank">https://www.gruposermicro.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.gruposermicro.com/" rel="noopener" target="_blank">https://www.gruposermicro.com/</a></div>
 </article>
-<article class="ficha" data-n="60" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="60" data-prov="SEVILLA">
   <header>
     <span class="num">60</span>
     <h3>GuadalTech Soluciones Tecnológicas</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 955 54 08 27</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2025-09-19</span><span class="chip rate">★★★★ 4.4 (43)</span><a class="chip" href="https://www.guadaltech.es/" rel="noopener" target="_blank">https://www.guadaltech.es/</a></div>
+  <div class="chips"><a class="chip" href="https://www.guadaltech.es/" rel="noopener" target="_blank">https://www.guadaltech.es/</a></div>
 </article>
-<article class="ficha" data-n="61" data-prov="MALAGA" data-tip="IT_GENERALISTA DESARROLLO">
+<article class="ficha" data-n="61" data-prov="MALAGA">
   <header>
     <span class="num">61</span>
     <h3>Hispasec Sistemas, S.L.</h3>
   </header>
-  <p class="tip">IT generalista · Desarrollo</p>
   <p class="dir">Severo Ochoa, 8 (Edificio Vid Distribuciones)</p>
   <div class="tel">📞 952 02 04 94</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-03-08</span><span class="chip rate">★★★★★ 4.8 (27)</span><a class="chip" href="https://hispasec.com/" rel="noopener" target="_blank">https://hispasec.com/</a></div>
+  <div class="chips"><a class="chip" href="https://hispasec.com/" rel="noopener" target="_blank">https://hispasec.com/</a></div>
 </article>
-<article class="ficha" data-n="62" data-prov="SEVILLA" data-tip="DATA_IA">
+<article class="ficha" data-n="62" data-prov="SEVILLA">
   <header>
     <span class="num">62</span>
     <h3>Idener</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">Plaza Alcalde Sánchez Monteseirín 2, Sevilla, 41092</p>
   <div class="tel">📞 954 46 02 78</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4.3 (9)</span><a class="chip" href="http://www.idener.ai" rel="noopener" target="_blank">http://www.idener.ai</a></div>
+  <div class="chips"><a class="chip" href="http://www.idener.ai" rel="noopener" target="_blank">http://www.idener.ai</a></div>
 </article>
-<article class="ficha" data-n="63" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="63" data-prov="SEVILLA">
   <header>
     <span class="num">63</span>
     <h3>Indra</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. de la Innovación, 41020 Sevilla, España</p>
   <div class="tel">📞 954 36 96 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-07</span><span class="chip rate">★★★★ 4.5 (12)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="64" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="64" data-prov="SEVILLA">
   <header>
     <span class="num">64</span>
     <h3>INDRA SOLUCIONES TECNOLOGIAS DE LA INFORMACION SL</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Av. de la Innovación, 41020 Sevilla, España</p>
   <div class="tel">📞 954 36 96 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-07</span><span class="chip rate">★★★★ 4.5 (12)</span><span class="chip off">sin web</span></div>
+  <div class="chips"><span class="chip off">sin web</span></div>
 </article>
-<article class="ficha" data-n="65" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="65" data-prov="SEVILLA">
   <header>
     <span class="num">65</span>
     <h3>Inetum</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Albert Einstein, s/n, Sevilla, 41092</p>
   <div class="tel">📞 954 46 83 80</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4.1 (11)</span><a class="chip" href="http://www.inetum.com" rel="noopener" target="_blank">http://www.inetum.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.inetum.com" rel="noopener" target="_blank">http://www.inetum.com</a></div>
 </article>
-<article class="ficha" data-n="66" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="66" data-prov="SEVILLA">
   <header>
     <span class="num">66</span>
     <h3>Innovasur</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Plaza Alcalde Alfredo Sánchez Monteseirín, 2, Sevilla, 41092</p>
   <div class="tel">📞 953 26 79 19</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4.5 (2)</span><a class="chip" href="http://www.innovasur.com" rel="noopener" target="_blank">http://www.innovasur.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.innovasur.com" rel="noopener" target="_blank">http://www.innovasur.com</a></div>
 </article>
-<article class="ficha" data-n="67" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="67" data-prov="SEVILLA">
   <header>
     <span class="num">67</span>
     <h3>Isotrol</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 3, Sevilla, 41092</p>
   <div class="tel">📞 955 03 68 00</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4 (66)</span><a class="chip" href="http://www.isotrol.com" rel="noopener" target="_blank">http://www.isotrol.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.isotrol.com" rel="noopener" target="_blank">http://www.isotrol.com</a></div>
 </article>
-<article class="ficha" data-n="68" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="68" data-prov="SEVILLA">
   <header>
     <span class="num">68</span>
     <h3>Iwan21</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 954 23 96 03</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="https://iwan21.net/" rel="noopener" target="_blank">https://iwan21.net/</a></div>
+  <div class="chips"><a class="chip" href="https://iwan21.net/" rel="noopener" target="_blank">https://iwan21.net/</a></div>
 </article>
-<article class="ficha" data-n="69" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="69" data-prov="SEVILLA">
   <header>
     <span class="num">69</span>
     <h3>JRV LAB SOCIEDAD LIMITADA.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Camino de los Descubrimientos, 41092 Sevilla, España</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-01</span><span class="chip rate">★★★★★ 5 (2)</span><a class="chip" href="https://grvc.us.es/" rel="noopener" target="_blank">https://grvc.us.es/</a></div>
+  <div class="chips"><a class="chip" href="https://grvc.us.es/" rel="noopener" target="_blank">https://grvc.us.es/</a></div>
 </article>
-<article class="ficha" data-n="70" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="70" data-prov="SEVILLA">
   <header>
     <span class="num">70</span>
     <h3>Kong Consulting Software</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 606 94 32 58</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-03-30</span><span class="chip rate">★★★★ 3.5 (6)</span><a class="chip" href="https://kongsoftware.es/" rel="noopener" target="_blank">https://kongsoftware.es/</a></div>
+  <div class="chips"><a class="chip" href="https://kongsoftware.es/" rel="noopener" target="_blank">https://kongsoftware.es/</a></div>
 </article>
-<article class="ficha" data-n="71" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="71" data-prov="MALAGA">
   <header>
     <span class="num">71</span>
     <h3>Kronte</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Málaga</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="https://www.kronte.com/" rel="noopener" target="_blank">https://www.kronte.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.kronte.com/" rel="noopener" target="_blank">https://www.kronte.com/</a></div>
 </article>
-<article class="ficha" data-n="72" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="72" data-prov="SEVILLA">
   <header>
     <span class="num">72</span>
     <h3>Lefty Garage</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle calle Gregor J. Mendel, 6, Sevilla, 41092</p>
   <div class="tel">📞 670 87 87 26</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://leftygarage.com" rel="noopener" target="_blank">http://leftygarage.com</a></div>
+  <div class="chips"><a class="chip" href="http://leftygarage.com" rel="noopener" target="_blank">http://leftygarage.com</a></div>
 </article>
-<article class="ficha" data-n="73" data-prov="MALAGA" data-tip="TELCO">
+<article class="ficha" data-n="73" data-prov="MALAGA">
   <header>
     <span class="num">73</span>
     <h3>“LEOSOFT” Sodimper Malaga</h3>
   </header>
-  <p class="tip">Telco</p>
   <p class="dir">Johannes Kepler (Abidiam)</p>
   <div class="tel">📞 952 02 80 80</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-07</span><span class="chip rate">★★★★ 4.3 (14)</span><a class="chip" href="https://www.macrotelecom.com" rel="noopener" target="_blank">https://www.macrotelecom.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.macrotelecom.com" rel="noopener" target="_blank">https://www.macrotelecom.com</a></div>
 </article>
-<article class="ficha" data-n="74" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="74" data-prov="MALAGA">
   <header>
     <span class="num">74</span>
     <h3>Logístiko</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">C. Concejal Muñoz Cerván, 3, Carretera de Cádiz, 29004 Málaga, España</p>
   <div class="tel">📞 633 15 17 22</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-04-20</span><span class="chip rate">★★★ 2.6 (5)</span><a class="chip" href="https://logistiko.es/" rel="noopener" target="_blank">https://logistiko.es/</a></div>
+  <div class="chips"><a class="chip" href="https://logistiko.es/" rel="noopener" target="_blank">https://logistiko.es/</a></div>
 </article>
-<article class="ficha" data-n="75" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="75" data-prov="SEVILLA">
   <header>
     <span class="num">75</span>
     <h3>Magtel</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 4, Sevilla, 41092</p>
   <div class="tel">📞 955 33 76 33</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-15</span><span class="chip rate">★★★★ 4.2 (54)</span><a class="chip" href="http://magtel.es" rel="noopener" target="_blank">http://magtel.es</a></div>
+  <div class="chips"><a class="chip" href="http://magtel.es" rel="noopener" target="_blank">http://magtel.es</a></div>
 </article>
-<article class="ficha" data-n="76" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="76" data-prov="SEVILLA">
   <header>
     <span class="num">76</span>
     <h3>Mayblue Consultores</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   <div class="tel">📞 955 27 21 27</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="https://www.mayblue.es/" rel="noopener" target="_blank">https://www.mayblue.es/</a></div>
+  <div class="chips"><a class="chip" href="https://www.mayblue.es/" rel="noopener" target="_blank">https://www.mayblue.es/</a></div>
 </article>
-<article class="ficha" data-n="77" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="77" data-prov="SEVILLA">
   <header>
     <span class="num">77</span>
     <h3>Médicos Sin Fronteras</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Bajos del, Puente del Cristo de la Expiración, s/n, Casco Antiguo, 41001 Sevilla, España</p>
   <div class="tel">📞 955 55 13 94</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-28</span><span class="chip rate">★★★★ 4.1 (7)</span><a class="chip" href="https://www.msf.es/contacta" rel="noopener" target="_blank">https://www.msf.es/contacta</a></div>
+  <div class="chips"><a class="chip" href="https://www.msf.es/contacta" rel="noopener" target="_blank">https://www.msf.es/contacta</a></div>
 </article>
-<article class="ficha" data-n="78" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="78" data-prov="MALAGA">
   <header>
     <span class="num">78</span>
     <h3>MetaData</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Severo Ochoa, 9 (Centro de Tecnologías Ferroviarias)</p>
   <div class="tel">📞 952 02 02 22</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-28</span><span class="chip rate">★★★★ 4.4 (84)</span><a class="chip" href="https://www.metadata.es" rel="noopener" target="_blank">https://www.metadata.es</a></div>
+  <div class="chips"><a class="chip" href="https://www.metadata.es" rel="noopener" target="_blank">https://www.metadata.es</a></div>
 </article>
-<article class="ficha" data-n="79" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="79" data-prov="SEVILLA">
   <header>
     <span class="num">79</span>
     <h3>Midway Technologies S.L.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Charles Darwin s/n,, Sevilla, 41092</p>
   <div class="tel">📞 954 86 97 59</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4.4 (14)</span><a class="chip" href="http://www.midway.tech" rel="noopener" target="_blank">http://www.midway.tech</a></div>
+  <div class="chips"><a class="chip" href="http://www.midway.tech" rel="noopener" target="_blank">http://www.midway.tech</a></div>
 </article>
-<article class="ficha" data-n="80" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="80" data-prov="SEVILLA">
   <header>
     <span class="num">80</span>
     <h3>Miguel Angel</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. Pastor y Landero, 31, Loc, Casco Antiguo, 41001 Sevilla, España</p>
   <div class="tel">📞 954 21 00 43</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-05</span><span class="chip rate">★★★★★ 4.8 (117)</span><a class="chip" href="http://www.sevillapixel.com" rel="noopener" target="_blank">http://www.sevillapixel.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.sevillapixel.com" rel="noopener" target="_blank">http://www.sevillapixel.com</a></div>
 </article>
-<article class="ficha" data-n="81" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="81" data-prov="SEVILLA">
   <header>
     <span class="num">81</span>
     <h3>Nace Ghenova Digital</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. San Francisco Javier, 20, Planta 2, 41018 Sevilla, España</p>
   <div class="tel">📞 954 99 02 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-14</span><span class="chip rate">★★★★★ 4.8 (33)</span><a class="chip" href="http://www.ghenova.com/" rel="noopener" target="_blank">http://www.ghenova.com/</a></div>
+  <div class="chips"><a class="chip" href="http://www.ghenova.com/" rel="noopener" target="_blank">http://www.ghenova.com/</a></div>
 </article>
-<article class="ficha" data-n="82" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="82" data-prov="MALAGA">
   <header>
     <span class="num">82</span>
     <h3>NOVANDA SOLUTIONS, S.L</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Severo ochoa, 51-56 Planta 4ª (Parcela IS-I)</p>
   <div class="tel">📞 951 10 99 99</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-01</span><span class="chip rate">★★★★ 4.5 (104)</span><a class="chip" href="https://www.expenti.com" rel="noopener" target="_blank">https://www.expenti.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.expenti.com" rel="noopener" target="_blank">https://www.expenti.com</a></div>
 </article>
-<article class="ficha" data-n="83" data-prov="SEVILLA" data-tip="DATA_IA">
+<article class="ficha" data-n="83" data-prov="SEVILLA">
   <header>
     <span class="num">83</span>
     <h3>NTT Data</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   <div class="tel">📞 954 98 97 10</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-01</span><span class="chip rate">★★★★ 4.3 (182)</span><a class="chip" href="https://es.nttdata.com/" rel="noopener" target="_blank">https://es.nttdata.com/</a></div>
+  <div class="chips"><a class="chip" href="https://es.nttdata.com/" rel="noopener" target="_blank">https://es.nttdata.com/</a></div>
 </article>
-<article class="ficha" data-n="84" data-prov="SEVILLA" data-tip="DATA_IA">
+<article class="ficha" data-n="84" data-prov="SEVILLA">
   <header>
     <span class="num">84</span>
     <h3>NTT Data Centers, S.L.</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   <div class="tel">📞 954 98 97 10</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-01</span><span class="chip rate">★★★★ 4.3 (182)</span><a class="chip" href="https://es.nttdata.com/" rel="noopener" target="_blank">https://es.nttdata.com/</a></div>
+  <div class="chips"><a class="chip" href="https://es.nttdata.com/" rel="noopener" target="_blank">https://es.nttdata.com/</a></div>
 </article>
-<article class="ficha" data-n="85" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="85" data-prov="SEVILLA">
   <header>
     <span class="num">85</span>
     <h3>Nunsys S.A.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Torricelli, 28, Sevilla, 41092</p>
   <div class="tel">📞 960 50 06 31</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (6)</span><a class="chip" href="http://www.nunsys.com" rel="noopener" target="_blank">http://www.nunsys.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.nunsys.com" rel="noopener" target="_blank">http://www.nunsys.com</a></div>
 </article>
-<article class="ficha" data-n="86" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="86" data-prov="SEVILLA">
   <header>
     <span class="num">86</span>
     <h3>Oracle</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Severo Ochoa, 51 (Parcela IS-I)</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-12</span><span class="chip rate">★★★★★ 5 (3)</span><a class="chip" href="https://www.oracle.com" rel="noopener" target="_blank">https://www.oracle.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.oracle.com" rel="noopener" target="_blank">https://www.oracle.com</a></div>
 </article>
-<article class="ficha" data-n="87" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="87" data-prov="MALAGA">
   <header>
     <span class="num">87</span>
     <h3>Orthoapnea</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">C. Flauta Mágica, 22, Cruz de Humilladero, 29006 Málaga, España</p>
   <div class="tel">📞 951 20 43 34</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-02-18</span><span class="chip rate">★★★★ 4.1 (13)</span><a class="chip" href="http://www.orthoapnea.com/" rel="noopener" target="_blank">http://www.orthoapnea.com/</a></div>
+  <div class="chips"><a class="chip" href="http://www.orthoapnea.com/" rel="noopener" target="_blank">http://www.orthoapnea.com/</a></div>
 </article>
-<article class="ficha" data-n="88" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="88" data-prov="SEVILLA">
   <header>
     <span class="num">88</span>
     <h3>Pampling</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">C. Puente y Pellón, 21, Casco Antiguo, 41001 Sevilla, España</p>
   <div class="tel">📞 955 54 77 40</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-01</span><span class="chip rate">★★★★ 4.2 (178)</span><a class="chip" href="https://www.pampling.com/" rel="noopener" target="_blank">https://www.pampling.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.pampling.com/" rel="noopener" target="_blank">https://www.pampling.com/</a></div>
 </article>
-<article class="ficha" data-n="89" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="89" data-prov="MALAGA">
   <header>
     <span class="num">89</span>
     <h3>Paraty Tech</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. de Manuel Fraga Iribarne, 15, portal 4, 1ª planta, 29620 Torremolinos, Málaga, España</p>
   <div class="tel">📞 952 23 08 87</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-02-25</span><span class="chip rate">★★★★ 4.3 (19)</span><a class="chip" href="https://www.paratytech.com/?utm_medium=organic&amp;utm_source=google&amp;utm_campaign=google-my-business&amp;utm_term=google-local" rel="noopener" target="_blank">https://www.paratytech.com/?utm_medium=org</a></div>
+  <div class="chips"><a class="chip" href="https://www.paratytech.com/?utm_medium=organic&amp;utm_source=google&amp;utm_campaign=google-my-business&amp;utm_term=google-local" rel="noopener" target="_blank">https://www.paratytech.com/?utm_medium=org</a></div>
 </article>
-<article class="ficha" data-n="90" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="90" data-prov="SEVILLA">
   <header>
     <span class="num">90</span>
     <h3>PedroManuelAtienzaHuerta</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Calle Dr. González Caraballo, 1, Planta 3, Oficina 12 Edificio Portasevilla, 41020 Sevilla, España</p>
   <div class="tel">📞 637 45 32 77</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4 (2)</span><a class="chip" href="https://sites.google.com/view/pedro-manuel-atienza-huerta" rel="noopener" target="_blank">https://sites.google.com/view/pedro-manuel</a></div>
+  <div class="chips"><a class="chip" href="https://sites.google.com/view/pedro-manuel-atienza-huerta" rel="noopener" target="_blank">https://sites.google.com/view/pedro-manuel</a></div>
 </article>
-<article class="ficha" data-n="91" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="91" data-prov="SEVILLA">
   <header>
     <span class="num">91</span>
     <h3>Plexus Tech (Intryo Servicios de Software S.L.)</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Isaac Newton, 4, Sevilla, 41092</p>
   <div class="tel">📞 902 99 80 05</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://plexus.es" rel="noopener" target="_blank">http://plexus.es</a></div>
+  <div class="chips"><a class="chip" href="http://plexus.es" rel="noopener" target="_blank">http://plexus.es</a></div>
 </article>
-<article class="ficha" data-n="92" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="92" data-prov="SEVILLA">
   <header>
     <span class="num">92</span>
     <h3>Powersolution</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Charles Darwin  s/n, Sevilla, 41092</p>
   <div class="tel">📞 917 37 38 80</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="http://www.powersolution.es" rel="noopener" target="_blank">http://www.powersolution.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.powersolution.es" rel="noopener" target="_blank">http://www.powersolution.es</a></div>
 </article>
-<article class="ficha" data-n="93" data-prov="SEVILLA" data-tip="IT_GENERALISTA">
+<article class="ficha" data-n="93" data-prov="SEVILLA">
   <header>
     <span class="num">93</span>
     <h3>ProfesionalCloud Nuevas Tecnologías S. L.</h3>
   </header>
-  <p class="tip">IT generalista</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 954 02 71 65</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-02-17</span><span class="chip rate">★★★★★ 4.6 (7)</span><a class="chip" href="http://www.profesionalcloud.com" rel="noopener" target="_blank">http://www.profesionalcloud.com</a></div>
+  <div class="chips"><a class="chip" href="http://www.profesionalcloud.com" rel="noopener" target="_blank">http://www.profesionalcloud.com</a></div>
 </article>
-<article class="ficha" data-n="94" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="94" data-prov="MALAGA">
   <header>
     <span class="num">94</span>
     <h3>Properly Software, S.L.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">C. Graham Bell, 6, Planta 1, (HEVIMAR)</p>
   <div class="tel">📞 952 02 02 00</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 4.8 (14)</span><a class="chip" href="https://www.properly.es" rel="noopener" target="_blank">https://www.properly.es</a></div>
+  <div class="chips"><a class="chip" href="https://www.properly.es" rel="noopener" target="_blank">https://www.properly.es</a></div>
 </article>
-<article class="ficha" data-n="95" data-prov="SEVILLA" data-tip="IT_GENERALISTA DESARROLLO">
+<article class="ficha" data-n="95" data-prov="SEVILLA">
   <header>
     <span class="num">95</span>
     <h3>PSS</h3>
   </header>
-  <p class="tip">IT generalista · Desarrollo</p>
   <p class="dir">C. Tetuán, 8, Casco Antiguo, 41001 Sevilla, España</p>
   <div class="tel">📞 954 10 96 71</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-23</span><span class="chip rate">★★★★ 4 (1326)</span><a class="chip" href="https://www.pullandbear.com/es/es/stores-locator/sevilla/tetuan-s16024" rel="noopener" target="_blank">https://www.pullandbear.com/es/es/stores-l</a></div>
+  <div class="chips"><a class="chip" href="https://www.pullandbear.com/es/es/stores-locator/sevilla/tetuan-s16024" rel="noopener" target="_blank">https://www.pullandbear.com/es/es/stores-l</a></div>
 </article>
-<article class="ficha" data-n="96" data-prov="SEVILLA" data-tip="DATA_IA">
+<article class="ficha" data-n="96" data-prov="SEVILLA">
   <header>
     <span class="num">96</span>
     <h3>Quantec Data Center S.L.</h3>
   </header>
-  <p class="tip">Datos / IA</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 955 05 35 83</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://www.quantecdc.es" rel="noopener" target="_blank">http://www.quantecdc.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.quantecdc.es" rel="noopener" target="_blank">http://www.quantecdc.es</a></div>
 </article>
-<article class="ficha" data-n="97" data-prov="MALAGA" data-tip="VIDEOJUEGOS">
+<article class="ficha" data-n="97" data-prov="MALAGA">
   <header>
     <span class="num">97</span>
     <h3>Raw Igaming</h3>
   </header>
-  <p class="tip">Videojuegos</p>
   <p class="dir">Graham Bell, 8 (Edificio Propio)</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="https://www.rawigaming.com/" rel="noopener" target="_blank">https://www.rawigaming.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.rawigaming.com/" rel="noopener" target="_blank">https://www.rawigaming.com/</a></div>
 </article>
-<article class="ficha" data-n="98" data-prov="SEVILLA" data-tip="IT_GENERALISTA">
+<article class="ficha" data-n="98" data-prov="SEVILLA">
   <header>
     <span class="num">98</span>
     <h3>Reflek.io</h3>
   </header>
-  <p class="tip">IT generalista</p>
   <p class="dir">Sevilla</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="https://www.reflek.io/" rel="noopener" target="_blank">https://www.reflek.io/</a></div>
+  <div class="chips"><a class="chip" href="https://www.reflek.io/" rel="noopener" target="_blank">https://www.reflek.io/</a></div>
 </article>
-<article class="ficha" data-n="99" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="99" data-prov="SEVILLA">
   <header>
     <span class="num">99</span>
     <h3>Revergy Engineering Services &amp; Constultancy</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   <div class="tel">📞 955 13 62 68</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 4.8 (6)</span><a class="chip" href="http://revergy.es" rel="noopener" target="_blank">http://revergy.es</a></div>
+  <div class="chips"><a class="chip" href="http://revergy.es" rel="noopener" target="_blank">http://revergy.es</a></div>
 </article>
-<article class="ficha" data-n="100" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="100" data-prov="SEVILLA">
   <header>
     <span class="num">100</span>
     <h3>S&amp;H Consultores</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">calle Torricelli, Sevilla, 41092</p>
   <div class="tel">📞 954 99 00 30</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="http://shsconsultores.es" rel="noopener" target="_blank">http://shsconsultores.es</a></div>
+  <div class="chips"><a class="chip" href="http://shsconsultores.es" rel="noopener" target="_blank">http://shsconsultores.es</a></div>
 </article>
-<article class="ficha" data-n="101" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="101" data-prov="SEVILLA">
   <header>
     <span class="num">101</span>
     <h3>Sandetel</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Camino de los Descubrimientos, 17. pct cartuja 41092, Sevilla, 41092</p>
   <div class="tel">📞 955 06 26 00</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 3.9 (36)</span><a class="chip" href="http://www.sandetel.es" rel="noopener" target="_blank">http://www.sandetel.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.sandetel.es" rel="noopener" target="_blank">http://www.sandetel.es</a></div>
 </article>
-<article class="ficha" data-n="102" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="102" data-prov="SEVILLA">
   <header>
     <span class="num">102</span>
     <h3>Santander</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Pl. de San Agustín, 16, 41003 Sevilla, España</p>
   <div class="tel">📞 954 42 25 61</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-25</span><span class="chip rate">★★★ 3.4 (50)</span><a class="chip" href="http://www.bancosantander.es/" rel="noopener" target="_blank">http://www.bancosantander.es/</a></div>
+  <div class="chips"><a class="chip" href="http://www.bancosantander.es/" rel="noopener" target="_blank">http://www.bancosantander.es/</a></div>
 </article>
-<article class="ficha" data-n="103" data-prov="MALAGA" data-tip="IT_GENERALISTA">
+<article class="ficha" data-n="103" data-prov="MALAGA">
   <header>
     <span class="num">103</span>
     <h3>SecurityLab</h3>
   </header>
-  <p class="tip">IT generalista</p>
   <p class="dir">Avda. Juan López Peñalver, 21 (BIC - Euronova)</p>
   <div class="tel">📞 951 20 48 16</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-12</span><span class="chip rate">★★★★★ 5 (13)</span><a class="chip" href="http://www.securitylab.es/" rel="noopener" target="_blank">http://www.securitylab.es/</a></div>
+  <div class="chips"><a class="chip" href="http://www.securitylab.es/" rel="noopener" target="_blank">http://www.securitylab.es/</a></div>
 </article>
-<article class="ficha" data-n="104" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="104" data-prov="SEVILLA">
   <header>
     <span class="num">104</span>
     <h3>SEMIC</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Américo Vespucio, 5, Sevilla, 41092</p>
   <div class="tel">📞 955 25 04 70</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://semic.es" rel="noopener" target="_blank">http://semic.es</a></div>
+  <div class="chips"><a class="chip" href="http://semic.es" rel="noopener" target="_blank">http://semic.es</a></div>
 </article>
-<article class="ficha" data-n="105" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="105" data-prov="MALAGA">
   <header>
     <span class="num">105</span>
     <h3>SEO Málaga</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Severo Ochoa, 27 - oficina 24 (PROMALAGA CW)</p>
   <div class="tel">📞 670 60 70 06</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-11</span><span class="chip rate">★★★★★ 4.9 (10)</span><a class="chip" href="https://seomalaga.com/" rel="noopener" target="_blank">https://seomalaga.com/</a></div>
+  <div class="chips"><a class="chip" href="https://seomalaga.com/" rel="noopener" target="_blank">https://seomalaga.com/</a></div>
 </article>
-<article class="ficha" data-n="106" data-prov="MALAGA" data-tip="IT_GENERALISTA">
+<article class="ficha" data-n="106" data-prov="MALAGA">
   <header>
     <span class="num">106</span>
     <h3>Sequel</h3>
   </header>
-  <p class="tip">IT generalista</p>
   <p class="dir">Edificio Oficina 2.14, C. Don Cristian, 2, Distrito Centro, 29007 Málaga, España</p>
   <div class="tel">📞 952 07 01 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-02-06</span><span class="chip rate">★★★★★ 4.7 (23)</span><a class="chip" href="https://www.sequel.com/" rel="noopener" target="_blank">https://www.sequel.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.sequel.com/" rel="noopener" target="_blank">https://www.sequel.com/</a></div>
 </article>
-<article class="ficha" data-n="107" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="107" data-prov="SEVILLA">
   <header>
     <span class="num">107</span>
     <h3>SEVEN SISTEMA DE SEGURIDAD SL</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Av. 19 de Diciembre, 5, Loc BAJO, 41749 El Cuervo, Sevilla, España</p>
   <div class="tel">📞 954 49 69 31</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-17</span><span class="chip rate">★★★★★ 4.7 (14)</span><a class="chip" href="http://www.sevenseguridad.com/" rel="noopener" target="_blank">http://www.sevenseguridad.com/</a></div>
+  <div class="chips"><a class="chip" href="http://www.sevenseguridad.com/" rel="noopener" target="_blank">http://www.sevenseguridad.com/</a></div>
 </article>
-<article class="ficha" data-n="108" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="108" data-prov="SEVILLA">
   <header>
     <span class="num">108</span>
     <h3>SHS Blue</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">calle Max Planck, 3, Sevilla, 41092</p>
   <div class="tel">📞 955 27 21 27</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://www.shsconsultores.es" rel="noopener" target="_blank">http://www.shsconsultores.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.shsconsultores.es" rel="noopener" target="_blank">http://www.shsconsultores.es</a></div>
 </article>
-<article class="ficha" data-n="109" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="109" data-prov="SEVILLA">
   <header>
     <span class="num">109</span>
     <h3>SHS Consultores S.L</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">calle Max Planck , 3, Sevilla, 41092</p>
   <div class="tel">📞 954 99 00 30</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 4.6 (27)</span><a class="chip" href="http://www.shsconsultores.es" rel="noopener" target="_blank">http://www.shsconsultores.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.shsconsultores.es" rel="noopener" target="_blank">http://www.shsconsultores.es</a></div>
 </article>
-<article class="ficha" data-n="110" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="110" data-prov="SEVILLA">
   <header>
     <span class="num">110</span>
     <h3>SILICON SUR SL.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">edificio torre limón, Av. Albaida, 13, Loc 15, 41110 Bollullos de la Mitación, Sevilla, España</p>
   <div class="tel">📞 689 57 03 63</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-26</span><span class="chip rate">★★★★★ 5 (3)</span><a class="chip" href="https://www.surcolor.es/" rel="noopener" target="_blank">https://www.surcolor.es/</a></div>
+  <div class="chips"><a class="chip" href="https://www.surcolor.es/" rel="noopener" target="_blank">https://www.surcolor.es/</a></div>
 </article>
-<article class="ficha" data-n="111" data-prov="SEVILLA" data-tip="CONSULTORA">
+<article class="ficha" data-n="111" data-prov="SEVILLA">
   <header>
     <span class="num">111</span>
     <h3>SOFICONECTA CONSULTING S.L.</h3>
   </header>
-  <p class="tip">Consultora</p>
   <p class="dir">C. Jose Sabin Pérez, 41410 Carmona, Sevilla, España</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-01-25</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="https://soficonecta.com/" rel="noopener" target="_blank">https://soficonecta.com/</a></div>
+  <div class="chips"><a class="chip" href="https://soficonecta.com/" rel="noopener" target="_blank">https://soficonecta.com/</a></div>
 </article>
-<article class="ficha" data-n="112" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="112" data-prov="SEVILLA">
   <header>
     <span class="num">112</span>
     <h3>Software de Empresas Diense</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 955 49 11 42</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><a class="chip" href="http://www.businessgo.es" rel="noopener" target="_blank">http://www.businessgo.es</a></div>
+  <div class="chips"><a class="chip" href="http://www.businessgo.es" rel="noopener" target="_blank">http://www.businessgo.es</a></div>
 </article>
-<article class="ficha" data-n="113" data-prov="SEVILLA" data-tip="IT_GENERALISTA">
+<article class="ficha" data-n="113" data-prov="SEVILLA">
   <header>
     <span class="num">113</span>
     <h3>SolarPack</h3>
   </header>
-  <p class="tip">IT generalista</p>
   <p class="dir">C. Astronomía, Norte, 41015 Sevilla, España</p>
   <div class="tel">📞 954 97 54 95</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (1)</span><a class="chip" href="https://www.solarpack.es/" rel="noopener" target="_blank">https://www.solarpack.es/</a></div>
+  <div class="chips"><a class="chip" href="https://www.solarpack.es/" rel="noopener" target="_blank">https://www.solarpack.es/</a></div>
 </article>
-<article class="ficha" data-n="114" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="114" data-prov="SEVILLA">
   <header>
     <span class="num">114</span>
     <h3>Soltel It Solutions S.L.</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 13, Sevilla, 41092</p>
   <div class="tel">📞 955 08 73 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-01</span><span class="chip rate">★★★★ 3.8 (37)</span><a class="chip" href="http://soltel.es" rel="noopener" target="_blank">http://soltel.es</a></div>
+  <div class="chips"><a class="chip" href="http://soltel.es" rel="noopener" target="_blank">http://soltel.es</a></div>
 </article>
-<article class="ficha" data-n="115" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="115" data-prov="SEVILLA">
   <header>
     <span class="num">115</span>
     <h3>Solutia Cibersecurity</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">(Sin dirección)</p>
   <div class="tel">📞 955 11 11 55</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-07</span><span class="chip rate">★★★★ 4.5 (82)</span><a class="chip" href="http://gruposolutia.com" rel="noopener" target="_blank">http://gruposolutia.com</a></div>
+  <div class="chips"><a class="chip" href="http://gruposolutia.com" rel="noopener" target="_blank">http://gruposolutia.com</a></div>
 </article>
-<article class="ficha" data-n="116" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="116" data-prov="SEVILLA">
   <header>
     <span class="num">116</span>
     <h3>Solutia Digital Health SL</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">(Sin dirección)</p>
   <div class="tel">📞 955 11 11 55</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-07</span><span class="chip rate">★★★★ 4.5 (82)</span><a class="chip" href="http://gruposolutia.com" rel="noopener" target="_blank">http://gruposolutia.com</a></div>
+  <div class="chips"><a class="chip" href="http://gruposolutia.com" rel="noopener" target="_blank">http://gruposolutia.com</a></div>
 </article>
-<article class="ficha" data-n="117" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="117" data-prov="SEVILLA">
   <header>
     <span class="num">117</span>
     <h3>Solutia IT</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Américo Vespucio, 35, 41092</p>
   <div class="tel">📞 955 11 11 55</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-07</span><span class="chip rate">★★★★ 4.5 (82)</span><a class="chip" href="http://gruposolutia.com" rel="noopener" target="_blank">http://gruposolutia.com</a></div>
+  <div class="chips"><a class="chip" href="http://gruposolutia.com" rel="noopener" target="_blank">http://gruposolutia.com</a></div>
 </article>
-<article class="ficha" data-n="118" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="118" data-prov="SEVILLA">
   <header>
     <span class="num">118</span>
     <h3>Sopra Steria</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">calle Charles Darwin s/n, Sevilla, 41092</p>
   <div class="tel">📞 854 50 01 80</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-05-06</span><span class="chip rate">★★★★ 4.2 (41)</span><a class="chip" href="http://sopragroup.es" rel="noopener" target="_blank">http://sopragroup.es</a></div>
+  <div class="chips"><a class="chip" href="http://sopragroup.es" rel="noopener" target="_blank">http://sopragroup.es</a></div>
 </article>
-<article class="ficha" data-n="119" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="119" data-prov="SEVILLA">
   <header>
     <span class="num">119</span>
     <h3>Sportradar</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Gonzalo Jiménez de Quesada, 2, Sevilla, 41092</p>
   <div class="tel">📞 954 91 05 35</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (8)</span><a class="chip" href="http://optimagaming.com" rel="noopener" target="_blank">http://optimagaming.com</a></div>
+  <div class="chips"><a class="chip" href="http://optimagaming.com" rel="noopener" target="_blank">http://optimagaming.com</a></div>
 </article>
-<article class="ficha" data-n="120" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="120" data-prov="SEVILLA">
   <header>
     <span class="num">120</span>
     <h3>TEAM2GO</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   <div class="tel">📞 954 23 96 03</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-06-11</span><span class="chip rate">★★★★★ 5 (5)</span><a class="chip" href="https://team2go.es/" rel="noopener" target="_blank">https://team2go.es/</a></div>
+  <div class="chips"><a class="chip" href="https://team2go.es/" rel="noopener" target="_blank">https://team2go.es/</a></div>
 </article>
-<article class="ficha" data-n="121" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="121" data-prov="SEVILLA">
   <header>
     <span class="num">121</span>
     <h3>TECHNOLOGIES, S.L</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">(BIC - Euronova)</p>
   <div class="tel">📞 954 68 99 70</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-08-14</span><span class="chip rate">★★★★ 4.2 (23)</span><a class="chip" href="http://www.atlantic.es/" rel="noopener" target="_blank">http://www.atlantic.es/</a></div>
+  <div class="chips"><a class="chip" href="http://www.atlantic.es/" rel="noopener" target="_blank">http://www.atlantic.es/</a></div>
 </article>
-<article class="ficha" data-n="122" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="122" data-prov="MALAGA">
   <header>
     <span class="num">122</span>
     <h3>TEDIAL</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Severo Ochoa, 33 (Edificio Propio)</p>
   <div class="tel">📞 951 01 26 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-09</span><span class="chip rate">★★★★★ 4.8 (13)</span><a class="chip" href="https://www.tedial.com" rel="noopener" target="_blank">https://www.tedial.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.tedial.com" rel="noopener" target="_blank">https://www.tedial.com</a></div>
 </article>
-<article class="ficha" data-n="123" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="123" data-prov="SEVILLA">
   <header>
     <span class="num">123</span>
     <h3>Tekpyme Sevilla</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Américo Vespucio, 25, Córdoba, 41005</p>
   <div class="tel">📞 955 34 22 11</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★ 4.3 (3)</span><a class="chip" href="https://www.tekpyme.com/" rel="noopener" target="_blank">https://www.tekpyme.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.tekpyme.com/" rel="noopener" target="_blank">https://www.tekpyme.com/</a></div>
 </article>
-<article class="ficha" data-n="124" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="124" data-prov="SEVILLA">
   <header>
     <span class="num">124</span>
     <h3>The Adecco Group</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Ramón Carande, 3, 41013 Sevilla, España</p>
   <div class="tel">📞 954 10 60 05</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-08</span><span class="chip rate">★★★★ 4 (180)</span><a class="chip" href="https://www.adecco.com/es-es/oficinas/sevilla/sevilla/adecco-staffing" rel="noopener" target="_blank">https://www.adecco.com/es-es/oficinas/sevi</a></div>
+  <div class="chips"><a class="chip" href="https://www.adecco.com/es-es/oficinas/sevilla/sevilla/adecco-staffing" rel="noopener" target="_blank">https://www.adecco.com/es-es/oficinas/sevi</a></div>
 </article>
-<article class="ficha" data-n="125" data-prov="MALAGA" data-tip="DESARROLLO">
+<article class="ficha" data-n="125" data-prov="MALAGA">
   <header>
     <span class="num">125</span>
     <h3>The Workshop</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Severo Ochoa, 16-20 (Málaga Business Park)</p>
   
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-07-28</span><span class="chip rate">★★★★★ 4.8 (35)</span><a class="chip" href="https://www.theworkshop.com" rel="noopener" target="_blank">https://www.theworkshop.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.theworkshop.com" rel="noopener" target="_blank">https://www.theworkshop.com</a></div>
 </article>
-<article class="ficha" data-n="126" data-prov="SEVILLA" data-tip="DESARROLLO">
+<article class="ficha" data-n="126" data-prov="SEVILLA">
   <header>
     <span class="num">126</span>
     <h3>Tier1</h3>
   </header>
-  <p class="tip">Desarrollo</p>
   <p class="dir">Edificio Vega 7, Calle Boabdil, 6, 41900 Camas, Sevilla, España</p>
   <div class="tel">📞 954 46 76 90</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-09-01</span><span class="chip rate">★★★★ 4.2 (60)</span><a class="chip" href="https://www.tier1.es/web/guest" rel="noopener" target="_blank">https://www.tier1.es/web/guest</a></div>
+  <div class="chips"><a class="chip" href="https://www.tier1.es/web/guest" rel="noopener" target="_blank">https://www.tier1.es/web/guest</a></div>
 </article>
-<article class="ficha" data-n="127" data-prov="SEVILLA" data-tip="">
+<article class="ficha" data-n="127" data-prov="SEVILLA">
   <header>
     <span class="num">127</span>
     <h3>Track4x</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">calle Leonardo da Vinci, 18, Sevilla, 41092</p>
   
-  <div class="chips"><span class="chip off" title="Sin datos de actividad en Google">actividad sin datos</span><a class="chip" href="https://track4call.com/" rel="noopener" target="_blank">https://track4call.com/</a></div>
+  <div class="chips"><a class="chip" href="https://track4call.com/" rel="noopener" target="_blank">https://track4call.com/</a></div>
 </article>
-<article class="ficha" data-n="128" data-prov="SEVILLA" data-tip="VIDEOJUEGOS">
+<article class="ficha" data-n="128" data-prov="SEVILLA">
   <header>
     <span class="num">128</span>
     <h3>TRIPLE A TESTING S.L.</h3>
   </header>
-  <p class="tip">Videojuegos</p>
   <p class="dir">952 028080 (Edificio Grupo ACT)</p>
   <div class="tel">📞 666 39 72 96</div>
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (4)</span><a class="chip" href="https://www.localsoft.com" rel="noopener" target="_blank">https://www.localsoft.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.localsoft.com" rel="noopener" target="_blank">https://www.localsoft.com</a></div>
 </article>
-<article class="ficha" data-n="129" data-prov="MALAGA" data-tip="IT_GENERALISTA DESARROLLO">
+<article class="ficha" data-n="129" data-prov="MALAGA">
   <header>
     <span class="num">129</span>
     <h3>Valsea Technologies</h3>
   </header>
-  <p class="tip">IT generalista · Desarrollo</p>
   <p class="dir">Carretera de Istán km 1 C.C, Le Village, Local 8-12, 29602 Marbella, Málaga, España</p>
   
-  <div class="chips"><span class="chip warn" title="Sin reseña reciente; web operativa">activa · web viva</span><span class="chip rate">★★★★★ 5 (5)</span><a class="chip" href="https://www.valsea.com" rel="noopener" target="_blank">https://www.valsea.com</a></div>
+  <div class="chips"><a class="chip" href="https://www.valsea.com" rel="noopener" target="_blank">https://www.valsea.com</a></div>
 </article>
-<article class="ficha" data-n="130" data-prov="MALAGA" data-tip="">
+<article class="ficha" data-n="130" data-prov="MALAGA">
   <header>
     <span class="num">130</span>
     <h3>Verisk</h3>
   </header>
-  <p class="tip">sin clasificar</p>
   <p class="dir">Edificio Oficina 2.14, C. Don Cristian, 2, Distrito Centro, 29007 Málaga, España</p>
   <div class="tel">📞 952 07 01 00</div>
-  <div class="chips"><span class="chip ok" title="Reseña publicada en los últimos 12 meses">activa · 2026-02-06</span><span class="chip rate">★★★★★ 4.7 (23)</span><a class="chip" href="https://www.verisk.com/" rel="noopener" target="_blank">https://www.verisk.com/</a></div>
+  <div class="chips"><a class="chip" href="https://www.verisk.com/" rel="noopener" target="_blank">https://www.verisk.com/</a></div>
 </article></main>
 
 <details class="aviso"><summary>Metodología, fuentes y aviso legal</summary><pre># Aviso legal, fuentes y metodología
@@ -2218,7 +2081,7 @@ const PUNTOS = [{n:2,name:"Accenture",lat:37.4085872,lng:-6.0051052,prov:"SEVILL
 {n:128,name:"TRIPLE A TESTING S.L.",lat:37.3666191,lng:-5.900703099999999,prov:"SEVILLA"},
 {n:129,name:"Valsea Technologies",lat:36.5062828,lng:-4.942914,prov:"MALAGA"},
 {n:130,name:"Verisk",lat:36.7183919,lng:-4.4289252,prov:"MALAGA"}];
-const STATS = {"total": 130, "con_coords": 123, "sevilla": 102, "malaga": 28, "activas": 123, "resena12m": 78, "web_viva": 45, "generado": "2026-09-18"};
+const STATS = {"total": 130, "con_coords": 123, "sevilla": 102, "malaga": 28, "generado": "2026-09-18"};
 
 const map = L.map('map').setView([37.15, -5.35], 8);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -2264,22 +2127,19 @@ document.getElementById('stats').innerHTML = `
   <div><b>${STATS.total}</b>empresas</div>
   <div><b>${STATS.sevilla}</b>Sevilla</div>
   <div><b>${STATS.malaga}</b>Málaga</div>
-  <div><b>${STATS.resena12m}</b>reseña &lt;12m</div>
-  <div><b>${STATS.web_viva}</b>web viva</div>
   <div><b>${STATS.con_coords}</b>en el mapa</div>`;
 
 pinta(PUNTOS);
 new Leyenda({ position: 'bottomright' }).addTo(map);
 
 // filtros: ocultan fichas y sincronizan el mapa (mismo criterio, un solo filtro)
-const q = document.getElementById('q'), prov = document.getElementById('prov'), act = document.getElementById('act');
+const q = document.getElementById('q'), prov = document.getElementById('prov');
 function aplica() {
-  const texto = q.value.toLowerCase(), p = prov.value, a = act.value;
+  const texto = q.value.toLowerCase(), p = prov.value;
   let visibles = 0;
   document.querySelectorAll('.ficha').forEach(el => {
     const ok = (!texto || el.textContent.toLowerCase().includes(texto))
-            && (!p || el.dataset.prov === p)
-            && (!a || el.innerHTML.includes(a === 'RESENA_12M' ? 'reseña' : 'web viva') === (a !== ''));
+            && (!p || el.dataset.prov === p);
     el.style.display = ok ? '' : 'none';
     if (ok) visibles++;
   });
@@ -2289,7 +2149,7 @@ function aplica() {
   pinta(PUNTOS.filter(x => ids.has(x.n)));
   document.getElementById('grid').dataset.visibles = visibles;
 }
-[q, prov, act].forEach(el => el.addEventListener('input', aplica));
+[q, prov].forEach(el => el.addEventListener('input', aplica));
 
 // ---- etiquetas postales: el <dialog> nativo ya da modal, foco y Escape ----
 const dlg = document.getElementById('etq');
