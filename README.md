@@ -4,7 +4,35 @@ Censo de empresas de desarrollo de software en las provincias de **Sevilla (INE 
 
 ## Estado
 
-**Fase 0 — pendiente.** El plan está escrito y verificado en sus partes críticas; la ejecución no ha empezado.
+**Fases 0-6 completadas.** 130 empresas en el censo. Cobertura del **4,3 %** del
+universo DIRCE (CNAE 62, 2025). Publicado en `index.html`.
+
+| Fase | Resultado |
+|---|---|
+| 0 — Prerequisitos | DIRCE 1.298 (Sevilla) / 2.195 (Málaga) locales CNAE 62. BORME vía API `boe.es/datosabiertos/api/borme/sumario/{AAAAMMDD}`. `provincia_de()` por polígonos del PBF Geofabrik (12/12 puntos OK) |
+| 1 — Recolección | 1.108 fichas crudas de 7 fuentes (empleo, parques, BORME, licitaciones, GitHub, prensa) |
+| 2 — Fusión | 1.108 → 313 fichas (72 % absorbidas en deduplicación) |
+| 3 — Places + actividad | 103 fuera de ámbito. **82 con reseña <12 meses** |
+| 4 — Clasificación | 66 clasificadas por tipología. N2 salvó 45 fichas vía web viva |
+| 5 — Cierre | Cobertura 4,3 %. Chao1 no aplicable (`f2=0`) |
+| 6 — Publicación | `index.html` generado desde `data/empresas.json` |
+
+### Resultados
+
+- **130 empresas**, 102 Sevilla / 28 Málaga
+- **123 con actividad acreditada** (78 por reseña <12 m, 45 por web viva)
+- **Su 108 fichas con teléfono** y 123 con web
+- **No está completo**: cubre el 4,3 % del universo. Sevilla 9,2 %, Málaga 1,5 %
+
+### Limitaciones conocidas
+
+- El sesgo geográfico va **contra** Málaga: el DIRCE dice 63/37 y el censo da 79/21,
+  porque la fuente de empleo cubre Sevilla mucho mejor.
+- **42 % de los nombres no verificables en Places** con ese nombre exacto (razón
+  social ≠ nombre comercial). `data/places_cache.json` conserva 97 geocodificaciones
+  erróneas que el filtro de ámbito descartó correctamente.
+- Places **no clasifica** empresas de software (todas salen `establishment`); la
+  tipología sale de las notas de oferta de empleo.
 
 ## Documentos
 

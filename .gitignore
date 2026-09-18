@@ -1,7 +1,5 @@
-# datos crudos de collectors y dataset
-data/*.json
+data/places_cache.json
 raw/*.jsonl
-informes/*.md
+informes/*.log
 __pycache__/
 *.pyc
-.venv/
