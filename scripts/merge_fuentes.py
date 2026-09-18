@@ -27,8 +27,20 @@ DATA = os.path.join(RAIZ, "data")
 INFORMES = os.path.join(RAIZ, "informes")
 SALIDA = os.path.join(DATA, "empresas.json")
 
-# DIRCE 2025 (INE, operación DIR): locales CNAE 62 por provincia
-DIRCE = {"SEVILLA": 1298, "MALAGA": 2195}
+# DIRCE 2025 (INE, operación DIR) — tabla 301, CNAE 62, locales por provincia.
+# Valores medidos, no estimados: data/dirce_cnae62.csv los reproduce fila a fila
+# y su __main__ comprueba que los tramos suman el Total.
+DIRCE = {"SEVILLA": 1298, "MALAGA": 2195, "HUELVA": 111}
+
+# ETT / consultoras de selección que aparecen como ANUNCIANTES en Tecnoempleo.
+# NO se descartan (decisión del usuario 2026-09-18): se marcan con ES_ETT para que
+# el consumidor decida. OJO: 'knowmad mood' NO está aquí a propósito — es una
+# consultora tecnológica real (sede Málaga, contrata developers), no una ETT.
+ETT = re.compile(
+    r"\bmichael page\b|\bpage personnel\b|\bhays\b|\bmanpower\b|\badecco\b|"
+    r"\brandstad\b|\bexperis\b|spring professional|\beurofirms\b|"
+    r"talent search people|digital talent agency|\bsecond window\b|"
+    r"grupo digital\b|selecci[oó]n de personal|consultora de selecci[oó]n", re.I)
 
 # Municipio centinela para ofertas de empleo sin ubicación: NO es un municipio
 # real y no debe anclar la deduplicación (ver informe de fusión §"cambios de criterio").
@@ -164,6 +176,8 @@ def funde(grupo, ficheros_ok):
         flags.append("MUNICIPIO_FUERA_PROVINCIA")
     if mun is None:
         flags.append("SIN_MUNICIPIO")
+    if ETT.search(primero("nombre") or ""):
+        flags.append("ES_ETT")
 
     return {
         "id": None,                            # se rellena al final (orden estable)
@@ -172,7 +186,7 @@ def funde(grupo, ficheros_ok):
         "municipio_normalizado": mun_clave,
         "cif": primero("cif"),
         "municipio": mun,
-        "provincia": {"MALAGA": "Málaga"}.get(prov, prov.title() if prov else None),
+        "provincia": prov.title() if prov else None,
         "cp": None,
         "direccion": primero("direccion"),
         "direccion_completa": None,
@@ -373,13 +387,14 @@ def main():
           "## Cobertura frente a DIRCE 2025",
           "",
           f"- DIRCE 2025, locales CNAE 62: Sevilla {DIRCE['SEVILLA']}, "
-          f"Málaga {DIRCE['MALAGA']}, total **{total_dirce}**",
+          f"Málaga {DIRCE['MALAGA']}, Huelva {DIRCE['HUELVA']}, total **{total_dirce}**",
           f"- Censo fusionado: **{len(fichas)}** fichas → "
           f"**{100*len(fichas)/total_dirce:.2f} %** del universo DIRCE",
           "",
           "Por provincia:",
           ""]
-    for prov, den in (("Sevilla", DIRCE["SEVILLA"]), ("Málaga", DIRCE["MALAGA"])):
+    for prov, den in (("Sevilla", DIRCE["SEVILLA"]), ("Málaga", DIRCE["MALAGA"]),
+                      ("Huelva", DIRCE["HUELVA"])):
         n = sum(1 for f in fichas if f["provincia"] == prov)
         L.append(f"- {prov}: {n} / {den} = **{100*n/den:.2f} %**")
     sin_prov = sum(1 for f in fichas if not f["provincia"])

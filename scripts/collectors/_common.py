@@ -61,9 +61,23 @@ def fichas(rows, fuente, provincia, fecha):
     return salida
 
 
-def escribe(salida, fuente, provincia, fecha):
+def escribe(salida, fuente, provincia, fecha, aviso_pisar=False):
+    """Escribe el raw. NO pisa en silencio un fichero del mismo día.
+
+    Medido: ejecutar e2_empleo.py con otra lista de --fuentes sobreescribió el raw
+    bueno de Sevilla/Málaga con uno de 329 ofertas remotas, y el merge duplicó E2
+    (130 -> 592 fichas). Un collector puede correr dos veces; el fichero del día
+    solo se pisa con intención explícita.
+    """
     os.makedirs(RAW, exist_ok=True)
     ruta = os.path.join(RAW, f"{fuente.lower()}_{provincia.lower()}_{fecha}.jsonl")
+    if os.path.exists(ruta) and not aviso_pisar:
+        previas = sum(1 for _ in open(ruta, encoding="utf-8"))
+        raise SystemExit(
+            f"ABORTA: {ruta} ya existe ({previas} fichas) y no se pisa sin --pisar.\n"
+            f"  Si es una re-ejecución legítima: añade --pisar al comando.\n"
+            f"  Si es otro juego de fuentes: usa otro nombre de FUENTE."
+        )
     with open(ruta, "w") as f:
         for s in salida:
             f.write(json.dumps(s, ensure_ascii=False) + "\n")

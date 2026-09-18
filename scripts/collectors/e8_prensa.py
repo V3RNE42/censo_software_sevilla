@@ -28,6 +28,7 @@ N_SNAPSHOTS = 8                     # ~500 entradas c/u; ver HALLAZGO arriba
 PROV = {
     "SEVILLA": ("Sevilla", re.compile(r"^Sevilla$", re.I)),
     "MALAGA": ("Málaga", re.compile(r"^M[aá]laga$", re.I)),
+    "HUELVA": ("Huelva", re.compile(r"^Huelva$", re.I)),
 }
 
 NEWS_QS = {
@@ -37,6 +38,9 @@ NEWS_QS = {
     "MALAGA": ["empresa software Malaga", "startup Malaga ronda financiacion",
                "tecnologica Malaga nueva sede", "Malaga empresa inteligencia artificial",
                "Malaga TechPark empresa"],
+    "HUELVA": ["empresa software Huelva", "startup Huelva ronda financiacion",
+               "tecnologica Huelva nueva sede", "Huelva empresa inteligencia artificial",
+               "Huelva digitalizacion empresa"],
 }
 
 # NIF de persona juridica privada: letra inicial A-H, J, N, U, V, W + 7 digitos + control.
@@ -54,7 +58,8 @@ NOT_A_COMPANY = re.compile(
 # El titular debe situar la empresa en la provincia; si no, es ruido nacional
 # que Google News cuela al buscar "startup ... ronda". ponytail: filtro textual.
 PROV_IN_TITLE = {"SEVILLA": re.compile(r"sevilla|andalu", re.I),
-                 "MALAGA": re.compile(r"m[aá]laga|andalu|axarqu|costa del sol", re.I)}
+                 "MALAGA": re.compile(r"m[aá]laga|andalu|axarqu|costa del sol", re.I),
+                 "HUELVA": re.compile(r"huelva|andalu|condado|cuenca minera", re.I)}
 
 
 def _txt(e, tag):

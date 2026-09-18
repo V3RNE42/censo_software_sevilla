@@ -210,19 +210,99 @@ comprobar. Si devuelve 0, se documenta y se cierra.
 
 ## 5. Fases
 
-| Fase | Qué | Bloqueo |
-|---|---|---|
-| **A0** | Cambios de código §4 (4 constantes + cache PBF + DIRCE Huelva) | Ninguno |
-| **A1** | Colecta con 2 agentes (§3) | A0 (necesita `provincia_de('Huelva')`) |
-| **A2** | Merge al censo existente | A1 |
-| **A3** | Places + filtro 12 meses sobre las fichas de Huelva | A2 |
-| **A4** | Etiquetas + PDF + re-publicación | A3 |
+| Fase | Qué | Bloqueo | Estado |
+|---|---|---|---|
+| **A0** | Cambios de código §4 (4 constantes + cache PBF + DIRCE Huelva) | Ninguno | **HECHA** |
+| **A1** | Colecta con 2 agentes (§3) | A0 | en curso |
+| **A2** | Merge al censo existente | A1 | pendiente |
+| **A3** | Places + filtro 12 meses sobre las fichas de Huelva | A2 | pendiente |
+| **A4** | Etiquetas + PDF + re-publicación | A3 | pendiente |
 
 **A0 bloquea A1 por una razón concreta:** los agentes validan sus fichas con
 `provincia_de()`. Si el cache no tiene Huelva, toda ficha onubense sale
 `None` y se descarta en silencio — exactamente el fallo que ya ocurrió con
 Málaga. **No lanzar A1 antes de que el autocheck de `build_provincias.py`
 pase con los 3 puntos de Huelva.**
+
+---
+
+## 5bis. A0 ejecutada — lo que se midió (no lo que se supuso)
+
+Se ejecutó A0 y el resultado **corrigió el addendum en 4 puntos**. Se anota aquí
+porque el plan original se escribió sin estos datos.
+
+### 5bis.1 El cache de producción no tenía Huelva, y no se podía regenerar
+
+`_extraer()` filtraba durante el parseo (`OBJETIVO.get(name)` → `return`), así que
+el cache `~/.cache/censo_software/provincias_and.json` solo tenía Sevilla y Málaga.
+Añadir una provincia obligaba a **re-parsear los 194 MB** del PBF. Arreglado: se
+ensamblan las 8 andaluzas y **`OBJETIVO` filtra al leer**. Coste pagado una vez
+(42 s), y Cádiz/Córdoba ya no lo repiten.
+
+### 5bis.2 `Huelva` resuelve a provincia, no a municipio — riesgo #1 descartado
+
+`provincia_de()` **19/19** puntos: 7 de Huelva (capital, Lepe, Ayamonte, Aracena,
+Valverde, Almonte, Cortegana) resuelven a `Huelva`; Córdoba, Cádiz y Badajoz dan
+`None`. Un punto en Cádiz da `None` **a propósito**.
+
+### 5bis.3 El PBF trae un `Córdoba - Sevilla` de 163 puntos
+
+Relación con nombre compuesto (enclave de límite), sin `ref_ine`. Es la
+explicación de los `None` históricos en la costura. Se guarda pero no se usa.
+
+### 5bis.4 `TECNO_PROV[HUELVA] = 277` era **TERUEL** — el error más caro evitado
+
+El código de Tecnoempleo **no es el INE**. Medido del `<select name="pr">`:
+`Huelva=255` (277 es Teruel, 235 Almería, 244 Cádiz). Haberlo dejado habría
+metido ofertas de Teruel etiquetadas como Huelva.
+
+### 5bis.5 🔴 **E2/Tecnoempleo NO sirve para Huelva** — corrige §3
+
+Medición de las 3 provincias con el mismo collector:
+
+| Provincia | Fichas | `100% remoto` | Con municipio real |
+|---|---|---|---|
+| Sevilla | 424 | 329 (77,6 %) | **95** |
+| Málaga | 388 | 329 (84,8 %) | **59** |
+| Huelva | 332 | 329 (99,1 %) | **3** |
+
+Las **329 remotas son idénticas en las 3** — es el mismo pool nacional servido a
+cada consulta de provincia. Para Huelva la fuente aporta **3 fichas de 332**
+(0,9 %). El raw se borró: no se mergea ruido.
+
+**Consecuencia para §3:** el addendum asignaba a Huelva el mismo E2 que a las
+otras dos. **Ya no.** La fuente principal de Huelva pasa a ser BORME + búsquedas
+locales. El agente de empleo se reduce a la papelera.
+
+### 5bis.6 BORME sí funciona, y da la primera empresa onubense real
+
+Con `21` añadido al dict de provincias (antes `{"41","29"}`), 10 días de BORME dan
+**Huelva 1 / Sevilla 5 / Málaga 8** — proporción coherente con 111 vs 1.298 vs 2.195.
+
+```
+ATLANTYQA SOVEREIGN SYSTEMS SL. | C/ BARCO, 4 Ptl.6 1º b | BORME-A-2026-172-21
+```
+
+Domicilio en Huelva capital, objeto social de programación y SaaS, evidencia BOE.
+**Imprimible** (CP 21xxx, dirección postal). Es exactamente el perfil que E2 no
+encontró.
+
+### 5bis.7 Un excluido resucita: `sev-0117 Seabery`
+
+`provincia_de()` pasa ahora su coordenada a `Huelva` (2,5 km de Huelva capital,
+84 km de Sevilla). Reverse geocoding externo (Nominatim) confirma
+`Calle Doctor Emilio Haya Prats, Huelva, 21005`.
+
+**Pero la ficha está contaminada:** su dirección es `calle Inca Garcilaso, 3,
+Sevilla, 41092` (PT Cartuja, 84 km) y su web `seaberyat.com` es de la Seabery
+sevillana. Es una **colisión de dos empresas homónimas**. No se puede imprimir
+(`etiqueta()` devuelve `None` porque la dirección declara provincia ajena) —
+y eso es **correcto**: enviar esa carta a Cartuja sería un error.
+
+**Regla nueva para el handoff (§3):** si el nombre existe en Sevilla/Málaga con
+otra dirección, comprobar que la coordenada y la dirección **concuerdan** antes de
+escribir la ficha. Homónimos entre provincias son un modo de fallo real, no
+hipotético.
 
 ---
 
@@ -250,11 +330,13 @@ rebajarlo.
 
 | Riesgo | Probabilidad | Mitigación |
 |---|---|---|
-| `Huelva` en el PBF resuelve al **municipio** (admin_level 8) y no a la provincia | Media | Autocheck con Lepe y Ayamonte (§4.1). Si falla, filtrar por `admin_level==6` + verificar área > mínima |
+| ~~`Huelva` en el PBF resuelve al **municipio**~~ | ~~Media~~ | **DESCARTADO — 19/19 puntos. §5bis.2** |
 | Los 67 autónomos **sin local** no aparecen en Places → criterio 12 meses inservible | **Alta** | Declararlo. El criterio pasa a ser «≤50% sin ficha», no «0 sin ficha» |
+| 🔴 **E2 no aporta nada para Huelva** (3 de 332) | **Cierto, medido** | Sustituir por BORME + búsquedas locales. §5bis.5 |
 | Huelva da menos fichas que el criterio 4 | Media | Reportar el número real. **No** relajar el criterio ni rellenar con datos plausibles |
+| Homónimos entre provincias (Seabery) contaminan fichas | Media | Regla de concordancia coords/dirección en §3. §5bis.7 |
 | El factor locales/empresas 1.15 de Huelva es un placeholder | Alta | Marcarlo `ponytail:` en `cierre.py` |
-| Solape con las 103 excluidas | Baja (medido 0) | Re-ejecutar el filtro igualmente (§4.6) |
+| Solape con las 103 excluidas | Baja (medido 1: Seabery) | Re-ejecutado. §5bis.7 |
 
 ---
 

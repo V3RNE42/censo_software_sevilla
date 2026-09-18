@@ -38,14 +38,21 @@ DATA = os.path.join(RAIZ, "data", "empresas.json")
 
 # Forma de presentación. `ambito` va en MAYÚSCULAS (SEVILLA/MALAGA) porque es la
 # clave que usa el filtro del index; la etiqueta impresa lleva texto humano.
-PROV_ES = {"SEVILLA": "Sevilla", "MALAGA": "Málaga"}
+PROV_ES = {"SEVILLA": "Sevilla", "MALAGA": "Málaga", "HUELVA": "Huelva"}
+
+# CP -> las 2 primeras cifras. FUENTE ÚNICA: verificar_coherencia deriva de aquí.
+CP_PROV = {"SEVILLA": "41", "MALAGA": "29", "HUELVA": "21"}
+CP_RE = r"\b(41\d{3}|29\d{3}|21\d{3})\b"
 
 # Provincias ajenas: si aparecen en la dirección, la ficha NO es de ámbito.
 # OJO con 'Cádiz': 'Carretera de Cádiz' es una calle DE MÁLAGA (3 falsos
 # positivos medidos). Solo cuenta como ajena con CP detrás o al final.
+# OJO 2: las del ámbito (Sevilla/Málaga/Huelva) NO van aquí o se autoexcluirían;
+# el filtro las salta vía `propias` en provincia_ajena().
 OTRAS = ("Barcelona", "Madrid", "Valencia", "Córdoba", "Cordoba", "Almería",
-         "Almeria", "Granada", "Huelva", "Zaragoza", "Valladolid", "Murcia",
-         "Alicante", "Bilbao", "Vizcaya", "Sevilla", "Málaga", "Malaga")
+         "Almeria", "Granada", "Zaragoza", "Valladolid", "Murcia",
+         "Alicante", "Bilbao", "Vizcaya", "Sevilla", "Málaga", "Malaga",
+         "Huelva")
 
 
 def esc(s):
@@ -98,7 +105,7 @@ def etiqueta(e):
 
     # CP: del campo o embebido en la dirección. Sin CP, carta que no llega.
     if not cp:
-        m = re.search(r"\b(41\d{3}|29\d{3})\b", dire)
+        m = re.search(CP_RE, dire)
         cp = m.group(1) if m else ""
     if not cp:
         return None

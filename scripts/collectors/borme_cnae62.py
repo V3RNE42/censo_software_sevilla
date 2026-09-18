@@ -86,7 +86,7 @@ def parse_provincia(xml):
 
 def main():
     n_dias = int(sys.argv[1]) if len(sys.argv) > 1 else 10
-    provincias = {"41": "SEVILLA", "29": "MALAGA"}
+    provincias = {"41": "SEVILLA", "29": "MALAGA", "21": "HUELVA"}
     encontrados = {k: [] for k in provincias}
     stats = {k: {"fechas": 0, "empresas": 0, "match_cnae": 0, "match_prog": 0}
              for k in provincias}

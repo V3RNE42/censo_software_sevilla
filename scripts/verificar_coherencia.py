@@ -38,9 +38,10 @@ def _demo_norm():
 def main():
     _demo_norm()
     d = json.load(open(DATA, encoding="utf-8"))
-    CP_PROV = {"SEVILLA": "41", "MALAGA": "29"}
+    # Deriva de etiquetas.py: una provincia nueva no obliga a tocar 2 ficheros.
+    from etiquetas import CP_PROV
 
-    mal_coord = mal_cp = sin_coords = 0
+    mal_coord = mal_cp = sin_coords = sin_cp = 0
     for c in d:
         amb = norm(c.get("ambito"))
         cp = (c.get("cp") or "").strip()
@@ -53,17 +54,25 @@ def main():
             mal_coord += 1
             print(f"  COORD {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} coords->{prov}")
         exp = CP_PROV.get(amb)
-        if exp and cp[:2] != exp:
-            mal_cp += 1
-            print(f"  CP    {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} cp={cp}")
+        if exp and cp:
+            if cp[:2] != exp:
+                mal_cp += 1
+                print(f"  CP    {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} cp={cp}")
+        elif exp and not cp:
+            # Sin CP NO es incoherencia: `cp` lo rellena etiquetas.etiqueta() a
+            # partir de la dirección (o Places) más adelante. Contarlo como fallo
+            # daba 388/388 falsos positivos y mataba el check con assert.
+            sin_cp += 1
 
     con_coords = len(d) - sin_coords
     print(f"ambito vs coordenada : {mal_coord}/{con_coords} incoherentes")
-    print(f"ambito vs cp         : {mal_cp}/{con_coords} incoherentes")
+    print(f"ambito vs cp         : {mal_cp}/{con_coords} incoherentes "
+          f"({sin_cp} sin CP poblado, no verificables aun)")
     print(f"sin coordenadas      : {sin_coords} (provincia no verificable)")
     assert mal_coord == 0, f"{mal_coord} fichas con ambito != provincia de su coordenada"
     assert mal_cp == 0, f"{mal_cp} fichas con CP de otra provincia"
-    print(f"OK: {con_coords} fichas coherentes (ambito == punto-en-poligono == rango de CP)")
+    print(f"OK: {con_coords} fichas coherentes (ambito == punto-en-poligono; "
+          f"{con_coords-sin_cp} ademas con rango de CP)")
 
 
 if __name__ == "__main__":

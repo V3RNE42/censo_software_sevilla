@@ -29,8 +29,11 @@ import _common as C  # noqa: E402
 
 HOY = date.today().isoformat()
 
-# Tecnoempleo: código interno de provincia (leído del <select name="pr">)
-TECNO_PROV = {"SEVILLA": 274, "MALAGA": 264}
+# Tecnoempleo: código interno de provincia. MEDIDO del <select name="pr"> el
+# 18/09/2026 — NO es el código INE (Huelva=255, no 21; Sevilla=274, no 41).
+# Inventar este número contamina el censo en silencio: 277 es TERUEL.
+# Verificación: curl -s '...busqueda-empleo.php?pr=277' | grep '<select name="pr"'
+TECNO_PROV = {"SEVILLA": 274, "MALAGA": 264, "HUELVA": 255}
 TECNO_MAX_PAG = 30          # tope de seguridad; el portal pagina 30 ofertas/página
 TECNO_POR_PAG = 30
 
@@ -41,7 +44,11 @@ MANFRED_CIUDADES = ("sevilla", "málaga", "malaga", "marbella", "torremolinos",
                     "alhaurín de la torre", "alhaurin de la torre", "antequera",
                     "vélez-málaga", "velez-malaga", "cártama", "cartama",
                     "ronda", "écija", "ecija", "utrera", "dos hermanas",
-                    "mairena del aljarafe", "alcalá de guadaíra", "alcala de guadaira")
+                    "mairena del aljarafe", "alcalá de guadaíra", "alcala de guadaira",
+                    "huelva", "lepe", "almonte", "moguer", "aljaraque", "ayamonte",
+                    "punta umbría", "punta umbria", "cartaya", "isla cristina",
+                    "la palma del condado", "valverde del camino", "gibraleón",
+                    "gibraleon", "rociana", "bollullos par del condado")
 
 _MUNICIPIO = re.compile(r"<b>([^<]+)</b>")
 _FECHA = re.compile(r"(\d{2}/\d{2}/\d{4})")
@@ -151,10 +158,12 @@ def manfred(provincia):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--fuentes", default="tecnoempleo,manfred")
+    ap.add_argument("--pisar", action="store_true",
+                    help="sobrescribe el raw del día si ya existe (re-ejecución intencionada)")
     a = ap.parse_args()
     fuentes = [f.strip() for f in a.fuentes.split(",") if f.strip()]
 
-    for provincia in ("SEVILLA", "MALAGA"):
+    for provincia in ("SEVILLA", "MALAGA", "HUELVA"):
         print(f"== {provincia}", file=sys.stderr)
         filas = []
         if "tecnoempleo" in fuentes:
@@ -167,7 +176,7 @@ def main():
         # nombre de fichero compuesto si hay >1 portal, para no pisar el otro agente
         fuente = "E2_EMPLEO" if len(fuentes) > 1 else f"E2_{fuentes[0].upper()}"
         salida = C.fichas(filas, fuente, provincia, HOY)
-        C.escribe(salida, fuente, provincia, HOY)
+        C.escribe(salida, fuente, provincia, HOY, aviso_pisar=a.pisar)
 
 
 if __name__ == "__main__":

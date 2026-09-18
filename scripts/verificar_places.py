@@ -10,7 +10,7 @@ Dos pasos:
 
 La key se lee del entorno. NUNCA inline (ver Anexo A del plan).
 """
-import json, os, sys, time, urllib.parse, urllib.request
+import json, os, re, sys, time, urllib.parse, urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from build_provincias import provincia_de
@@ -52,42 +52,111 @@ def _places(url, params):
     return {"status": "FAIL", "results": []}
 
 
+def _cp_a_ambito(cp):
+    """'21006' -> 'HUELVA' | '41092' -> 'SEVILLA' | None si no es del ámbito."""
+    from etiquetas import CP_PROV
+    for amb, pref in CP_PROV.items():
+        if (cp or "").startswith(pref):
+            return amb
+    return None
+
+
 def ambito():
-    """Marca provincia real y aparta lo que cae fuera del ámbito."""
+    """Marca provincia real y aparta lo que cae fuera del ámbito.
+
+    `ambito` va SIEMPRE en mayúsculas (SEVILLA/MALAGA/HUELVA): es la clave que
+    consumen build_html.py, etiquetas.py y el filtro del index (`dataset.prov`).
+    provincia_de() devuelve la forma canónica ('Sevilla') y aquí se normaliza:
+    tener las dos formas rompía el filtro del mapa (190 fichas invisibles).
+
+    HOMÓNIMOS: Places busca por nombre limpio y una empresa como 'Diseño web HH'
+    (Huelva) resuelve a un negocio homónimo de Sevilla. Medido: la ficha decía
+    cp=21006 Huelva con coords de Sevilla y ambito=SEVILLA. Cuando el CP de la
+    dirección es del ámbito y discrepa de la coordenada, MANDA EL CP: es dato
+    postal verificado (el que va en el sobre), la coord es una búsqueda por nombre.
+    """
     fichas = json.load(open(EMPRESAS))
     dentro, fuera = [], []
     for f in fichas:
         lat, lng = f.get("lat"), f.get("lng")
         prov = provincia_de(lat, lng) if (lat and lng) else None
+        cp_amb = _cp_a_ambito((f.get("cp") or "").strip())
+
+        if cp_amb and prov and _ambito_key(prov) != cp_amb:
+            # discrepancia: el CP postal manda. La coord es de un homónimo.
+            # NO se excluye: se queda en el censo con la provincia de su CP y sin
+            # punto en el mapa (una coord de otra provincia no es su ubicación).
+            f["flags"] = f.get("flags", []) + ["COORD_HOMONIMO"]
+            f["coords_sospechosas"] = {"coord_ambito": _ambito_key(prov),
+                                       "cp_ambito": cp_amb}
+            f["lat"] = f["lng"] = None       # no son de esta empresa: fuera del mapa
+            prov = cp_amb.capitalize().replace("Malaga", "Málaga")
+        elif cp_amb and not prov:
+            prov = cp_amb.capitalize().replace("Malaga", "Málaga")
 
         if prov:
-            f["ambito"] = prov
+            f["ambito"] = _ambito_key(prov)
             f["provincia"] = prov.capitalize().replace("Malaga", "Málaga")
             f["flags"] = [x for x in f.get("flags", []) if x != "MUNICIPIO_FUERA_PROVINCIA"]
             dentro.append(f)
         elif lat and lng:
             f["flags"] = f.get("flags", []) + ["FUERA_AMBITO"]
+            f["ambito"] = None
             fuera.append(f)
         else:
-            # sin coords: nos fiamos del municipio declarado y lo marcamos
-            f["ambito"] = (f.get("provincia") or "").upper().replace("Á", "A")
-            f["flags"] = f.get("flags", []) + ["SIN_COORDS"]
+            # Sin coords. El CP manda sobre `provincia`: el merge ya sobrescribió
+            # `provincia` con lo que dijo Places, así que puede estar contaminado
+            # ('Diseño web HH' de Huelva quedó como Sevilla). El CP viene de la
+            # dirección postal, que es el dato del sobre.
+            amb = cp_amb or _ambito_key(f.get("provincia"))
+            f["ambito"] = amb
+            if "COORD_HOMONIMO" not in (f.get("flags") or []):
+                f["flags"] = f.get("flags", []) + ["SIN_COORDS"]
             dentro.append(f)
     return dentro, fuera
+
+
+def _ambito_key(valor):
+    """'Sevilla' | 'SÉVILLA' | 'Málaga' -> 'SEVILLA' | 'MALAGA'. Sin tildes."""
+    import unicodedata
+    s = unicodedata.normalize("NFD", str(valor or "").upper())
+    return "".join(c for c in s if unicodedata.category(c) != "Mn").strip()
+
+
+def _clave_cache(nombre):
+    """Clave de cache INSENSIBLE a mayúsculas/tildes/espacios.
+
+    Indexar por `f['nombre']` crudo pagaba dos veces la misma empresa cuando el
+    mismo negocio aparece como 'SYMONLINE' en un raw y 'Symonline' en otro
+    (medido: 8 solapes entre las dos fuentes de Huelva). Misma normalización que
+    usa el merge, para que coincida con lo que ya está cacheado.
+    """
+    import unicodedata
+    s = unicodedata.normalize("NFD", str(nombre or "").lower())
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    return re.sub(r"[^a-z0-9]+", " ", s).strip()
 
 
 def resolver_coords(fichas):
     """Rellena lat/lng vía Places textsearch. Nombre LIMPIO: 'CARTO Sevilla' da ZERO_RESULTS."""
     cache = json.load(open(CACHE_PLACES)) if os.path.exists(CACHE_PLACES) else {}
-    pendientes = [f for f in fichas if not f.get("lat") and f["nombre"] not in cache]
-    print(f"  geocodificando {len(pendientes)} fichas vía Places...")
-    for i, f in enumerate(pendientes, 1):
+    pendientes = {}
+    for f in fichas:
+        if f.get("lat"):
+            continue
+        k = _clave_cache(f["nombre"])
+        if k in cache or k in pendientes:
+            continue                       # cacheado, o ya en cola en esta pasada
+        pendientes[k] = f
+    print(f"  geocodificando {len(pendientes)} fichas únicas vía Places "
+          f"({len(fichas)} fichas, {len(fichas)-len(pendientes)} ya resueltas o repetidas)...")
+    for i, (k, f) in enumerate(pendientes.items(), 1):
         d = _places("https://maps.googleapis.com/maps/api/place/textsearch/json",
                     {"query": f["nombre"], "language": "es",
                      "location": "37.3891,-5.9845", "radius": "200000"})
         res = d.get("results", [])
         top = res[0] if res else None
-        cache[f["nombre"]] = {
+        cache[k] = {
             "place_id": top.get("place_id") if top else None,
             "lat": top["geometry"]["location"]["lat"] if top else None,
             "lng": top["geometry"]["location"]["lng"] if top else None,
@@ -108,17 +177,17 @@ def resolver_coords(fichas):
 def actividad(cache):
     """details con reviews_sort=newest → publishTime → filtro de 12 meses."""
     det = {}
-    con_pid = [f for f in json.load(open(EMPRESAS)) if cache.get(f["nombre"], {}).get("place_id")]
+    con_pid = [f for f in json.load(open(EMPRESAS)) if cache.get(_clave_cache(f["nombre"]), {}).get("place_id")]
     print(f"  consultando reseñas de {len(con_pid)} fichas...")
     for i, f in enumerate(con_pid, 1):
-        pid = cache[f["nombre"]]["place_id"]
+        pid = cache[_clave_cache(f["nombre"])]["place_id"]
         d = _places("https://maps.googleapis.com/maps/api/place/details/json",
                     {"place_id": pid, "language": "es", "reviews_sort": "newest",
                      "fields": "name,rating,user_ratings_total,reviews,business_status"})
         r = d.get("result", {})
         fechas = sorted((x["time"] for x in r.get("reviews", [])), reverse=True)
         nueva = (time.strftime("%Y-%m-%d", time.gmtime(fechas[0])) if fechas else None)
-        det[f["nombre"]] = {
+        det[_clave_cache(f["nombre"])] = {
             "business_status": r.get("business_status"),
             "rating": r.get("rating"),
             "n_resenas": r.get("user_ratings_total"),
@@ -137,10 +206,10 @@ def enriquecer_contacto():
     cache = json.load(open(CACHE_PLACES)) if os.path.exists(CACHE_PLACES) else {}
     fichas = json.load(open(EMPRESAS))
     pend = [f for f in fichas
-            if not f.get("telefono") and cache.get(f["nombre"], {}).get("place_id")]
+            if not f.get("telefono") and cache.get(_clave_cache(f["nombre"]), {}).get("place_id")]
     print(f"  enriqueciendo contacto de {len(pend)} fichas...")
     for i, f in enumerate(pend, 1):
-        pid = cache[f["nombre"]]["place_id"]
+        pid = cache[_clave_cache(f["nombre"])]["place_id"]
         d = _places("https://maps.googleapis.com/maps/api/place/details/json",
                     {"place_id": pid, "language": "es",
                      "fields": "formatted_phone_number,website,address_components"})
@@ -170,10 +239,20 @@ def main():
 
     print("\n[2/4] aplicando ámbito provincial (point-in-polygon PBF)")
     for f in fichas:
-        c = cache.get(f["nombre"], {})
+        c = cache.get(_clave_cache(f["nombre"]), {})
         if not f.get("lat") and c.get("lat"):
             f["lat"], f["lng"] = c["lat"], c["lng"]
-            f["direccion"] = f.get("direccion") or c.get("direccion")
+        # La dirección de Places trae el CP ('..., 29590 Málaga'); la de la fuente
+        # muchas veces no ('Severo Ochoa, 12'). Sin CP, etiqueta() descarta la ficha
+        # y no se imprime. Medido: 122 fichas de Málaga con CP en la cache tirado.
+        fd = f.get("direccion") or ""
+        cd = c.get("direccion") or ""
+        if not f.get("cp"):
+            m = re.search(r"\b(\d{5})\b", fd) or re.search(r"\b(\d{5})\b", cd)
+            if m:
+                f["cp"] = m.group(1)
+        if cd and not re.search(r"\b\d{5}\b", fd):
+            f["direccion"] = cd          # la nuestra no tiene CP: manda la de Places
     json.dump(fichas, open(EMPRESAS, "w"), ensure_ascii=False, indent=1)
 
     dentro, fuera = ambito()
@@ -185,8 +264,8 @@ def main():
     print("\n[4/4] escribiendo resultados")
     activas = inactivas = sin_datos = 0
     for f in dentro:
-        d = det.get(f["nombre"])
-        c = cache.get(f["nombre"], {})
+        d = det.get(_clave_cache(f["nombre"]))
+        c = cache.get(_clave_cache(f["nombre"]), {})
         f["google_place_id"] = c.get("place_id")
         if d:
             f.update({

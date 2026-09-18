@@ -77,6 +77,7 @@ def main():
         "con_coords": len(con_coords),
         "sevilla": sum(1 for e in orden if e.get("ambito") == "SEVILLA"),
         "malaga": sum(1 for e in orden if e.get("ambito") == "MALAGA"),
+        "huelva": sum(1 for e in orden if e.get("ambito") == "HUELVA"),
         "generado": "2026-09-18",
     }
 
@@ -98,7 +99,7 @@ def main():
 
     open(OUT, "w", encoding="utf-8").write(out)
     print(f"index.html: {n_fichas} fichas, {n_puntos} puntos, {n_etq} etiquetas, "
-          f"Sevilla {stats['sevilla']} / Málaga {stats['malaga']}")
+          f"Sevilla {stats['sevilla']} / Málaga {stats['malaga']} / Huelva {stats['huelva']}")
 
 
 if __name__ == "__main__":

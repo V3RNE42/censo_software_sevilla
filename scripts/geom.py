@@ -16,7 +16,9 @@ R_TIERRA = 6371.0088
 # IDs de relación OSM, obtenidos vía Nominatim (consulta barata de 2 llamadas).
 # OJO: NO usar area["ref:ine"="41"] en Overpass — medido el 18/09/2026 devuelve 0
 # elementos para Andalucía. Los IDs de relación sí son correctos.
-PROVINCIAS = {"SEVILLA": 349008, "MALAGA": 5275848}
+# Huelva (349_/) queda sin ID: provincia_de() va por PBF, no por Overpass, así
+# que no se usa. Rellenar solo si algún collector vuelve a Overpass.
+PROVINCIAS = {"SEVILLA": 349008, "MALAGA": 5275848, "HUELVA": None}
 CACHE = os.path.expanduser("~/.cache/censo_software/provincias.json")
 
 MIRRORS = [

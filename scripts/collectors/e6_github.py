@@ -36,6 +36,8 @@ QUERIES = {
     "MALAGA": ["Malaga", "Málaga", "Andalucia", "Marbella", "Mijas",
                "Torremolinos", "Benalmadena", "Estepona", "Fuengirola",
                "Velez-Malaga", "Ronda", "Antequera"],
+    "HUELVA": ["Huelva", "Andalucia", "Lepe", "Almonte", "Ayamonte",
+               "Moguer", "Aljaraque", "Valverde del Camino", "Isla Cristina"],
 }
 
 # Ubicacion de la org -> provincia. GitHub no obliga a poner la provincia.
@@ -46,6 +48,11 @@ PROV_RE = {
     "MALAGA": re.compile(r"m[aá]laga|marbella|mijas|torremolinos|benalm[aá]dena|"
                          r"fuengirola|estepona|v[eé]lez|rinc[oó]n de la victoria|"
                          r"antequera|ronda|co[ií]n\b|torrox|nerja|archidona", re.I),
+    # Huelva: 'punta umbria' y 'rocio' son del litoral; 'minas de riotinto' no
+    # aparece como 'riotinto' suelto para no cazar el municipio de Sevilla.
+    "HUELVA": re.compile(r"huelva|lepe|almonte|ayamonte|moguer|aljaraque|"
+                         r"valverde del camino|isla cristina|punta umbr[ií]a|"
+                         r"cartaya|gibrale[oó]n|rociana|la palma del condado", re.I),
 }
 # "Andalucia" a secas no dice provincia -> se pide detalle y si no aclara, fuera.
 

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Empresas de desarrollo de software — Sevilla y Málaga</title>
+<title>Empresas de desarrollo de software — Sevilla, Málaga y Huelva</title>
 <link rel="stylesheet" href="leaflet.css">
 <style>
   :root { --bg:#0f1117; --card:#171a23; --line:#252a36; --txt:#e8eaf0; --dim:#8b93a7;
@@ -95,8 +95,8 @@
 </head>
 <body>
 <header class="top">
-  <h1>Empresas de desarrollo de software — Sevilla y Málaga</h1>
-  <p class="sub">Censo por triangulación multifuente. Provincias INE 41 y 29.</p>
+  <h1>Empresas de desarrollo de software — Sevilla, Málaga y Huelva</h1>
+  <p class="sub">Censo por triangulación multifuente. Provincias INE 41, 29 y 21.</p>
   <button class="btn-etq" id="btn-etq" type="button">Imprimir etiquetas</button>
   <div class="stats" id="stats"></div>
 </header>
@@ -106,7 +106,7 @@
 <div class="filtros">
   <input id="q" type="search" placeholder="Buscar por nombre o dirección…">
   <select id="prov"><option value="">Todas las provincias</option>
-    <option value="SEVILLA">Sevilla</option><option value="MALAGA">Málaga</option></select>
+    <option value="SEVILLA">Sevilla</option><option value="MALAGA">Málaga</option><option value="HUELVA">Huelva</option></select>
 </div>
 
 <main class="grid" id="grid"><!--FICHAS--></main>
@@ -138,8 +138,8 @@ const capa = L.layerGroup().addTo(map);
 const marcadores = {};
 
 // leyenda: el mapa codifica la provincia en el color del marcador, hay que decirlo.
-const COLORES = { SEVILLA: '#5b8cff', MALAGA: '#2fbf71' };
-const NOMBRES = { SEVILLA: 'Sevilla', MALAGA: 'Málaga' };
+const COLORES = { SEVILLA: '#5b8cff', MALAGA: '#2fbf71', HUELVA: '#f0a443' };
+const NOMBRES = { SEVILLA: 'Sevilla', MALAGA: 'Málaga', HUELVA: 'Huelva' };
 
 // L.Control.extend, no `L.control().onAdd = fn`: esa forma le asigna onAdd a un
 // objeto temporal y addControl recibe otro SIN onAdd -> TypeError y el script
@@ -173,6 +173,7 @@ document.getElementById('stats').innerHTML = `
   <div><b>${STATS.total}</b>empresas</div>
   <div><b>${STATS.sevilla}</b>Sevilla</div>
   <div><b>${STATS.malaga}</b>Málaga</div>
+  <div><b>${STATS.huelva}</b>Huelva</div>
   <div><b>${STATS.con_coords}</b>en el mapa</div>`;
 
 pinta(PUNTOS);

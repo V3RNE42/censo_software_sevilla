@@ -74,6 +74,33 @@ DEV_FUERTE = re.compile(
 )
 
 
+# Persona física: nombre propio + 2 apellidos, SIN sufijo societario. Un autónomo
+# con móvil personal es PII (dato personal identificable), no empresa censable.
+# Medido en Huelva: 67 de 111 locales DIRCE son autónomos sin asalariados, así que
+# esto NO es hipotético. OJO: 'Manuel Jesús Carbón Salas' tiene nombre COMPUESTO
+# (4 palabras) — el patrón de 3 palabras no lo caza. Por eso se admiten 2-4.
+PERSONA_FISICA = re.compile(
+    r"^(?:[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+\s){2,4}[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+$")
+MOVIL_ES = re.compile(r"(?:\+34[\s.]?)?[67]\d{2}[\s.]?\d{2,3}[\s.]?\d{2}[\s.]?\d{2}")
+SUFIJO_SOCIETARIO = re.compile(
+    r"\b(sl|s\.l|slu|s\.l\.u|sa|s\.a|sc|s\.c|cb|c\.b|slne|sociedad|limitada|"
+    r"anonima|an[oó]nima|cooperativa|comunidad de bienes)\b", re.I)
+
+
+def es_pii_autonomo(nombre, telefono, tiene_web=False):
+    """True si es un particular con móvil: se descarta.
+
+    Un autónomo CON web propia y marca comercial es un negocio (Abatic, Creadores
+    Web Huelva) y se queda: la web es la seña de actividad empresarial. Uno sin web
+    y con nombre de persona + móvil es un particular y no se censa.
+    Medido: el criterio 'nombre de persona + móvil' a secas tiró 2 empresas reales.
+    """
+    if tiene_web or SUFIJO_SOCIETARIO.search(nombre or ""):
+        return False
+    return bool(PERSONA_FISICA.match((nombre or "").strip())
+                and MOVIL_ES.search(telefono or ""))
+
+
 def es_software(nombre, actividad, sector=""):
     """True si la entidad hace desarrollo de software. Fronteras §1.3."""
     if EXC_PUBLICO.search(nombre):
