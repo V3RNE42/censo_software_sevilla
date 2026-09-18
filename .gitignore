@@ -1,0 +1,7 @@
+# datos crudos de collectors y dataset
+data/*.json
+raw/*.jsonl
+informes/*.md
+__pycache__/
+*.pyc
+.venv/
