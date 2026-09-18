@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""verificar_coherencia.py — check runnable de la coherencia de provincia.
+
+POR QUÉ EXISTE: durante el desarrollo, comparar `ambito` ('SEVILLA') con el
+resultado canónico de provincia_de() ('Sevilla' / 'Málaga') dio 123 y luego 26
+"incoherencias" que NO existían — era el case y la tilde. Un verificador que
+grita en falso es peor que no tenerlo: hace perder tiempo y erosiona la
+confianza en el dataset. Aquí la normalización es ASCII+upper, y hay un caso
+de control con tilde para que el propio check no pueda volver a fallar así.
+
+Uso: python3 scripts/verificar_coherencia.py
+"""
+import json
+import os
+import sys
+import unicodedata
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from geom import provincia_de
+
+RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA = os.path.join(RAIZ, "data", "empresas.json")
+
+
+def norm(s):
+    """ASCII + mayúsculas: 'Málaga'->'MALAGA', 'SEVILLA'->'SEVILLA'. Iguales."""
+    return unicodedata.normalize("NFD", s or "").encode("ascii", "ignore").decode().upper().strip()
+
+
+def _demo_norm():
+    """El check se valida a sí mismo: sin esto, el bug de la tilde vuelve."""
+    assert norm("Málaga") == norm("MALAGA") == "MALAGA"
+    assert norm("Sevilla") == norm("SEVILLA") == "SEVILLA"
+    assert norm("Málaga") != norm("Sevilla")
+    assert norm(None) == ""
+
+
+def main():
+    _demo_norm()
+    d = json.load(open(DATA, encoding="utf-8"))
+    CP_PROV = {"SEVILLA": "41", "MALAGA": "29"}
+
+    mal_coord = mal_cp = sin_coords = 0
+    for c in d:
+        amb = norm(c.get("ambito"))
+        cp = (c.get("cp") or "").strip()
+        lat, lng = c.get("lat"), c.get("lng")
+        if lat is None:
+            sin_coords += 1
+            continue
+        prov = norm(provincia_de(lat, lng))
+        if prov != amb:
+            mal_coord += 1
+            print(f"  COORD {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} coords->{prov}")
+        exp = CP_PROV.get(amb)
+        if exp and cp[:2] != exp:
+            mal_cp += 1
+            print(f"  CP    {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} cp={cp}")
+
+    con_coords = len(d) - sin_coords
+    print(f"ambito vs coordenada : {mal_coord}/{con_coords} incoherentes")
+    print(f"ambito vs cp         : {mal_cp}/{con_coords} incoherentes")
+    print(f"sin coordenadas      : {sin_coords} (provincia no verificable)")
+    assert mal_coord == 0, f"{mal_coord} fichas con ambito != provincia de su coordenada"
+    assert mal_cp == 0, f"{mal_cp} fichas con CP de otra provincia"
+    print(f"OK: {con_coords} fichas coherentes (ambito == punto-en-poligono == rango de CP)")
+
+
+if __name__ == "__main__":
+    main()

@@ -42,12 +42,59 @@
   details.aviso { padding:20px; color:var(--dim); font-size:13px; border-top:1px solid var(--line); }
   details.aviso pre { white-space:pre-wrap; font-family:inherit; }
   footer { padding:16px 20px 40px; color:var(--off); font-size:12px; }
+
+  /* ---- botón Imprimir etiquetas (arriba a la derecha) ---- */
+  header.top { position:relative; }
+  .btn-etq { position:absolute; top:24px; right:20px;
+             background:var(--acc); color:#0f1117; border:0; border-radius:9px;
+             padding:10px 16px; font:600 14px/1 inherit; cursor:pointer; }
+  .btn-etq:hover { background:#7ba3ff; }
+  .btn-etq:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+
+  /* ---- modal de etiquetas ---- */
+  dialog#etq { width:min(100%,240mm); max-height:92vh; padding:0; border:1px solid var(--line);
+               border-radius:12px; background:var(--bg); color:var(--txt); }
+  dialog#etq::backdrop { background:rgba(0,0,0,.7); }
+  .etq-bar { position:sticky; top:0; z-index:2; display:flex; gap:10px; align-items:center;
+             padding:12px 16px; background:var(--card); border-bottom:1px solid var(--line); }
+  .etq-bar h2 { margin:0; font-size:16px; flex:1; }
+  .etq-bar button { background:var(--acc); color:#0f1117; border:0; border-radius:8px;
+                    padding:9px 14px; font:600 13px/1 inherit; cursor:pointer; }
+  .etq-bar button.sec { background:var(--card); color:var(--txt); border:1px solid var(--line); }
+  .etq-count { color:var(--dim); font-size:12px; }
+  .hoja { padding:16px; background:#fff; }
+  /* grid tambien en pantalla: la vista previa debe verse COMO la hoja A4.
+     (Antes el grid vivia solo en @media print y la previsualizacion salia
+     apilada en una columna, sin parecerse al PDF.) */
+  .hoja { display:grid; grid-template-columns:repeat(2,88mm);
+          grid-auto-rows:52mm; gap:0; align-content:start; }
+  .etq { width:88mm; height:52mm; box-sizing:border-box; padding:6mm; overflow:hidden;
+         border:1px dashed #c9ced9; display:flex; flex-direction:column; justify-content:center; }
+  .etq-emp { font-weight:700; font-size:11pt; color:#111; text-transform:uppercase;
+             line-height:1.2; margin-bottom:2.5mm; }
+  .etq-dir { font-size:9.5pt; color:#333; line-height:1.35; }
+  .etq-loc { font-size:9.5pt; color:#333; line-height:1.35; margin-top:1mm; }
+
+  /* ---- A4: 2 columnas x 5 filas = 10 etiquetas por pagina ---- */
+  @page { size:A4 portrait; margin:8mm; }
+  @media print {
+    body { background:#fff; color:#000; }
+    header.top, #map, .filtros, main.grid, details.aviso, footer, .etq-bar { display:none !important; }
+    dialog#etq { position:static; width:auto; max-height:none; border:0; border-radius:0;
+                 background:#fff; padding:0; margin:0; }
+    dialog#etq::backdrop { display:none; }
+    .hoja { padding:0; display:grid;
+            grid-template-columns:repeat(2,88mm);
+            grid-auto-rows:52mm; gap:0; }
+    .etq { border:0; outline:1px dashed #d5d9e0; break-inside:avoid; page-break-inside:avoid; }
+  }
 </style>
 </head>
 <body>
 <header class="top">
   <h1>Empresas de desarrollo de software — Sevilla y Málaga</h1>
   <p class="sub">Censo por triangulación multifuente. Provincias INE 41 y 29.</p>
+  <button class="btn-etq" id="btn-etq" type="button">Imprimir etiquetas</button>
   <div class="stats" id="stats"></div>
 </header>
 
@@ -1460,6 +1507,585 @@ vía.
 </pre></details>
 <footer>Generado por <code>scripts/build_html.py</code> desde <code>data/empresas.json</code>. Ficha y mapa salen del mismo registro.</footer>
 
+<dialog id="etq">
+  <div class="etq-bar">
+    <h2>Etiquetas postales</h2>
+    <span class="etq-count" id="etq-count"></span>
+    <button type="button" id="etq-print">Imprimir / PDF</button>
+    <button type="button" class="sec" id="etq-close">Cerrar</button>
+  </div>
+  <div class="hoja" id="hoja"><div class="etq">
+  <div class="etq-emp">4i.ai</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Accenture</div>
+  <div class="etq-dir">Parque Científico y Tecnológico Cartuja - Edificio, C. Isaac Newton, 3, Bluenet</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Accenture</div>
+  <div class="etq-dir">Calle Isaac Newton, 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Acciparte</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Active Business &amp; Technology</div>
+  <div class="etq-dir">Calle Gonzalo Jiménez de Quesada, 2</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Aibe Formación</div>
+  <div class="etq-dir">Av. de la Vega, 1, 2ª planta, Antequera</div>
+  <div class="etq-loc">29200, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Airbus</div>
+  <div class="etq-dir">Av. Maestranza Aérea</div>
+  <div class="etq-loc">41011, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">alGenio Markenting Online S.L</div>
+  <div class="etq-dir">calle Leonardo da Vinci , 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Apipana</div>
+  <div class="etq-dir">Avda. Carlos III s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Appian</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 13</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">archietechnologies.es</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Arelance</div>
+  <div class="etq-dir">C. de Marie Curie, 3, Campanillas</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Ascendia</div>
+  <div class="etq-dir">calle Isaac Newton, 4</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">AUTO ACCOUNTING &amp;amp; ADVISORY SL.</div>
+  <div class="etq-dir">Plaza Pintor Amalio García del Moral, 6</div>
+  <div class="etq-loc">41005, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">AUTOMARKETING MLG SL.</div>
+  <div class="etq-dir">C. Archidona, 14, Las Lagunas de Mijas</div>
+  <div class="etq-loc">29640, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Ayesa Digital</div>
+  <div class="etq-dir">C. Marie Curie, 2</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">BCS DATA</div>
+  <div class="etq-dir">C/ Graham Bell, 6 - Local 2 (HEVIMAR)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">BeSoccer</div>
+  <div class="etq-dir">C. Horacio Quiroga, 19, Carretera de Cádiz</div>
+  <div class="etq-loc">29004, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Best-tic S.L.</div>
+  <div class="etq-dir">Camino de los Descubrimientos, 11</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">BusinessGo</div>
+  <div class="etq-dir">calle Leonardo da Vinci 18, 5ª PL. MOD. 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Cajamar Tecnología</div>
+  <div class="etq-dir">Av. de la Buhaira, 33</div>
+  <div class="etq-loc">41018, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">CGI</div>
+  <div class="etq-dir">calle Américo Vespucio, 45</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Chakray Consulting</div>
+  <div class="etq-dir">ruiz zorrilla, 2</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Circet</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Circet Infraestructura</div>
+  <div class="etq-dir">(Sin dirección)</div>
+  <div class="etq-loc">41007, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">CIRCET SERVICIOS COMERCIALES</div>
+  <div class="etq-dir">(Sin dirección)</div>
+  <div class="etq-loc">41007, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Consultoría Informática ACOFI</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">CoverManager</div>
+  <div class="etq-dir">Pl. del Cabildo, 24, 4ª Planta, Casco Antiguo</div>
+  <div class="etq-loc">41001, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Crear Página e-web</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Crypto Fund Trader</div>
+  <div class="etq-dir">Av. de la República Argentina, 25</div>
+  <div class="etq-loc">41011, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">CTx Tech</div>
+  <div class="etq-dir">n. Pabellón de la UE, C. Isaac Newton</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Cuántico Innovación, S.L.</div>
+  <div class="etq-dir">calle Isaac Newton, 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">DXC</div>
+  <div class="etq-dir">c/ Charles Darwin s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Elecnor Servicios y Proyectos</div>
+  <div class="etq-dir">calle Charles Darwin  s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">ENFOCA AI SL.</div>
+  <div class="etq-dir">Parque Industrial Pisa, Calle Exposición 14,, Edificio Sodinur, 2º planta, modulo 24-A, Mairena del Aljarafe,, Sevilla, Mairena del Aljarafe</div>
+  <div class="etq-loc">41927, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">EonSea (El Cubo)</div>
+  <div class="etq-dir">Camino de los Descubrimientos, 17</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">EPAM</div>
+  <div class="etq-dir">Av. Imperio Argentina, 19-21, 2º Planta, Carretera de Cádiz</div>
+  <div class="etq-loc">29004, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Ericsson Network Services</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">ESAIL VITE</div>
+  <div class="etq-dir">Avda. Juan López Peñalver, 21 (BIC - Euronova)</div>
+  <div class="etq-loc">29001, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">EVA INSTRUMENTS SL.</div>
+  <div class="etq-dir">C. María Auxiliadora, 18</div>
+  <div class="etq-loc">41008, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">FLETERS SOLUTIONS SOCIEDAD LIMITADA.</div>
+  <div class="etq-dir">C. Pérez Hervás</div>
+  <div class="etq-loc">41003, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Freepik</div>
+  <div class="etq-dir">C. Molina Lario, 13, Piso 5º, Distrito Centro</div>
+  <div class="etq-loc">29015, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Fuerte Group Hotels</div>
+  <div class="etq-dir">Avda. Severo Ochoa, 28, 9º A Edificio Singlehome, Marbella</div>
+  <div class="etq-loc">29603, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Gamma</div>
+  <div class="etq-dir">calle Isaac Newton, 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Getronics</div>
+  <div class="etq-dir">calle Isaac Newton, 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">GMV</div>
+  <div class="etq-dir">1, Edificio Insur Cartuja, C. Albert Einstein, s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">GMV Soluciones Globales Internet S.A.U.</div>
+  <div class="etq-dir">calle Albert Einstein, s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">GPRC Pymes Telecom 3.0 S.L.</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Grupo A3Satel</div>
+  <div class="etq-dir">Camino de los Descubrimientos, 11</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Grupo Sermicro</div>
+  <div class="etq-dir">Polígono Industrial Pineda, C. A, Nave 2</div>
+  <div class="etq-loc">41013, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">GuadalTech Soluciones Tecnológicas</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Hispasec Sistemas, S.L.</div>
+  <div class="etq-dir">Severo Ochoa, 8 (Edificio Vid Distribuciones)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Idener</div>
+  <div class="etq-dir">Plaza Alcalde Sánchez Monteseirín 2</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Indra</div>
+  <div class="etq-dir">Av. de la Innovación</div>
+  <div class="etq-loc">41020, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">INDRA SOLUCIONES TECNOLOGIAS DE LA INFORMACION SL</div>
+  <div class="etq-dir">Av. de la Innovación</div>
+  <div class="etq-loc">41020, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Inetum</div>
+  <div class="etq-dir">calle Albert Einstein, s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Innovasur</div>
+  <div class="etq-dir">Plaza Alcalde Alfredo Sánchez Monteseirín, 2</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Isotrol</div>
+  <div class="etq-dir">calle Isaac Newton, 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Iwan21</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">JRV LAB SOCIEDAD LIMITADA.</div>
+  <div class="etq-dir">Camino de los Descubrimientos</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Kong Consulting Software</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Lefty Garage</div>
+  <div class="etq-dir">calle Gregor J. Mendel, 6</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">“LEOSOFT” Sodimper Malaga</div>
+  <div class="etq-dir">Johannes Kepler (Abidiam)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Logístiko</div>
+  <div class="etq-dir">C. Concejal Muñoz Cerván, 3, Carretera de Cádiz</div>
+  <div class="etq-loc">29004, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Magtel</div>
+  <div class="etq-dir">calle Isaac Newton, 4</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Mayblue Consultores</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Médicos Sin Fronteras</div>
+  <div class="etq-dir">Bajos del, Puente del Cristo de la Expiración, s/n, Casco Antiguo</div>
+  <div class="etq-loc">41001, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">MetaData</div>
+  <div class="etq-dir">Severo Ochoa, 9 (Centro de Tecnologías Ferroviarias)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Midway Technologies S.L.</div>
+  <div class="etq-dir">calle Charles Darwin s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Miguel Angel</div>
+  <div class="etq-dir">C. Pastor y Landero, 31, Loc, Casco Antiguo</div>
+  <div class="etq-loc">41001, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Nace Ghenova Digital</div>
+  <div class="etq-dir">Av. San Francisco Javier, 20, Planta 2</div>
+  <div class="etq-loc">41018, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">NOVANDA SOLUTIONS, S.L</div>
+  <div class="etq-dir">Severo ochoa, 51-56 Planta 4ª (Parcela IS-I)</div>
+  <div class="etq-loc">29016, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">NTT Data</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">NTT Data Centers, S.L.</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Nunsys S.A.</div>
+  <div class="etq-dir">calle Torricelli, 28</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Orthoapnea</div>
+  <div class="etq-dir">C. Flauta Mágica, 22, Cruz de Humilladero</div>
+  <div class="etq-loc">29006, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Pampling</div>
+  <div class="etq-dir">C. Puente y Pellón, 21, Casco Antiguo</div>
+  <div class="etq-loc">41001, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Paraty Tech</div>
+  <div class="etq-dir">Av. de Manuel Fraga Iribarne, 15, portal 4, 1ª planta, Torremolinos</div>
+  <div class="etq-loc">29620, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">PedroManuelAtienzaHuerta</div>
+  <div class="etq-dir">Calle Dr. González Caraballo, 1, Planta 3, Oficina 12 Edificio Portasevilla</div>
+  <div class="etq-loc">41020, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Plexus Tech (Intryo Servicios de Software S.L.)</div>
+  <div class="etq-dir">calle Isaac Newton, 4</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Powersolution</div>
+  <div class="etq-dir">calle Charles Darwin  s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">ProfesionalCloud Nuevas Tecnologías S. L.</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Properly Software, S.L.</div>
+  <div class="etq-dir">C. Graham Bell, 6, Planta 1, (HEVIMAR)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">PSS</div>
+  <div class="etq-dir">C. Tetuán, 8, Casco Antiguo</div>
+  <div class="etq-loc">41001, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Quantec Data Center S.L.</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Revergy Engineering Services &amp; Constultancy</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">S&amp;H Consultores</div>
+  <div class="etq-dir">calle Torricelli</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Sandetel</div>
+  <div class="etq-dir">Camino de los Descubrimientos, 17. pct cartuja</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Santander</div>
+  <div class="etq-dir">Pl. de San Agustín, 16</div>
+  <div class="etq-loc">41003, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SecurityLab</div>
+  <div class="etq-dir">Avda. Juan López Peñalver, 21 (BIC - Euronova)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SEMIC</div>
+  <div class="etq-dir">calle Américo Vespucio, 5</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SEO Málaga</div>
+  <div class="etq-dir">Severo Ochoa, 27 - oficina 24 (PROMALAGA CW)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Sequel</div>
+  <div class="etq-dir">Edificio Oficina 2.14, C. Don Cristian, 2, Distrito Centro</div>
+  <div class="etq-loc">29007, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SEVEN SISTEMA DE SEGURIDAD SL</div>
+  <div class="etq-dir">Av. 19 de Diciembre, 5, Loc BAJO, El Cuervo</div>
+  <div class="etq-loc">41749, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SHS Blue</div>
+  <div class="etq-dir">calle Max Planck, 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SHS Consultores S.L</div>
+  <div class="etq-dir">calle Max Planck , 3</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SILICON SUR SL.</div>
+  <div class="etq-dir">edificio torre limón, Av. Albaida, 13, Loc 15, Bollullos de la Mitación</div>
+  <div class="etq-loc">41110, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SOFICONECTA CONSULTING S.L.</div>
+  <div class="etq-dir">C. Jose Sabin Pérez, Carmona</div>
+  <div class="etq-loc">41410, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Software de Empresas Diense</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">SolarPack</div>
+  <div class="etq-dir">C. Astronomía, Norte</div>
+  <div class="etq-loc">41015, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Soltel It Solutions S.L.</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 13</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Solutia Cibersecurity</div>
+  <div class="etq-dir">(Sin dirección)</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Solutia Digital Health SL</div>
+  <div class="etq-dir">(Sin dirección)</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Solutia IT</div>
+  <div class="etq-dir">calle Américo Vespucio, 35</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Sopra Steria</div>
+  <div class="etq-dir">calle Charles Darwin s/n</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Sportradar</div>
+  <div class="etq-dir">calle Gonzalo Jiménez de Quesada, 2</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">TEAM2GO</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">TEDIAL</div>
+  <div class="etq-dir">Severo Ochoa, 33 (Edificio Propio)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">The Adecco Group</div>
+  <div class="etq-dir">Ramón Carande, 3</div>
+  <div class="etq-loc">41013, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">The Workshop</div>
+  <div class="etq-dir">Severo Ochoa, 16-20 (Málaga Business Park)</div>
+  <div class="etq-loc">29590, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Tier1</div>
+  <div class="etq-dir">Edificio Vega 7, Calle Boabdil, 6, Camas</div>
+  <div class="etq-loc">41900, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Track4x</div>
+  <div class="etq-dir">calle Leonardo da Vinci, 18</div>
+  <div class="etq-loc">41092, Sevilla</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Valsea Technologies</div>
+  <div class="etq-dir">Carretera de Istán km 1 C.C, Le Village, Local 8-12, Marbella</div>
+  <div class="etq-loc">29602, Málaga</div>
+</div>
+<div class="etq">
+  <div class="etq-emp">Verisk</div>
+  <div class="etq-dir">Edificio Oficina 2.14, C. Don Cristian, 2, Distrito Centro</div>
+  <div class="etq-loc">29007, Málaga</div>
+</div></div>
+</dialog>
+
 <script src="leaflet.js"></script>
 <script>
 const PUNTOS = [{n:2,name:"Accenture",lat:37.4085872,lng:-6.0051052,prov:"SEVILLA"},
@@ -1640,6 +2266,18 @@ function aplica() {
   document.getElementById('grid').dataset.visibles = visibles;
 }
 [q, prov, act].forEach(el => el.addEventListener('input', aplica));
+
+// ---- etiquetas postales: el <dialog> nativo ya da modal, foco y Escape ----
+const dlg = document.getElementById('etq');
+document.getElementById('btn-etq').addEventListener('click', () => {
+  dlg.showModal();
+  const n = document.querySelectorAll('#hoja .etq').length;
+  document.getElementById('etq-count').textContent =
+    `${n} etiquetas · ${Math.ceil(n / 10)} páginas A4`;
+});
+document.getElementById('etq-close').addEventListener('click', () => dlg.close());
+document.getElementById('etq-print').addEventListener('click', () => window.print());
+
 </script>
 </body>
 </html>

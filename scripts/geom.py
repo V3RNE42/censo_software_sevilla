@@ -58,10 +58,10 @@ def _demo():
 
     print(f"OK haversine (Carmona {d_carmona:.1f} km) + isocrona")
 
-    assert provincia_de(*SEVILLA) == "SEVILLA"
-    assert provincia_de(36.7213, -4.4214) == "MALAGA"
+    assert provincia_de(*SEVILLA) == "Sevilla"
+    assert provincia_de(36.7213, -4.4214) == "Málaga"
     assert provincia_de(37.8882, -4.7794) is None, "Cordoba queda fuera de ambito"
-    print("OK provincia_de(): Sevilla=SEVILLA | Malaga=MALAGA | Cordoba=None")
+    print("OK provincia_de(): Sevilla=Sevilla | Malaga=Málaga | Cordoba=None")
 
 
 if __name__ == "__main__":

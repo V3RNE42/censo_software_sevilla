@@ -97,6 +97,11 @@ def main():
 
     # fichas: van al marcador, no se inyectan en un HTML preexistente
     cuerpo = "\n".join(card(e) for e in orden)
+    # etiquetas postales: misma fuente, otra vista. Se usa generar() (no
+    # etiqueta() en bucle) para que el dedupe sea el mismo que el del script.
+    from etiquetas import generar as _generar
+    celdas_etq, _, _ = _generar(orden)
+    hoja_etq = "\n".join(celdas_etq)
     puntos = ",\n".join(
         f'{{n:{e["numero"]},name:"{e["nombre"].replace(chr(34), chr(39))}",'
         f'lat:{e["lat"]},lng:{e["lng"]},prov:"{e.get("ambito","")}"}}'
@@ -118,16 +123,20 @@ def main():
            .replace("<!--FICHAS-->", cuerpo)
            .replace("/*PUNTOS*/", puntos)
            .replace("<!--AVISO-->", aviso)
+           .replace("<!--ETIQUETAS-->", hoja_etq)
            .replace("{{STATS}}", json.dumps(stats)))
 
     # comprobación de coherencia: fichas y puntos salen del mismo array
     n_fichas = out.count('<article class="ficha"')
     n_puntos = out.count("{n:")
+    n_etq = out.count('<div class="etq">')
     assert n_fichas == len(orden), f"{n_fichas} fichas en HTML vs {len(orden)} en JSON"
     assert n_puntos == len(con_coords), f"{n_puntos} puntos vs {len(con_coords)} con coords"
+    assert n_etq > 0, "sin etiquetas: revisa el marcador <!--ETIQUETAS-->"
+    assert "<!--ETIQUETAS-->" not in out, "marcador de etiquetas sin reemplazar"
 
     open(OUT, "w", encoding="utf-8").write(out)
-    print(f"index.html: {n_fichas} fichas, {n_puntos} puntos, "
+    print(f"index.html: {n_fichas} fichas, {n_puntos} puntos, {n_etq} etiquetas, "
           f"Sevilla {stats['sevilla']} / Málaga {stats['malaga']}")
 
 

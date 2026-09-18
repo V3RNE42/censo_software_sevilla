@@ -42,12 +42,59 @@
   details.aviso { padding:20px; color:var(--dim); font-size:13px; border-top:1px solid var(--line); }
   details.aviso pre { white-space:pre-wrap; font-family:inherit; }
   footer { padding:16px 20px 40px; color:var(--off); font-size:12px; }
+
+  /* ---- botón Imprimir etiquetas (arriba a la derecha) ---- */
+  header.top { position:relative; }
+  .btn-etq { position:absolute; top:24px; right:20px;
+             background:var(--acc); color:#0f1117; border:0; border-radius:9px;
+             padding:10px 16px; font:600 14px/1 inherit; cursor:pointer; }
+  .btn-etq:hover { background:#7ba3ff; }
+  .btn-etq:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+
+  /* ---- modal de etiquetas ---- */
+  dialog#etq { width:min(100%,240mm); max-height:92vh; padding:0; border:1px solid var(--line);
+               border-radius:12px; background:var(--bg); color:var(--txt); }
+  dialog#etq::backdrop { background:rgba(0,0,0,.7); }
+  .etq-bar { position:sticky; top:0; z-index:2; display:flex; gap:10px; align-items:center;
+             padding:12px 16px; background:var(--card); border-bottom:1px solid var(--line); }
+  .etq-bar h2 { margin:0; font-size:16px; flex:1; }
+  .etq-bar button { background:var(--acc); color:#0f1117; border:0; border-radius:8px;
+                    padding:9px 14px; font:600 13px/1 inherit; cursor:pointer; }
+  .etq-bar button.sec { background:var(--card); color:var(--txt); border:1px solid var(--line); }
+  .etq-count { color:var(--dim); font-size:12px; }
+  .hoja { padding:16px; background:#fff; }
+  /* grid tambien en pantalla: la vista previa debe verse COMO la hoja A4.
+     (Antes el grid vivia solo en @media print y la previsualizacion salia
+     apilada en una columna, sin parecerse al PDF.) */
+  .hoja { display:grid; grid-template-columns:repeat(2,88mm);
+          grid-auto-rows:52mm; gap:0; align-content:start; }
+  .etq { width:88mm; height:52mm; box-sizing:border-box; padding:6mm; overflow:hidden;
+         border:1px dashed #c9ced9; display:flex; flex-direction:column; justify-content:center; }
+  .etq-emp { font-weight:700; font-size:11pt; color:#111; text-transform:uppercase;
+             line-height:1.2; margin-bottom:2.5mm; }
+  .etq-dir { font-size:9.5pt; color:#333; line-height:1.35; }
+  .etq-loc { font-size:9.5pt; color:#333; line-height:1.35; margin-top:1mm; }
+
+  /* ---- A4: 2 columnas x 5 filas = 10 etiquetas por pagina ---- */
+  @page { size:A4 portrait; margin:8mm; }
+  @media print {
+    body { background:#fff; color:#000; }
+    header.top, #map, .filtros, main.grid, details.aviso, footer, .etq-bar { display:none !important; }
+    dialog#etq { position:static; width:auto; max-height:none; border:0; border-radius:0;
+                 background:#fff; padding:0; margin:0; }
+    dialog#etq::backdrop { display:none; }
+    .hoja { padding:0; display:grid;
+            grid-template-columns:repeat(2,88mm);
+            grid-auto-rows:52mm; gap:0; }
+    .etq { border:0; outline:1px dashed #d5d9e0; break-inside:avoid; page-break-inside:avoid; }
+  }
 </style>
 </head>
 <body>
 <header class="top">
   <h1>Empresas de desarrollo de software — Sevilla y Málaga</h1>
   <p class="sub">Censo por triangulación multifuente. Provincias INE 41 y 29.</p>
+  <button class="btn-etq" id="btn-etq" type="button">Imprimir etiquetas</button>
   <div class="stats" id="stats"></div>
 </header>
 
@@ -66,6 +113,16 @@
 
 <details class="aviso"><summary>Metodología, fuentes y aviso legal</summary><pre><!--AVISO--></pre></details>
 <footer>Generado por <code>scripts/build_html.py</code> desde <code>data/empresas.json</code>. Ficha y mapa salen del mismo registro.</footer>
+
+<dialog id="etq">
+  <div class="etq-bar">
+    <h2>Etiquetas postales</h2>
+    <span class="etq-count" id="etq-count"></span>
+    <button type="button" id="etq-print">Imprimir / PDF</button>
+    <button type="button" class="sec" id="etq-close">Cerrar</button>
+  </div>
+  <div class="hoja" id="hoja"><!--ETIQUETAS--></div>
+</dialog>
 
 <script src="leaflet.js"></script>
 <script>
@@ -125,6 +182,18 @@ function aplica() {
   document.getElementById('grid').dataset.visibles = visibles;
 }
 [q, prov, act].forEach(el => el.addEventListener('input', aplica));
+
+// ---- etiquetas postales: el <dialog> nativo ya da modal, foco y Escape ----
+const dlg = document.getElementById('etq');
+document.getElementById('btn-etq').addEventListener('click', () => {
+  dlg.showModal();
+  const n = document.querySelectorAll('#hoja .etq').length;
+  document.getElementById('etq-count').textContent =
+    `${n} etiquetas · ${Math.ceil(n / 10)} páginas A4`;
+});
+document.getElementById('etq-close').addEventListener('click', () => dlg.close());
+document.getElementById('etq-print').addEventListener('click', () => window.print());
+
 </script>
 </body>
 </html>

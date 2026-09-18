@@ -15,7 +15,10 @@ Luego se puede borrar el PBF: el cache JSON son ~2 MB.
 import json, os, sys
 
 CACHE = os.path.expanduser("~/.cache/censo_software/provincias_and.json")
-OBJETIVO = {"Sevilla": "SEVILLA", "Málaga": "MALAGA"}
+# Forma canónica = la que usa `municipio`/`provincia` en todo el proyecto.
+# NO cambiar a mayúsculas: 'Malaga' != 'Málaga' y el filtro de provincia
+# del index comparaba por startswith -> Málaga salía 0 fichas (Fase 5).
+OBJETIVO = {"Sevilla": "Sevilla", "Málaga": "Málaga"}
 
 
 def _extraer(pbf):
@@ -53,7 +56,7 @@ def _poligonos():
 
 
 def provincia_de(lat, lng):
-    """'SEVILLA' | 'MALAGA' | None. Las demás provincias andaluzas dan None (fuera de ámbito)."""
+    """'Sevilla' | 'Málaga' | None. Las demás provincias andaluzas dan None (fuera de ámbito)."""
     from shapely.geometry import Point, Polygon
     p = Point(lng, lat)
     for nombre, anillos in _poligonos().items():
@@ -79,15 +82,15 @@ if __name__ == "__main__":
     from geom import haversine_km, isocrona_bucket, SEVILLA
 
     puntos = [
-        ("Sevilla capital", 37.3891, -5.9845, "SEVILLA"),
-        ("Málaga capital", 36.7213, -4.4214, "MALAGA"),
-        ("Dos Hermanas", 37.2829, -5.9209, "SEVILLA"),
-        ("Utrera", 37.1851, -5.7807, "SEVILLA"),
-        ("Carmona", 37.4712, -5.6466, "SEVILLA"),
-        ("Écija", 37.5424, -5.0825, "SEVILLA"),
-        ("Antequera", 37.0194, -4.5622, "MALAGA"),
-        ("Ronda", 36.7423, -5.1665, "MALAGA"),
-        ("Marbella", 36.5110, -4.8870, "MALAGA"),
+        ("Sevilla capital", 37.3891, -5.9845, "Sevilla"),
+        ("Málaga capital", 36.7213, -4.4214, "Málaga"),
+        ("Dos Hermanas", 37.2829, -5.9209, "Sevilla"),
+        ("Utrera", 37.1851, -5.7807, "Sevilla"),
+        ("Carmona", 37.4712, -5.6466, "Sevilla"),
+        ("Écija", 37.5424, -5.0825, "Sevilla"),
+        ("Antequera", 37.0194, -4.5622, "Málaga"),
+        ("Ronda", 36.7423, -5.1665, "Málaga"),
+        ("Marbella", 36.5110, -4.8870, "Málaga"),
         ("Córdoba capital", 37.8882, -4.7794, None),
         ("Huelva capital", 37.2614, -6.9447, None),
         ("Cádiz capital", 36.5271, -6.2886, None),
