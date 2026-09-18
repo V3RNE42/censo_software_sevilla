@@ -62,6 +62,13 @@
                     padding:9px 14px; font:600 13px/1 inherit; cursor:pointer; }
   .etq-bar button.sec { background:var(--card); color:var(--txt); border:1px solid var(--line); }
   .etq-count { color:var(--dim); font-size:12px; }
+  /* leyenda del mapa (control de Leaflet) */
+  .leyenda { background:rgba(23,26,35,.92); border:1px solid var(--line); border-radius:8px;
+             padding:8px 10px; font-size:12px; color:var(--txt); display:flex; gap:14px;
+             line-height:1.6; }
+  .leyenda span { display:flex; align-items:center; gap:6px; }
+  .leyenda i { width:10px; height:10px; border-radius:50%; display:inline-block; }
+
   .hoja { padding:16px; background:#fff; }
   /* grid tambien en pantalla: la vista previa debe verse COMO la hoja A4.
      (Antes el grid vivia solo en @media print y la previsualizacion salia
@@ -2221,11 +2228,27 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 const capa = L.layerGroup().addTo(map);
 const marcadores = {};
 
+// leyenda: el mapa codifica la provincia en el color del marcador, hay que decirlo.
+const COLORES = { SEVILLA: '#5b8cff', MALAGA: '#2fbf71' };
+const NOMBRES = { SEVILLA: 'Sevilla', MALAGA: 'Málaga' };
+
+// L.Control.extend, no `L.control().onAdd = fn`: esa forma le asigna onAdd a un
+// objeto temporal y addControl recibe otro SIN onAdd -> TypeError y el script
+// entero muere ahi (0 marcadores, 0 leyenda). Medido.
+const Leyenda = L.Control.extend({
+  onAdd: function () {
+    const d = L.DomUtil.create('div', 'leyenda');
+    d.innerHTML = Object.keys(COLORES).map(k =>
+      `<span><i style="background:${COLORES[k]}"></i>${NOMBRES[k]}</span>`).join('');
+    return d;
+  }
+});
+
 function pinta(puntos) {
   capa.clearLayers();
   puntos.forEach(p => {
     const m = L.circleMarker([p.lat, p.lng], {
-      radius: 5, color: p.prov === 'SEVILLA' ? '#5b8cff' : '#2fbf71',
+      radius: 5, color: COLORES[p.prov] || '#8b93a7',
       fillOpacity: .75, weight: 1
     }).bindTooltip(p.name);
     m.on('click', () => {
@@ -2246,6 +2269,7 @@ document.getElementById('stats').innerHTML = `
   <div><b>${STATS.con_coords}</b>en el mapa</div>`;
 
 pinta(PUNTOS);
+new Leyenda({ position: 'bottomright' }).addTo(map);
 
 // filtros: ocultan fichas y sincronizan el mapa (mismo criterio, un solo filtro)
 const q = document.getElementById('q'), prov = document.getElementById('prov'), act = document.getElementById('act');
