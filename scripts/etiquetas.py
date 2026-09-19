@@ -156,7 +156,7 @@ def etiqueta(e):
     # Places a veces duplica el tipo de via: "Calle calle Gonzalo Jimenez".
     linea2 = re.sub(r"\b(calle|c/|avenida|avda\.?|plaza|paseo)\s+\1\b", r"\1", linea2, flags=re.I)
 
-    return (f'<div class="etq">\n'
+    return (f'<div class="etq" data-n="{e.get("numero")}">\n'
             f'  <div class="etq-emp">{esc(e.get("nombre"))}</div>\n'
             f'  <div class="etq-dir">{esc(linea2)}</div>\n'
             f'  <div class="etq-loc">{esc(f"{cp}, {prov}")}</div>\n'

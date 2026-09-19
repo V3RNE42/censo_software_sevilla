@@ -199,12 +199,37 @@ function aplica() {
 [q, prov].forEach(el => el.addEventListener('input', aplica));
 
 // ---- etiquetas postales: el <dialog> nativo ya da modal, foco y Escape ----
+// Las 379 etiquetas ya estan en el DOM con data-n, igual que las fichas. Imprimir
+// un subconjunto es filtrar, no regenerar: mismas dos condiciones que aplica().
+// OJO: 'n' es el numero de ficha, y en el filtro de provincia de las fichas se usa
+// dataset.prov. Aqui se cruza por n -> hay que mirar la ficha, no la etiqueta.
 const dlg = document.getElementById('etq');
-document.getElementById('btn-etq').addEventListener('click', () => {
-  dlg.showModal();
-  const n = document.querySelectorAll('#hoja .etq').length;
+const ETQS = [...document.querySelectorAll('#hoja .etq')];
+
+// fichas visibles -> numeros visibles. aplica() ya lo calcula: se reutiliza.
+function visibles() {
+  return new Set([...document.querySelectorAll('.ficha')]
+    .filter(el => el.style.display !== 'none')
+    .map(el => +el.querySelector('.num').textContent));
+}
+
+function aplicaEtq() {
+  const ids = visibles();
+  let n = 0;
+  ETQS.forEach(e => {
+    const ok = ids.has(+e.dataset.n);
+    e.style.display = ok ? '' : 'none';
+    if (ok) n++;
+  });
+  const p = prov.value ? ` · ${NOMBRES[prov.value]}` : '';
   document.getElementById('etq-count').textContent =
-    `${n} etiquetas · ${Math.ceil(n / 10)} páginas A4`;
+    `${n} etiquetas${p} · ${Math.ceil(n / 10)} páginas A4`;
+  return n;
+}
+
+document.getElementById('btn-etq').addEventListener('click', () => {
+  aplicaEtq();
+  dlg.showModal();
 });
 document.getElementById('etq-close').addEventListener('click', () => dlg.close());
 document.getElementById('etq-print').addEventListener('click', () => window.print());

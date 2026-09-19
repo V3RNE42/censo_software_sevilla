@@ -91,7 +91,7 @@ def main():
     # comprobación de coherencia: fichas y puntos salen del mismo array
     n_fichas = out.count('<article class="ficha"')
     n_puntos = out.count("{n:")
-    n_etq = out.count('<div class="etq">')
+    n_etq = out.count('<div class="etq" data-n=')
     assert n_fichas == len(orden), f"{n_fichas} fichas en HTML vs {len(orden)} en JSON"
     assert n_puntos == len(con_coords), f"{n_puntos} puntos vs {len(con_coords)} con coords"
     assert n_etq > 0, "sin etiquetas: revisa el marcador <!--ETIQUETAS-->"
