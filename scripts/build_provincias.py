@@ -113,6 +113,12 @@ def ambito_de(lat, lng, cp=None, provincia=None):
         return prov_cp, None, True           # homónimo: gana el CP, coord fuera
     if prov_cp:
         return prov_cp, (lat, lng) if prov_coord else None, False
+    # Coord FUERA del ámbito y CP que no es de ninguna de las tres: la coordenada
+    # manda y la ficha está fuera, aunque el fichero raw declare ámbito. Medido:
+    # '2026 LPJ CONSULTORES SL.' con cp=30112 (Murcia) desde Places -> guardar la
+    # `provincia` de la fila la metía en Málaga con un CP de Murcia.
+    if (lat and lng) and not prov_coord:
+        return None, None, False
     if prov_coord:
         return prov_coord, (lat, lng), False
     # Sin CP utilizable y sin coord en ámbito. `provincia` puede venir contaminada

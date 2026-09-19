@@ -1,0 +1,134 @@
+{
+ "atlantyqa sovereign systems sl.|c/ barco, 4 ptl.6 1º b": {
+  "cp": "21003",
+  "estado": "OK",
+  "consulta": "C/ BARCO, 4 Ptl.6 1º b, Huelva",
+  "formatted_address": "C. Berdigón, 24, 21003 Huelva"
+ },
+ "acme 51 sl.|avda conde de orgaz 49": {
+  "cp": "29002",
+  "estado": "OK",
+  "consulta": "AVDA CONDE DE ORGAZ 49, Málaga",
+  "formatted_address": "C. Cuarteles, 49, Distrito Centro, 29002 Málaga"
+ },
+ "adt gestión informática|avda. juan lópez peñalver, 8-1º": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "Avda. Juan López Peñalver, 8-1º, Málaga",
+  "formatted_address": "Av. Juan López de Peñalver, 8, Campanillas, 29590 Málaga"
+ },
+ "basegroup|maría curie, 11": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "María Curie, 11, Málaga",
+  "formatted_address": "C. de Marie Curie, 11, Campanillas, 29590 Málaga"
+ },
+ "beemeral|blvr. louis pasteur, 47": {
+  "cp": "29010",
+  "estado": "OK",
+  "consulta": "Blvr. Louis Pasteur, 47, Málaga",
+  "formatted_address": "Blvr. Louis Pasteur, 47, Teatinos-Universidad, 29010 Málaga"
+ },
+ "databaseteam|c/ maría curie, 3": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "C/ María Curie, 3, Málaga",
+  "formatted_address": "EDIFICIO PREMIER II, C. de Marie Curie, 3, Campanillas, 29590 Málaga"
+ },
+ "dorai labs sl.|c/ nuestra señora de gracia 3 (marbella)": {
+  "cp": "29601",
+  "estado": "OK",
+  "consulta": "C/ Nuestra Señora de Gracia 3 (MARBELLA), Marbella",
+  "formatted_address": "C. Ntra. Sra. de Gracia, 3, 29601 Marbella, Málaga"
+ },
+ "hispania eurovip, s.l.|ivan pavlov, 8 bloq.1 - 1º g alto": {
+  "cp": null,
+  "estado": "ZERO_RESULTS",
+  "consulta": "Ivan Pavlov, 8 bloq.1 - 1º G Alto, Málaga",
+  "formatted_address": null
+ },
+ "instituto de procesado de imagen - ipi|severo ochoa, 4 - 1ª planta": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "Severo Ochoa, 4 - 1ª planta, Málaga",
+  "formatted_address": "Edificio I+D6, C. Severo Ochoa, 21, Edificio I+D 6, Campanillas, 29590 Campanillas, Málaga"
+ },
+ "jcf gestion inteligente sl.|c/ tanzania 3 ptl.3 2 c - edificio 1 (malaga)": {
+  "cp": "29007",
+  "estado": "OK",
+  "consulta": "C/ TANZANIA 3 Ptl.3 2 C - EDIFICIO 1 (MALAGA), Málaga",
+  "formatted_address": "Av. de Andalucía, 4, y 6, Distrito Centro, 29007 Málaga"
+ },
+ "kd flow sl.|plaza goya 3 8 c (torremo": {
+  "cp": "29620",
+  "estado": "OK",
+  "consulta": "PLAZA GOYA 3 8 C (TORREMO, Málaga",
+  "formatted_address": "Pl. Goya, 3, 8 c, 29620 Torremolinos, Málaga"
+ },
+ "liberty global solutions ltd|severo ochoa, 41 (regus)": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "Severo ochoa, 41 (REGUS), Málaga",
+  "formatted_address": "C. Severo Ochoa, 41, Campanillas, 29590 Málaga"
+ },
+ "merinoditech sl.|cmno de la sierra númer": {
+  "cp": "29140",
+  "estado": "OK",
+  "consulta": "CMNO DE LA SIERRA Númer, Málaga",
+  "formatted_address": "Camino Club de Tenis, 6, Churriana, 29140 Málaga"
+ },
+ "okanan ecom sl.|c/ bahia 2 4 1 (benalma": {
+  "cp": "29631",
+  "estado": "OK",
+  "consulta": "C/ BAHIA 2 4 1 (BENALMA, Málaga",
+  "formatted_address": "Calle Bahía, 2, 4 1, 29631 Benalmádena, Málaga"
+ },
+ "op-25 soft sl.|c/ lanzarote 5 4 a (fuen": {
+  "cp": null,
+  "estado": "ZERO_RESULTS",
+  "consulta": "C/ LANZAROTE 5 4 A (FUEN, Málaga",
+  "formatted_address": null
+ },
+ "pa30 solutions sl.|calle jabea 36 número36": {
+  "cp": "29639",
+  "estado": "OK",
+  "consulta": "CALLE Jabea 36 Número36, Málaga",
+  "formatted_address": "C. Jabea, 36, 36, 29639 Benalmádena, Málaga"
+ },
+ "powering a great opportunity sl.|calle seyal del hornill": {
+  "cp": null,
+  "estado": "ZERO_RESULTS",
+  "consulta": "CALLE SEYAL DEL HORNILL, Málaga",
+  "formatted_address": null
+ },
+ "raw igaming|graham bell, 8 (edificio propio)": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "Graham Bell, 8 (Edificio Propio), Málaga",
+  "formatted_address": "C. Graham Bell, 6, Campanillas, 29590 Málaga"
+ },
+ "realcore spain sl|ivan pavlov, 8 - bloque 2, oficina 1°g": {
+  "cp": "29590",
+  "estado": "OK",
+  "consulta": "Ivan Pavlov, 8 - Bloque 2, Oficina 1°G, Málaga",
+  "formatted_address": "C. Iván Pavlov, 8, Blq 2, Oficina G, Campanillas, 29590 Málaga"
+ },
+ "singavan sl.|c/ alejandro dumas 17 (m": {
+  "cp": "29004",
+  "estado": "OK",
+  "consulta": "C/ ALEJANDRO DUMAS 17 (M, Málaga",
+  "formatted_address": "C. Alejandro Dumas, 17, m, Carretera de Cádiz, 29004 Málaga"
+ },
+ "stellar digital sl.|avda juan gomez juanito 1": {
+  "cp": "29004",
+  "estado": "OK",
+  "consulta": "AVDA JUAN GOMEZ JUANITO 1, Málaga",
+  "formatted_address": "Pl. Juan Gomez Juanito, 1, Carretera de Cádiz, 29004 Málaga"
+ },
+ "busca inquilinos sociedad limitada.|c/ virgen de la fuensanta 5 - puerta dr": {
+  "cp": "41003",
+  "estado": "OK",
+  "consulta": "C/ VIRGEN DE LA FUENSANTA 5 - PUERTA DR, Sevilla",
+  "formatted_address": "Calle San Esteban, 22, Pta 5, Casco Antiguo, 41003 Sevilla"
+ }
+}

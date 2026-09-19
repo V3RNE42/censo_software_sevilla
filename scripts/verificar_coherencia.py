@@ -17,6 +17,7 @@ import unicodedata
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from geom import provincia_de
+from build_provincias import ambito_de
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(RAIZ, "data", "empresas.json")
@@ -43,14 +44,32 @@ def main():
 
     mal_coord = mal_cp = sin_coords = sin_cp = 0
     multisede = []
+    # municipio en OTRA provincia, con la dirección sin mencionarlo: dato
+    # contaminado de la oferta de empleo (EY: cp=41002 Sevilla + municipio=Málaga,
+    # de una vacante en Málaga). Ningún check lo miraba — `etiqueta()` ya ignora
+    # ese municipio, así que el efecto se contiene, pero no se veía en el informe.
+    mun_ajeno = []
     for c in d:
         amb = norm(c.get("ambito"))
         cp = (c.get("cp") or "").strip()
         lat, lng = c.get("lat"), c.get("lng")
+        prov = norm(provincia_de(lat, lng)) if (lat and lng) else ""
+        # `ambito` se decide por CP cuando el CP y la coord discrepan (homónimos de
+        # Places). Este check juzgaba solo por coordenada, así que las fichas
+        # resueltas por CP salían como "23 incoherentes" que no lo son: usaba otra
+        # regla que la fuente única. Se juzga con ambito_de, que es quien decide.
+        prov_decidida, _, _ = ambito_de(lat, lng, c.get("cp"), c.get("provincia"))
+        prov = norm(prov_decidida) if prov_decidida else ""
+        # `municipio` puede ser un municipio o una provincia; interesa si es una
+        # de las provincias del ámbito distinta a la de la ficha.
+        mun = (c.get("municipio") or "").strip()
+        if mun and norm(mun) in ("SEVILLA", "MALAGA", "HUELVA") and norm(mun) != amb:
+            dire = norm(c.get("direccion") or "")
+            if norm(mun) not in dire:      # si la dirección lo dice, no es contaminación
+                mun_ajeno.append(c)
         if lat is None:
             sin_coords += 1
             continue
-        prov = norm(provincia_de(lat, lng))
         if prov != amb:
             mal_coord += 1
             print(f"  COORD {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} coords->{prov}")
@@ -86,6 +105,11 @@ def main():
     for c in multisede:
         print(f"  MULTISEDE {c['id']:10s} {c['nombre'][:28]:28s} cp={c.get('cp')} "
               f"coord->{provincia_de(c['lat'], c['lng'])}")
+    print(f"municipio de otra provincia: {len(mun_ajeno)} (dato de la oferta, no de la ficha:"
+          " etiqueta() lo ignora)")
+    for c in mun_ajeno[:15]:
+        print(f"  MUN_AJENO {c['id']:10s} {c['nombre'][:26]:26s} amb={norm(c.get('ambito'))} "
+              f"mun={c.get('municipio')} cp={c.get('cp') or '-'}")
     print(f"sin coordenadas      : {sin_coords} (provincia no verificable)")
     assert mal_coord == 0, f"{mal_coord} fichas con ambito != provincia de su coordenada"
     assert mal_cp == 0, f"{mal_cp} fichas con CP de otra provincia"

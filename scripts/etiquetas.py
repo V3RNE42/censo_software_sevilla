@@ -137,13 +137,23 @@ def etiqueta(e):
     # direccion (viene de place_id; el campo se contamina desde la oferta de
     # empleo). Medido: Circet con dir 41092 y campo 41007 -> el sobre llevaba
     # dos CP distintos y uno falso. Aqui se adopta el de la direccion.
-    cps_dir = re.findall(CP_RE, dire)
-    if len(set(cps_dir)) > 1:
+    #
+    # CP EXTRANJERO: 'Monterrey, 64650, México' (LOGITRACK). `provincia_ajena()`
+    # no lo caza porque el texto dice 'México', no una provincia espanola, y el
+    # campo `cp` decia 41710 (Sevilla, de otro sitio): se imprimia un sobre a
+    # Sevilla con la direccion de Mexico. Un CP de 5 cifras que NO es de ninguna
+    # provincia del ambito, en una direccion que no menciona la provincia de la
+    # ficha, significa que la direccion no es de aqui.
+    cps_5 = re.findall(r"\b(\d{5})\b", dire)
+    propios = re.findall(CP_RE, dire)            # solo 41/29/21
+    if cps_5 and not propios:
+        return None
+    if len(set(propios)) > 1:
         # dos CP distintos en la misma direccion: no se puede imprimir un sobre
         # coherente (medido: ConXioN, 'Morales y Torres, 41003' + campo 41007)
         return None
-    if cps_dir:
-        cp = cps_dir[0]
+    if propios:
+        cp = propios[0]
     linea2 = re.sub(rf",?\s*\b{re.escape(cp)}\b\s*,?", ", ", linea2).strip(", ").strip()
     # el nombre de la provincia tambien sobra si ya esta en la linea 3,
     # pero solo si va al final (no si forma parte del nombre de la calle)

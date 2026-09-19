@@ -46,6 +46,7 @@ def fichas(rows, fuente, provincia, fecha):
             "municipio": r.get("municipio"),
             "provincia": provincia,
             "direccion": r.get("direccion"),
+            "cp": r.get("cp"),              # BORME lo trae del objeto social
             "web": r.get("web"),
             "telefono": r.get("telefono"),
             "email": r.get("email"),
@@ -103,9 +104,11 @@ def _coord_en_ambito(ficha, ambito_de, amb):
 
 
 def _ambito_key_upper(valor):
+    """'Málaga'|'MALAGA' -> 'MALAGA'. También vale para un CP: '41092' -> '41'."""
     import unicodedata
     s = unicodedata.normalize("NFD", str(valor or "").upper())
-    return "".join(c for c in s if unicodedata.category(c) != "Mn").strip()
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn").strip()
+    return s[:2] if s.isdigit() else s
 
 
 def _escribe_dataset(ruta, fichas, backup=True, validar=True):
@@ -131,23 +134,46 @@ def _escribe_dataset(ruta, fichas, backup=True, validar=True):
     for f in fichas:
         prov, coord, conflicto = ambito_de(f.get("lat"), f.get("lng"),
                                            f.get("cp"), f.get("provincia"))
-        amb = _ambito_key(f.get("ambito"))
+        # `ambito` lo escribe la fase que llama (verificar_places), no el merge. Si
+        # aun no esta, se valida contra el `ambito` que ambito_de acaba de decidir:
+        # exigir el campo antes de que exista abortaba la fase que lo crea.
+        amb = _ambito_key_upper(f.get("ambito") or prov)
         if not prov:
             malas.append((f.get("nombre"), "fuera de ámbito pero está en el dataset"))
             continue
-        if amb != _ambito_key(prov):
+        if amb != _ambito_key_upper(prov):
             malas.append((f.get("nombre"), f"ambito={amb} pero su CP/coord dice {prov}"))
-        if f.get("lat") and not coord:
+        # `lat` no nula con ambito de otra provincia: la fase que llama ya limpio la
+        # coord del homonimo y dejo ambito = el del CP, asi que un `lat` que
+        # discrepa de `ambito` es un fallo real. OJO: comparar aqui contra `prov`
+        # (recalculado de esa misma coord) siempre cuadraria — hay que comparar
+        # contra el ambito DECIDIDO, que es lo que quedo escrito.
+        if f.get("lat") and ambito_de(f.get("lat"), f.get("lng"), None, None)[0] \
+                and _ambito_key_upper(ambito_de(f.get("lat"), f.get("lng"), None, None)[0]) != amb:
             malas.append((f.get("nombre"), "coord de otra provincia (homónimo)"))
         cp = (f.get("cp") or "").strip()
         # CP de otra provincia: NO es incoherencia si la coordenada cae en el
         # ámbito — la empresa tiene varias sedes y la fuente pegó la dirección de
         # la otra (Between Technology, dir. Barcelona 08018 desde
         # sevillatechpark.es, coord en la Cartuja). La ficha es válida; no se
-        # imprimirá el sobre con ese CP. Misma excepción que verificar_coherencia.
-        if (cp and CP_PROV.get(amb) and not cp.startswith(CP_PROV[amb])
-                and not _coord_en_ambito(f, ambito_de, amb)):
+        # imprimirá el sobre con ese CP.
+        # La excepción va PRIMERO: si se comprueba antes "el CP no es de ningún
+        # ámbito", Between Technology (08018, Barcelona) cae ahí y nunca llega al
+        # caso multisede.
+        # OJO: CP_PROV mapea PROVINCIA -> prefijo ('SEVILLA' -> '41'), no al revés.
+        if _coord_en_ambito(f, ambito_de, amb):
+            pass                                    # multisede: se admite el CP ajeno
+        elif cp and cp[:2] not in set(CP_PROV.values()):
+            malas.append((f.get("nombre"), f"cp={cp} no es de ninguna provincia del ámbito"))
+        elif cp and CP_PROV.get(amb) and not cp.startswith(CP_PROV[amb]):
             malas.append((f.get("nombre"), f"cp={cp} no es de {amb}"))
+        # `municipio` que es el nombre de OTRA provincia del ámbito: dato de la
+        # oferta de empleo, no del domicilio (EY: cp=41002 Sevilla con
+        # municipio=Málaga). No rompe el sobre (etiquetas.etiqueta() ya lo ignora),
+        # pero es un campo que se contradice con su propia ficha.
+        mun_key = _ambito_key_upper(f.get("municipio"))
+        if mun_key in set(CP_PROV.keys()) and mun_key != amb:
+            malas.append((f.get("nombre"), f"municipio={f.get('municipio')} pero ambito={amb}"))
     if malas:
         raise SystemExit(
             "ABORTA: el dataset no es coherente (no se escribe nada):\n  "

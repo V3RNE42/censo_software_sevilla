@@ -31,6 +31,25 @@ SALIDA = os.path.join(DATA, "empresas.json")
 # Valores medidos, no estimados: data/dirce_cnae62.csv los reproduce fila a fila
 # y su __main__ comprueba que los tramos suman el Total.
 DIRCE = {"SEVILLA": 1298, "MALAGA": 2195, "HUELVA": 111}
+# Forma canonica de presentacion, y la MISMA que espera `ambito` en mayusculas.
+# `prov.title()` sobre el valor en mayusculas da 'Malaga' sin tilde, que no es la
+# forma que usan etiquetas/etiqueta() ni el dataset historico ('Málaga'). Medido:
+# 242 fichas quedaron como 'Malaga' tras el re-merge.
+PROV_ES = {"SEVILLA": "Sevilla", "MALAGA": "Málaga", "HUELVA": "Huelva"}
+
+# Nombres de provincia que JAMAS son un municipio. Si aparecen en `municipio`, el
+# campo viene de la oferta de empleo, no del domicilio.
+PROVINCIAS_AJENAS = {
+    "madrid", "barcelona", "valencia", "cordoba", "granada", "cadiz", "almeria",
+    "jaen", "malaga", "sevilla", "huelva", "zaragoza", "valladolid", "murcia",
+    "alicante", "bilbao", "vizcaya", "toledo", "salamanca", "badajoz", "caceres",
+}
+
+
+def provincia_es(valor):
+    """'SEVILLA'|'Sevilla'|'Sevilla ' -> 'Sevilla'|'Málaga'|'Huelva'. None si no es del ámbito."""
+    k = norm_municipio(valor)[0]
+    return PROV_ES.get(k.upper()) if k else None
 
 # ETT / consultoras de selección que aparecen como ANUNCIANTES en Tecnoempleo.
 # NO se descartan (decisión del usuario 2026-09-18): se marcan con ES_ETT para que
@@ -118,12 +137,59 @@ def lee_raw():
 
 
 def campo_foraneo(d):
-    """Municipio declarado por la oferta pero fuera de la provincia del fichero."""
+    """Municipio declarado por la oferta pero fuera de la provincia del fichero.
+
+    OJO: comparaba `norm_municipio(mun)[0]` (minúsculas) con `prov.islower()` sobre
+    DIRCE (mayúsculas), así que la condición no se cumplía nunca y
+    MUNICIPIO_FUERA_PROVINCIA no se marcaba aunque hubiera municipio ajeno. Un
+    flag que nunca salta es peor que no tenerlo: parece que el dato está limpio.
+    Ahora usa la misma normalización que municipio_util.
+    """
+    mun = _ambito_de_valor(d.get("municipio"))
+    prov = _ambito_de_valor(d.get("provincia"))
+    return mun if (mun and prov and mun != prov) else None
+
+
+def _ambito_de_valor(valor):
+    """'Málaga'|'MALAGA'|'malaga' -> 'MALAGA'. None si no es del ámbito.
+
+    norm_municipio devuelve la clave en MINÚSCULAS ('malaga') y DIRCE está en
+    MAYÚSCULAS ('MALAGA'): comparar las dos directamente nunca era cierto, así que
+    `campo_foraneo` no marcaba nada y `municipio_util` no filtraba nada.
+    """
+    k = norm_municipio(valor)[0]
+    return k.upper() if k and k.upper() in DIRCE else None
+
+
+def municipio_util(d):
+    """El municipio de la fila, o None si es basura de la oferta de empleo.
+
+    Una fila E2 declara `provincia=SEVILLA` y `municipio=Málaga`: el nombre de la
+    OTRA provincia colado como si fuera un pueblo. `primero("municipio")` se lo
+    quedaba y contaminaba la ficha (medido: 38 fichas con cp de Sevilla y
+    municipio=Málaga — EY, Accenture, Capgemini, Ericsson...).
+
+    Un municipio nunca es el nombre de otra provincia del ámbito: en ese caso la
+    fila no aporta municipio. `ETIQUETA()` ya lo ignoraba al imprimir, así que
+    descartarlo aquí solo hace que el dato coincida con el efecto.
+    """
     mun = norm_municipio(d.get("municipio"))[1]
-    prov = (d.get("provincia") or "").upper()
-    if mun and prov in DIRCE and norm_municipio(mun)[0] != prov.islower():
+    if not mun or not d.get("provincia"):
         return mun
-    return None
+    # Un nombre de provincia como municipio solo es basura si CONTRADICE la
+    # provincia de la fila. No basta con "es una provincia": Málaga y Sevilla son
+    # capital y provincia a la vez, y descartarlas siempre tiraba el municipio
+    # bueno (lo caza el check de regresion de CAS TRAINING, que exige 'Málaga').
+    # Medido: 38 fichas con cp de Sevilla y municipio=Málaga (EY, Accenture,
+    # Capgemini, Ericsson) — ahi si contradice. Y 4 con municipio=Madrid desde una
+    # fila de MALAGA: Madrid no es del ambito pero tampoco es municipio andaluz.
+    p_amb = _ambito_de_valor(d.get("provincia"))
+    if p_amb:
+        if _ambito_de_valor(mun) not in (None, p_amb):
+            return None                      # 'Málaga' en una fila de Sevilla
+        if mun.strip().lower() in PROVINCIAS_AJENAS and _ambito_de_valor(mun) is None:
+            return None                      # 'Madrid' como municipio de Málaga
+    return mun
 
 
 def funde(grupo, ficheros_ok):
@@ -148,9 +214,10 @@ def funde(grupo, ficheros_ok):
     def primero(campo):
         for d, _ in grupo:
             d = dict(d)
-            v = d.get(campo)
-            if v and campo == "municipio":
-                v = norm_municipio(v)[1]
+            # `municipio` filtra el nombre de la provincia contraria (ver
+            # municipio_util): una vacante de Sevilla con municipio=Málaga le
+            # ganaba el campo a la fila buena por ser la primera del grupo.
+            v = municipio_util(d) if campo == "municipio" else d.get(campo)
             if v:
                 return v
         return None
@@ -186,8 +253,8 @@ def funde(grupo, ficheros_ok):
         "municipio_normalizado": mun_clave,
         "cif": primero("cif"),
         "municipio": mun,
-        "provincia": prov.title() if prov else None,
-        "cp": None,
+        "provincia": provincia_es(prov),
+        "cp": primero("cp"),
         "direccion": primero("direccion"),
         "direccion_completa": None,
         "lat": None, "lng": None,              # los rellena Fase 3
@@ -264,8 +331,13 @@ def valida(fichas):
     for f in fichas:
         # municipio/provincia pueden ser null legitimamente (ofertas sin ubicacion,
         # BORME sin municipio); su ausencia va marcada en flags, no es un fallo.
+        # `flags` vacío TAMBIEN es legitimo: significa "ficha limpia", y es lo que
+        # devuelve funde(). Contarlo como falta hacia que este assert abortara con
+        # 305 fichas buenas y el merge no pudiera re-ejecutarse: por eso el dataset
+        # se quedo congelado desde la primera pasada y todo lo posterior
+        # (verificar_places) se aplico encima sin poder rehacer el merge.
         faltan = [c for c in OBLIGATORIOS
-                  if f.get(c) in (None, "", []) and c not in ("municipio", "provincia")]
+                  if f.get(c) in (None, "", []) and c not in ("municipio", "provincia", "flags")]
         assert not faltan, f"{f.get('id')}: campos obligatorios vacíos {faltan}"
         assert f["id"] not in ids, f"id repetido {f['id']}"
         ids.add(f["id"])
@@ -292,11 +364,18 @@ def main():
     # son empresas distintas (cadena "Grupo Digital" en Sevilla y Malaga). Si uno
     # de los grupos tiene municipio desconocido (ofertas en remoto), NO desambigua:
     # es la misma empresa, y se fusiona con el municipio conocido.
+    #
+    # OJO: el municipio se lee con municipio_util(), que descarta el nombre de la
+    # provincia contraria ('Málaga' en una fila de SEVILLA). Sin ese filtro, una
+    # vacante mal etiquetada PARTIA la empresa en dos fichas: 'Accenture' quedaba
+    # duplicada en Sevilla y Málaga con la MISMA direccion y el MISMO cp 41092
+    # (medido: Accenture, Michael Page, Pulsia Technology, Nunsys). El bug que
+    # venia a arreglar el filtro lo estaba creando esta desambiguacion.
     grupos = []
     for filas in claves.values():
         por_mun = defaultdict(list)
         for d, f in filas:
-            por_mun[norm_municipio(d.get("municipio"))[0]].append((d, f))
+            por_mun[norm_municipio(municipio_util(d))[0]].append((d, f))
         conocidos = [k for k in por_mun if k is not None]
         if len(conocidos) <= 1:
             grupos.append(filas)               # un solo municipio real: todo junto

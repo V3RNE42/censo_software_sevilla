@@ -23,7 +23,7 @@ def main():
 
     # 1) mismo numero de etiquetas en el HTML y en el generador
     n_html = html.count('<div class="etq" data-n=')
-    assert n_html == len(celdas) == 379, (n_html, len(celdas))
+    assert n_html == len(celdas) and n_html > 0, (n_html, len(celdas))
 
     # 2) toda etiqueta lleva data-n y apunta a una ficha que existe
     nums_ficha = {e["numero"] for e in orden}

@@ -64,6 +64,35 @@ def dias_habiles(n, hasta=None):
     return out
 
 
+def domicilio_de(texto):
+    """Saca calle/CP/municipio del 'Domicilio: ...' del objeto social.
+
+    POR QUÉ: BORME da el domicilio en PROSA dentro del objeto social, no en un
+    campo. Medido: 87 de 94 anuncios de CNAE62 traen 'Domicilio: C/ ... - 41005
+    (SEVILLA)' y sin parsearlo la ficha salia sin direccion y se iba a
+    SIN_DOMICILIO: 12 de Sevilla y 1 de Huelva con domicilio real, tiradas.
+    Formatos vistos: 'CP: 41005 (SEVILLA)', '41003 (SEVILLA)', 'CP 41410 (CARMONA)',
+    'CODIGO POSTAL 41012 (SEVILLA)', y cortes del XML ('C/ RIO GUADIAMAR 4 - 41').
+
+    Devuelve {} si no hay domicilio: no se inventa nada.
+    """
+    m = re.search(r"Domicilio:\s*(.+?)(?:\.\s*(?:Capital|Declaraci|Socio|Nombram|"
+                  r"Cargo|Datos|Objeto)|$)", texto or "", re.S)
+    if not m:
+        return {}
+    dom = re.sub(r"\s+", " ", m.group(1)).strip(" .;-")
+    mcp = re.search(r"\b(\d{5})\b", dom)
+    cp = mcp.group(1) if mcp else None
+    # municipio: lo que va entre paréntesis, o tras el CP
+    mmun = re.search(r"\(([^)]+)\)", dom)
+    mun = mmun.group(1).strip().title() if mmun else None
+    calle = dom
+    if mcp:
+        calle = dom[:mcp.start()].strip(" -.,;:")
+        calle = re.sub(r"\b(CP|CODIGO POSTAL)\b\s*:?\s*$", "", calle, flags=re.I).strip(" -.,;:")
+    return {"direccion": calle or None, "cp": cp, "municipio": mun}
+
+
 def parse_provincia(xml):
     """Devuelve [(nombre, objeto_social_texto)] del XML provincial."""
     if not xml:
@@ -126,6 +155,7 @@ def main():
                         "fecha_borme": ymd,
                         "match": "CNAE_620x" if m_cnae else "OBJETO_SOCIAL",
                         "objeto_social": texto[:400],
+                        **domicilio_de(texto),
                         "evidencia_url": PROV_XML.format(ids[0]),
                         "fuente": "BORME_BOE",
                     })
