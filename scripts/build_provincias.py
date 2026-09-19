@@ -24,6 +24,10 @@ OBJETIVO = {"Sevilla": "Sevilla", "Málaga": "Málaga", "Huelva": "Huelva"}
 OTRAS_ANDALUZAS = ("Sevilla", "Málaga", "Huelva", "Cádiz", "Córdoba",
                    "Granada", "Jaén", "Almería")
 
+# CP -> ámbito por las 2 primeras cifras. FUENTE ÚNICA: etiquetas.CP_PROV.
+# También la usan verificar_places._cp_a_ambito y verificar_coherencia.
+CP_PROV = {"SEVILLA": "41", "MALAGA": "29", "HUELVA": "21"}
+
 
 def _extraer(pbf):
     """Ensambla TODAS las provincias andaluzas del PBF. Filtrar aquí tiraba datos
@@ -76,6 +80,63 @@ def provincia_de(lat, lng):
             if Polygon(anillo).contains(p):
                 return OBJETIVO[nombre]
     return None
+
+
+def ambito_de(lat, lng, cp=None, provincia=None):
+    """Provincia de una ficha, resolviendo el conflicto de los homónimos de Places.
+
+    POR QUÉ EXISTE: Places se consulta por nombre LIMPIO y hay nombres que no son
+    únicos. 'Diseño web HH' es una empresa de Huelva capital (cp 21006) y Places
+    devolvió un negocio homónimo de Sevilla → la ficha quedó con dirección y CP de
+    Huelva y coords de Sevilla. Medido: 11 fichas de Huelva con coords de Sevilla,
+    3 de Sevilla con coords de Málaga/Huelva (Seabery), 21 en total.
+
+    REGLA: manda el CP postal. Es el dato que va en el sobre y viene verificado;
+    la coordenada es el resultado de una búsqueda por nombre, que es justo lo que
+    puede traer el homónimo de otra provincia.
+
+    Se unifica AQUÍ, en la fuente única, porque antes vivía solo en
+    verificar_places.ambito() y por eso el estado quedó a medias en tres formas a
+    la vez: `lat` poblada con coord ajena, `flags: COORD_HOMONIMO` puesto, y
+    `direccion` con el CP correcto — incoherentes entre sí y con el check.
+
+    Devuelve (provincia, coord_valida, conflicto):
+      - provincia: 'Sevilla' | 'Málaga' | 'Huelva' | None (fuera de ámbito)
+      - coord_valida: la coord si es de esa provincia, o None si hay conflicto
+        (una coord de otra provincia no es la ubicación de esta empresa)
+      - conflicto: True si el CP y la coord discrepaban
+    """
+    prov_coord = provincia_de(lat, lng) if (lat and lng) else None
+    prov_cp = _ambito_a_provincia(cp)
+
+    if prov_cp and prov_coord and _ambito_key(prov_coord) != _ambito_key(prov_cp):
+        return prov_cp, None, True           # homónimo: gana el CP, coord fuera
+    if prov_cp:
+        return prov_cp, (lat, lng) if prov_coord else None, False
+    if prov_coord:
+        return prov_coord, (lat, lng), False
+    # Sin CP utilizable y sin coord en ámbito. `provincia` puede venir contaminada
+    # del merge (lo sobrescribe con lo que dijo Places), así que solo se acepta si
+    # está en el ámbito: si no, la ficha está fuera.
+    if provincia and _ambito_key(provincia) in CP_PROV:
+        return provincia, None, False
+    return None, None, False
+
+
+def _ambito_a_provincia(cp):
+    """'21006' -> 'Huelva'. None si el CP no es del ámbito o viene vacío."""
+    pref = (cp or "").strip()[:2]
+    for nombre, p in CP_PROV.items():
+        if p == pref:
+            return nombre.capitalize() if nombre != "MALAGA" else "Málaga"
+    return None
+
+
+def _ambito_key(valor):
+    """'Sevilla' | 'SÉVILLA' | 'Málaga' -> 'SEVILLA' | 'MALAGA'. Sin tildes."""
+    import unicodedata
+    s = unicodedata.normalize("NFD", str(valor or "").upper())
+    return "".join(c for c in s if unicodedata.category(c) != "Mn").strip()
 
 
 def dentro_de_provincias(lat, lng):

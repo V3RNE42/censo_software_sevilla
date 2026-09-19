@@ -31,7 +31,12 @@ import html as htmlmod
 import json
 import os
 import re
+import sys
 import unicodedata
+
+# La verdad de "¿de qué provincia es esto?" vive en un solo sitio (rung 2).
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from build_provincias import _ambito_a_provincia, _ambito_key, CP_PROV  # noqa: E402,F401
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(RAIZ, "data", "empresas.json")
@@ -40,8 +45,6 @@ DATA = os.path.join(RAIZ, "data", "empresas.json")
 # clave que usa el filtro del index; la etiqueta impresa lleva texto humano.
 PROV_ES = {"SEVILLA": "Sevilla", "MALAGA": "Málaga", "HUELVA": "Huelva"}
 
-# CP -> las 2 primeras cifras. FUENTE ÚNICA: verificar_coherencia deriva de aquí.
-CP_PROV = {"SEVILLA": "41", "MALAGA": "29", "HUELVA": "21"}
 CP_RE = r"\b(41\d{3}|29\d{3}|21\d{3})\b"
 
 # Provincias ajenas: si aparecen en la dirección, la ficha NO es de ámbito.
@@ -100,6 +103,12 @@ def etiqueta(e):
     # "(Sin dirección)" es un literal en los datos, no un nulo
     if not dire or "sin dirección" in norm_txt(dire).lower():
         return None
+
+    # "Una dirección que no es de esta provincia no se imprime": el sello lleva la
+    # provincia del ámbito, así que la carta se iría a otro sitio.
+    # Nota: se probó además a filtrar por el CP del campo, y descartaba 0 fichas
+    # que este check no descarte ya (medido). No se añade código que no cambia
+    # nada; este check por nombre cubre el caso, incluido Between Technology.
     if provincia_ajena(dire, e.get("ambito")):
         return None
 
@@ -128,7 +137,7 @@ def etiqueta(e):
     # direccion (viene de place_id; el campo se contamina desde la oferta de
     # empleo). Medido: Circet con dir 41092 y campo 41007 -> el sobre llevaba
     # dos CP distintos y uno falso. Aqui se adopta el de la direccion.
-    cps_dir = re.findall(r"\b(?:41|29)\d{3}\b", dire)
+    cps_dir = re.findall(CP_RE, dire)
     if len(set(cps_dir)) > 1:
         # dos CP distintos en la misma direccion: no se puede imprimir un sobre
         # coherente (medido: ConXioN, 'Morales y Torres, 41003' + campo 41007)

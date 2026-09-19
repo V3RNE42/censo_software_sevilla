@@ -3,17 +3,24 @@
 Fase 3 — ámbito + verificación Places + filtro de actividad 12 meses.
 
 Dos pasos:
-  1. ambito(): marca cada ficha con su provincia real por point-in-polygon del PBF,
-     y descarta lo que cae fuera de Sevilla/Málaga (Córdoba, Huelva, Cádiz...).
+  1. ambito(): marca cada ficha con su provincia real resolviendo el conflicto
+     CP vs coordenada (homónimos de Places), y aparta lo que cae fuera del ámbito.
   2. actividad(): Places textsearch (nombre LIMPIO, sin municipio) + details con
      reviews_sort=newest. publishTime ISO → filtro de 12 meses.
+
+La verdad de "¿de qué provincia es esto?" NO vive aquí: vive en
+build_provincias.ambito_de(), que es también lo que valida el escritor del
+dataset (_common._escribe_dataset) y lo que lee el generador de etiquetas.
 
 La key se lee del entorno. NUNCA inline (ver Anexo A del plan).
 """
 import json, os, re, sys, time, urllib.parse, urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from build_provincias import provincia_de
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "collectors"))
+from build_provincias import (ambito_de, provincia_de, _ambito_key,
+                              _ambito_a_provincia, CP_PROV)
+from _common import _escribe_dataset  # noqa: E402  (vive en collectors/)
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMPRESAS = os.path.join(RAIZ, "data", "empresas.json")
@@ -54,11 +61,8 @@ def _places(url, params):
 
 def _cp_a_ambito(cp):
     """'21006' -> 'HUELVA' | '41092' -> 'SEVILLA' | None si no es del ámbito."""
-    from etiquetas import CP_PROV
-    for amb, pref in CP_PROV.items():
-        if (cp or "").startswith(pref):
-            return amb
-    return None
+    p = _ambito_a_provincia(cp)
+    return _ambito_key(p) if p else None
 
 
 def ambito():
@@ -66,61 +70,48 @@ def ambito():
 
     `ambito` va SIEMPRE en mayúsculas (SEVILLA/MALAGA/HUELVA): es la clave que
     consumen build_html.py, etiquetas.py y el filtro del index (`dataset.prov`).
-    provincia_de() devuelve la forma canónica ('Sevilla') y aquí se normaliza:
-    tener las dos formas rompía el filtro del mapa (190 fichas invisibles).
 
-    HOMÓNIMOS: Places busca por nombre limpio y una empresa como 'Diseño web HH'
-    (Huelva) resuelve a un negocio homónimo de Sevilla. Medido: la ficha decía
-    cp=21006 Huelva con coords de Sevilla y ambito=SEVILLA. Cuando el CP de la
-    dirección es del ámbito y discrepa de la coordenada, MANDA EL CP: es dato
-    postal verificado (el que va en el sobre), la coord es una búsqueda por nombre.
+    La decisión (CP vs coordenada, homónimos) NO se toma aquí: se delega en
+    build_provincias.ambito_de(). Tenerla duplicada es lo que dejó el dataset en
+    un estado a medias — `lat` con coord ajena + `flags: COORD_HOMONIMO` puesto +
+    `direccion` con el CP bueno, tres campos contradiciéndose entre sí. Con una
+    sola implementación, lo que escribe este script y lo que valida el escritor
+    del dataset no pueden discrepar.
     """
     fichas = json.load(open(EMPRESAS))
     dentro, fuera = [], []
     for f in fichas:
-        lat, lng = f.get("lat"), f.get("lng")
-        prov = provincia_de(lat, lng) if (lat and lng) else None
-        cp_amb = _cp_a_ambito((f.get("cp") or "").strip())
-
-        if cp_amb and prov and _ambito_key(prov) != cp_amb:
-            # discrepancia: el CP postal manda. La coord es de un homónimo.
-            # NO se excluye: se queda en el censo con la provincia de su CP y sin
+        prov, coord, conflicto = ambito_de(f.get("lat"), f.get("lng"),
+                                           f.get("cp"), f.get("provincia"))
+        if conflicto:
+            # El CP manda y la coord era de un homónimo: la ficha se queda, sin
             # punto en el mapa (una coord de otra provincia no es su ubicación).
             f["flags"] = f.get("flags", []) + ["COORD_HOMONIMO"]
-            f["coords_sospechosas"] = {"coord_ambito": _ambito_key(prov),
-                                       "cp_ambito": cp_amb}
-            f["lat"] = f["lng"] = None       # no son de esta empresa: fuera del mapa
-            prov = cp_amb.capitalize().replace("Malaga", "Málaga")
-        elif cp_amb and not prov:
-            prov = cp_amb.capitalize().replace("Malaga", "Málaga")
-
+            f["coords_sospechosas"] = {"coord_ambito": _ambito_key(provincia_de(f.get("lat"), f.get("lng"))) if f.get("lat") else None,
+                                       "cp_ambito": cp_ambito_de(f)}
+            f["lat"] = f["lng"] = None
+        if coord:
+            f["lat"], f["lng"] = coord
         if prov:
             f["ambito"] = _ambito_key(prov)
-            f["provincia"] = prov.capitalize().replace("Malaga", "Málaga")
+            f["provincia"] = prov
             f["flags"] = [x for x in f.get("flags", []) if x != "MUNICIPIO_FUERA_PROVINCIA"]
+            if not coord and f.get("lat") is None and "COORD_HOMONIMO" not in f["flags"]:
+                f["flags"] = f["flags"] + ["SIN_COORDS"]
             dentro.append(f)
-        elif lat and lng:
+        elif f.get("lat") and f.get("lng"):
             f["flags"] = f.get("flags", []) + ["FUERA_AMBITO"]
             f["ambito"] = None
             fuera.append(f)
         else:
-            # Sin coords. El CP manda sobre `provincia`: el merge ya sobrescribió
-            # `provincia` con lo que dijo Places, así que puede estar contaminado
-            # ('Diseño web HH' de Huelva quedó como Sevilla). El CP viene de la
-            # dirección postal, que es el dato del sobre.
-            amb = cp_amb or _ambito_key(f.get("provincia"))
-            f["ambito"] = amb
-            if "COORD_HOMONIMO" not in (f.get("flags") or []):
-                f["flags"] = f.get("flags", []) + ["SIN_COORDS"]
-            dentro.append(f)
+            f["ambito"] = None
+            fuera.append(f)
     return dentro, fuera
 
 
-def _ambito_key(valor):
-    """'Sevilla' | 'SÉVILLA' | 'Málaga' -> 'SEVILLA' | 'MALAGA'. Sin tildes."""
-    import unicodedata
-    s = unicodedata.normalize("NFD", str(valor or "").upper())
-    return "".join(c for c in s if unicodedata.category(c) != "Mn").strip()
+def cp_ambito_de(f):
+    """Solo para la traza de `coords_sospechosas`."""
+    return _cp_a_ambito((f.get("cp") or "").strip())
 
 
 def _clave_cache(nombre):
@@ -222,10 +213,10 @@ def enriquecer_contacto():
             if "postal_code" in comp.get("types", []):
                 f["cp"] = f.get("cp") or comp["long_name"]
         if i % 50 == 0:
-            json.dump(fichas, open(EMPRESAS, "w"), ensure_ascii=False, indent=1)
+            _escribe_dataset(EMPRESAS, fichas)
             print(f"    {i}/{len(pend)}")
         time.sleep(LATENCIA)
-    json.dump(fichas, open(EMPRESAS, "w"), ensure_ascii=False, indent=1)
+    _escribe_dataset(EMPRESAS, fichas)
     print(f"  con teléfono: {sum(1 for f in fichas if f.get('telefono'))}")
     print(f"  con web:      {sum(1 for f in fichas if f.get('web'))}")
 
@@ -237,7 +228,7 @@ def main():
     fichas = json.load(open(EMPRESAS))
     cache = resolver_coords(fichas)
 
-    print("\n[2/4] aplicando ámbito provincial (point-in-polygon PBF)")
+    print("\n[2/4] aplicando ámbito provincial (point-in-polygon PBF + regla del CP)")
     for f in fichas:
         c = cache.get(_clave_cache(f["nombre"]), {})
         if not f.get("lat") and c.get("lat"):
@@ -253,7 +244,7 @@ def main():
                 f["cp"] = m.group(1)
         if cd and not re.search(r"\b\d{5}\b", fd):
             f["direccion"] = cd          # la nuestra no tiene CP: manda la de Places
-    json.dump(fichas, open(EMPRESAS, "w"), ensure_ascii=False, indent=1)
+    _escribe_dataset(EMPRESAS, fichas)
 
     dentro, fuera = ambito()
     print(f"  dentro del ámbito: {len(dentro)} | fuera: {len(fuera)}")
@@ -292,12 +283,15 @@ def main():
             sin_datos += 1
 
     excl = json.load(open(EXCLUIDOS)) if os.path.exists(EXCLUIDOS) else []
-    for f in fuera:
+    ya = {x.get("id") for x in excl if x.get("id")}   # re-ejecutar no acumula:
+    for f in fuera:                                    # sin esto, 10 ids duplicados
+        if f.get("id") in ya:
+            continue
         excl.append({**f, "motivo_exclusion": "EXC_FUERA_AMBITO",
                      "evidencia_url": f"point-in-polygon PBF Geofabrik 2026-09-16",
                      "fecha": HOY})
-    json.dump(dentro, open(EMPRESAS, "w"), ensure_ascii=False, indent=1)
-    json.dump(excl, open(EXCLUIDOS, "w"), ensure_ascii=False, indent=1)
+    _escribe_dataset(EMPRESAS, dentro)
+    _escribe_dataset(EXCLUIDOS, excl, backup=False, validar=False)
 
     print(f"\n  activas (reseña <12m):      {activas}")
     print(f"  sin reseña reciente:        {inactivas}")

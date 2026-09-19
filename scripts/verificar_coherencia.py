@@ -42,6 +42,7 @@ def main():
     from etiquetas import CP_PROV
 
     mal_coord = mal_cp = sin_coords = sin_cp = 0
+    multisede = []
     for c in d:
         amb = norm(c.get("ambito"))
         cp = (c.get("cp") or "").strip()
@@ -56,6 +57,18 @@ def main():
         exp = CP_PROV.get(amb)
         if exp and cp:
             if cp[:2] != exp:
+                # El CP es de otra provincia pero la coordenada cae en el ámbito:
+                # la empresa tiene varias sedes y esta ficha es la del ámbito, con
+                # la dirección de OTRA sede pegada por la fuente. Medido:
+                # sev-0023 'Between Technology' — direccion 'calle Charles Darwin
+                # s/n, Barcelona, 08018' desde sevillatechpark.es, con coordenada
+                # en la Cartuja de Sevilla. La ficha es válida (está en el ámbito);
+                # lo que no vale es imprimir un sobre con ese CP. No es
+                # incoherencia del dataset: es una sede múltiple. etiqueta() ya la
+                # descarta por CP ajeno, que es el efecto correcto y buscado.
+                if prov == amb:      # `prov` ya viene normalizado arriba (norm())
+                    multisede.append(c)
+                    continue
                 mal_cp += 1
                 print(f"  CP    {c['id']:10s} {c['nombre'][:28]:28s} ambito={amb} cp={cp}")
         elif exp and not cp:
@@ -68,11 +81,16 @@ def main():
     print(f"ambito vs coordenada : {mal_coord}/{con_coords} incoherentes")
     print(f"ambito vs cp         : {mal_cp}/{con_coords} incoherentes "
           f"({sin_cp} sin CP poblado, no verificables aun)")
+    print(f"multi-sede           : {len(multisede)} (CP de otra sede, coord en el ambito:"
+          " no se imprimen, no son incoherentes)")
+    for c in multisede:
+        print(f"  MULTISEDE {c['id']:10s} {c['nombre'][:28]:28s} cp={c.get('cp')} "
+              f"coord->{provincia_de(c['lat'], c['lng'])}")
     print(f"sin coordenadas      : {sin_coords} (provincia no verificable)")
     assert mal_coord == 0, f"{mal_coord} fichas con ambito != provincia de su coordenada"
     assert mal_cp == 0, f"{mal_cp} fichas con CP de otra provincia"
     print(f"OK: {con_coords} fichas coherentes (ambito == punto-en-poligono; "
-          f"{con_coords-sin_cp} ademas con rango de CP)")
+          f"{con_coords-sin_cp-len(multisede)} ademas con rango de CP)")
 
 
 if __name__ == "__main__":
