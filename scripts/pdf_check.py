@@ -36,7 +36,7 @@ def main():
         )
 
         pg.pdf(path=OUT, format="A4", print_background=True,
-               margin={"top": "8mm", "bottom": "8mm", "left": "8mm", "right": "8mm"})
+               margin={"top": "10mm", "bottom": "10mm", "left": "10mm", "right": "10mm"})
         b.close()
 
     size = os.path.getsize(OUT)

@@ -40,6 +40,7 @@ from build_provincias import _ambito_a_provincia, _ambito_key, CP_PROV  # noqa: 
 
 RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA = os.path.join(RAIZ, "data", "empresas.json")
+PLANTILLA = os.path.join(RAIZ, "plantilla.html")
 
 # Forma de presentación. `ambito` va en MAYÚSCULAS (SEVILLA/MALAGA) porque es la
 # clave que usa el filtro del index; la etiqueta impresa lleva texto humano.
@@ -60,6 +61,18 @@ OTRAS = ("Barcelona", "Madrid", "Valencia", "Córdoba", "Cordoba", "Almería",
 
 def esc(s):
     return htmlmod.escape(str(s)) if s else ""
+
+
+def _corta_tras_3a_coma(s):
+    """(antes, despues) partiendo el texto justo tras la 3a coma, o (s, None)
+    si tiene menos de 3. Solo se usa en la 2a columna del esquema (Dirección):
+    con direcciones tipo 'Calle X, 12, 3o, Puerta B, Barrio' la 3a coma cae ya
+    entrada la ficha y evita que la ultima parte (barrio/edificio) fuerce un
+    envoltorio de linea torpe o un recorte por overflow:hidden."""
+    partes = s.split(",", 3)
+    if len(partes) < 4:
+        return s, None
+    return ",".join(partes[:3]) + ",", partes[3].strip()
 
 
 def norm_txt(s):
@@ -155,6 +168,11 @@ def etiqueta(e):
     if propios:
         cp = propios[0]
     linea2 = re.sub(rf",?\s*\b{re.escape(cp)}\b\s*,?", ", ", linea2).strip(", ").strip()
+    # El numero ya salio arriba; la etiqueta literal 'CP' que lo acompañaba
+    # ('- CP 29010', 'Local 3 CP, 29010...') se queda colgando sin el numero
+    # detras ('- CP', 'Local 3 CP'). El CP ya va en la linea 3 (schema "CP,
+    # Provincia"): sobra en la 2 con o sin el numero.
+    linea2 = re.sub(r"[\s\-,]*\bCP\b[\s\-,]*", " ", linea2, flags=re.I).strip(" ,-").strip()
     # el nombre de la provincia tambien sobra si ya esta en la linea 3,
     # pero solo si va al final (no si forma parte del nombre de la calle)
     prov_nom = PROV_ES.get(e.get("ambito"), "")
@@ -166,9 +184,16 @@ def etiqueta(e):
     # Places a veces duplica el tipo de via: "Calle calle Gonzalo Jimenez".
     linea2 = re.sub(r"\b(calle|c/|avenida|avda\.?|plaza|paseo)\s+\1\b", r"\1", linea2, flags=re.I)
 
+    # 'Calle'/'calle'/'CALLE' -> 'C/': mas corto, deja mas ancho para el resto
+    # de la direccion (relevante ahora que la columna es mas estrecha).
+    linea2 = re.sub(r"\bcalle\b", "C/", linea2, flags=re.I)
+
+    antes, despues = _corta_tras_3a_coma(linea2)
+    dir_html = esc(antes) if despues is None else f"{esc(antes)}<br>{esc(despues)}"
+
     return (f'<div class="etq" data-n="{e.get("numero")}">\n'
             f'  <div class="etq-emp">{esc(e.get("nombre"))}</div>\n'
-            f'  <div class="etq-dir">{esc(linea2)}</div>\n'
+            f'  <div class="etq-dir">{dir_html}</div>\n'
             f'  <div class="etq-loc">{esc(f"{cp}, {prov}")}</div>\n'
             f'</div>')
 
@@ -203,6 +228,23 @@ def generar(orden):
     return celdas, saltadas, colapsadas
 
 
+def _css_hoja():
+    """CSS de la hoja A4 tal cual vive en plantilla.html — una sola fuente.
+
+    etiquetas_hoja.html es un artefacto de depuracion (build_html.py no lo lee:
+    llama a generar() directamente), pero vive suelto en la raiz del repo junto
+    a index.html y a los PDF. Si alguien lo abre a pelo, sin este <style> el
+    navegador imprime cada .etq como bloque a ancho completo, sin @page ni
+    caja A4: el texto no respeta ningun limite. Reusar el <style> de
+    plantilla.html evita mantener dos copias de las reglas .hoja/.etq/@page
+    que puedan divergir.
+    """
+    m = re.search(r"<style>.*?</style>", open(PLANTILLA, encoding="utf-8").read(), re.S)
+    if not m:
+        raise SystemExit(f"No se encontro <style> en {PLANTILLA}")
+    return m.group(0)
+
+
 def main():
     empresas = json.load(open(DATA, encoding="utf-8"))
     orden = sorted(empresas, key=lambda e: ((e.get("nombre_normalizado") or e.get("nombre") or "").lower()))
@@ -219,8 +261,15 @@ def main():
         for v in colapsadas:
             print(f"  {' + '.join(str(x) for x in v)}")
 
+    # Standalone: mismo <style> que plantilla.html, para que abrir este
+    # fichero a pelo e imprimir de la caja A4 correcta (ver _css_hoja()).
+    doc = (f"<!doctype html>\n<html lang=\"es\"><head><meta charset=\"utf-8\">\n"
+           f"<title>Etiquetas postales</title>\n{_css_hoja()}\n</head>\n"
+           f"<body class=\"hoja-standalone\">\n"
+           f"<div class=\"hoja\" id=\"hoja\">\n{chr(10).join(celdas)}\n</div>\n"
+           f"</body></html>\n")
     out = os.path.join(RAIZ, "etiquetas_hoja.html")
-    open(out, "w", encoding="utf-8").write("\n".join(celdas))
+    open(out, "w", encoding="utf-8").write(doc)
     print(f"escrito: {out}")
 
     for c in celdas:

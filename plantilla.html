@@ -69,17 +69,42 @@
   /* grid tambien en pantalla: la vista previa debe verse COMO la hoja A4.
      (Antes el grid vivia solo en @media print y la previsualizacion salia
      apilada en una columna, sin parecerse al PDF.) */
-  .hoja { display:grid; grid-template-columns:repeat(2,88mm);
-          grid-auto-rows:52mm; gap:0; align-content:start; }
-  .etq { width:88mm; height:52mm; box-sizing:border-box; padding:6mm; overflow:hidden;
-         border:1px dashed #c9ced9; display:flex; flex-direction:column; justify-content:center; }
-  .etq-emp { font-weight:700; font-size:11pt; color:#111; text-transform:uppercase;
+  /* 75mm x 2 columnas, sin hueco entre ellas = 150mm de ancho total. Con
+     @page margin 10mm por lado el area imprimible es 190mm: quedan 40mm de
+     margen de seguridad frente a los 88mm+gap:0=176mm de antes (solo 18mm),
+     que en una impresora real (Brother DCP-L2627DWE) se comio la columna
+     derecha por su area no imprimible propia. No basta con que el calculo
+     en mm cuadre con la hoja teorica A4: el hardware del propio dispositivo
+     recorta mas cerca del borde. */
+  .hoja { display:grid; grid-template-columns:repeat(2,75mm);
+          grid-auto-rows:41.8mm; gap:0; align-content:start; }
+  .etq { width:75mm; height:41.8mm; box-sizing:border-box; padding:5mm 9%; overflow:hidden;
+         border:1px dashed rgba(201, 206, 217, 0.1); display:flex; flex-direction:column; justify-content:center;
+         min-width:0; }
+  /* Cadencia real, no la teorica: la hoja A4 con margin:10mm y filas de
+     41.8mm "deberia" dar 6 filas/pagina (12n-1/12n), pero la impresora real
+     (Brother DCP-L2627DWE) solo mete 5 filas/pagina - medido con "42 hojas de
+     papel" en el dialogo de impresion real para 413 etiquetas
+     (413/10 = 41.3 -> 42, no 413/12 = 34.4 -> 35). Mismo desfase CSS-vs-hardware
+     que ya paso con el ancho de columna: no basta con el calculo en mm. */
+  .etq:nth-child(10n-1), .etq:nth-child(10n) { border-bottom-color:transparent; }
+  /* min-width:0 + overflow-wrap: el ancho fijo (88mm) no basta por si solo -
+     un item de flex/grid no encoge por debajo del min-content de su texto
+     (min-width:auto, por defecto) aunque el padre declare overflow:hidden.
+     Con una fuente del sistema mas ancha que la usada al medir esto (varía
+     por SO/navegador), una palabra larga ("Campanillas") no rompe linea y
+     sale cortada a mitad de caracter en vez de bajar de linea. Medido: se
+     reproduce con Chrome + fuentes reales de Windows, no con Chromium
+     headless (sustituye una fuente mas estrecha). */
+  .etq-emp, .etq-dir, .etq-loc { min-width:0; overflow-wrap:anywhere; word-break:break-word; }
+  .etq-emp { font-weight:700; font-size:9.68pt; color:#111; text-transform:uppercase;
              line-height:1.2; margin-bottom:2.5mm; }
   .etq-dir { font-size:9.5pt; color:#333; line-height:1.35; }
   .etq-loc { font-size:9.5pt; color:#333; line-height:1.35; margin-top:1mm; }
 
-  /* ---- A4: 2 columnas x 5 filas = 10 etiquetas por pagina ---- */
-  @page { size:A4 portrait; margin:8mm; }
+  /* ---- A4: 2 columnas x 6 filas = 12 etiquetas por pagina (teorico; ver
+     comentario en .hoja sobre el margen real de la impresora) ---- */
+  @page { size:A4 portrait; margin:10mm; }
   @media print {
     body { background:#fff; color:#000; }
     header.top, #map, .filtros, main.grid, details.aviso, footer, .etq-bar { display:none !important; }
@@ -87,9 +112,17 @@
                  background:#fff; padding:0; margin:0; }
     dialog#etq::backdrop { display:none; }
     .hoja { padding:0; display:grid;
-            grid-template-columns:repeat(2,88mm);
-            grid-auto-rows:52mm; gap:0; }
-    .etq { border:0; outline:1px dashed #d5d9e0; break-inside:avoid; page-break-inside:avoid; }
+            grid-template-columns:repeat(2,75mm);
+            grid-auto-rows:41.8mm; gap:0; }
+    /* outline no se puede colorear lado a lado (es un solo trazo perimetral);
+       para dejar transparente solo el borde inferior de la ultima fila hace
+       falta border (box-sizing:border-box ya lo absorbe en el 75x41.8mm
+       declarado, así que no cambia el tamaño de la celda). */
+    .etq { border:1px dashed rgba(213, 217, 224, 0.1); break-inside:avoid; page-break-inside:avoid; }
+    /* Cadencia real (5 filas/pagina = 10 etiquetas/pagina), no la teorica de
+       6 filas/12 etiquetas que da el calculo en mm - ver comentario junto a
+       la regla .hoja de mas arriba. */
+    .etq:nth-child(10n-1), .etq:nth-child(10n) { border-bottom-color:transparent; }
   }
 </style>
 </head>
