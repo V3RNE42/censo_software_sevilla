@@ -45,7 +45,7 @@ def card(e):
 
 
 def main():
-    empresas = json.load(open(DATA))
+    empresas = json.load(open(DATA, encoding="utf-8"))
     orden = sorted(empresas, key=lambda e: (e.get("nombre_normalizado") or "").lower())
     for i, e in enumerate(orden, 1):
         e["numero"] = i

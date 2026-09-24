@@ -77,17 +77,14 @@
      en mm cuadre con la hoja teorica A4: el hardware del propio dispositivo
      recorta mas cerca del borde. */
   .hoja { display:grid; grid-template-columns:repeat(2,75mm);
-          grid-auto-rows:41.8mm; gap:0; align-content:start; }
-  .etq { width:75mm; height:41.8mm; box-sizing:border-box; padding:5mm 9%; overflow:hidden;
+          grid-auto-rows:34.83mm; gap:0; align-content:start; }
+  .etq { width:75mm; height:34.83mm; box-sizing:border-box; padding:5mm 9%; overflow:hidden;
          border:1px dashed rgba(201, 206, 217, 0.1); display:flex; flex-direction:column; justify-content:center;
          min-width:0; }
-  /* Cadencia real, no la teorica: la hoja A4 con margin:10mm y filas de
-     41.8mm "deberia" dar 6 filas/pagina (12n-1/12n), pero la impresora real
-     (Brother DCP-L2627DWE) solo mete 5 filas/pagina - medido con "42 hojas de
-     papel" en el dialogo de impresion real para 413 etiquetas
-     (413/10 = 41.3 -> 42, no 413/12 = 34.4 -> 35). Mismo desfase CSS-vs-hardware
-     que ya paso con el ancho de columna: no basta con el calculo en mm. */
-  .etq:nth-child(10n-1), .etq:nth-child(10n) { border-bottom-color:transparent; }
+  /* 6 filas x 34.83mm = 208.98mm, el mismo espacio vertical que ya probaron
+     5 filas x 41.8mm=209mm en la impresora real (Brother DCP-L2627DWE) -
+     mismo total, repartido en una fila mas. Altura reducida 16.6% (5/6). */
+  .etq:nth-child(12n-1), .etq:nth-child(12n) { border-bottom-color:transparent; }
   /* min-width:0 + overflow-wrap: el ancho fijo (88mm) no basta por si solo -
      un item de flex/grid no encoge por debajo del min-content de su texto
      (min-width:auto, por defecto) aunque el padre declare overflow:hidden.
@@ -97,13 +94,12 @@
      reproduce con Chrome + fuentes reales de Windows, no con Chromium
      headless (sustituye una fuente mas estrecha). */
   .etq-emp, .etq-dir, .etq-loc { min-width:0; overflow-wrap:anywhere; word-break:break-word; }
-  .etq-emp { font-weight:700; font-size:9.68pt; color:#111; text-transform:uppercase;
+  .etq-emp { font-weight:700; font-size:9.1pt; color:#111; text-transform:uppercase;
              line-height:1.2; margin-bottom:2.5mm; }
-  .etq-dir { font-size:9.5pt; color:#333; line-height:1.35; }
-  .etq-loc { font-size:9.5pt; color:#333; line-height:1.35; margin-top:1mm; }
+  .etq-dir { font-size:8.93pt; color:#333; line-height:1.35; }
+  .etq-loc { font-size:8.93pt; color:#333; line-height:1.35; margin-top:1mm; }
 
-  /* ---- A4: 2 columnas x 6 filas = 12 etiquetas por pagina (teorico; ver
-     comentario en .hoja sobre el margen real de la impresora) ---- */
+  /* ---- A4: 2 columnas x 6 filas = 12 etiquetas por página ---- */
   @page { size:A4 portrait; margin:10mm; }
   @media print {
     body { background:#fff; color:#000; }
@@ -113,16 +109,14 @@
     dialog#etq::backdrop { display:none; }
     .hoja { padding:0; display:grid;
             grid-template-columns:repeat(2,75mm);
-            grid-auto-rows:41.8mm; gap:0; }
+            grid-auto-rows:34.83mm; gap:0; }
     /* outline no se puede colorear lado a lado (es un solo trazo perimetral);
        para dejar transparente solo el borde inferior de la ultima fila hace
        falta border (box-sizing:border-box ya lo absorbe en el 75x41.8mm
        declarado, así que no cambia el tamaño de la celda). */
-    .etq { border:1px dashed rgba(213, 217, 224, 0.1); break-inside:avoid; page-break-inside:avoid; }
-    /* Cadencia real (5 filas/pagina = 10 etiquetas/pagina), no la teorica de
-       6 filas/12 etiquetas que da el calculo en mm - ver comentario junto a
-       la regla .hoja de mas arriba. */
-    .etq:nth-child(10n-1), .etq:nth-child(10n) { border-bottom-color:transparent; }
+    .etq { height:34.83mm; border:1px dashed rgba(213, 217, 224, 0.1); break-inside:avoid; page-break-inside:avoid; }
+    /* 6 filas/página = 12 etiquetas/página. */
+    .etq:nth-child(12n-1), .etq:nth-child(12n) { border-bottom-color:transparent; }
   }
 </style>
 </head>
@@ -6804,7 +6798,7 @@ function aplicaEtq() {
   });
   const p = prov.value ? ` · ${NOMBRES[prov.value]}` : '';
   document.getElementById('etq-count').textContent =
-    `${n} etiquetas${p} · ${Math.ceil(n / 10)} páginas A4`;
+    `${n} etiquetas${p} · ${Math.ceil(n / 12)} páginas A4`;
   return n;
 }
 
