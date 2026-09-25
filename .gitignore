@@ -5,3 +5,4 @@ __pycache__/
 *.pyc
 .playwright-cli/
 data/_consultadas.txt
+data/borme_cache/
