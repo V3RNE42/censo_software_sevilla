@@ -223,33 +223,6 @@
   "fecha_verificacion": "2026-09-25"
  },
  {
-  "id": "sin-0009",
-  "nombre": "ATLANTYQA SOVEREIGN SYSTEMS SL.",
-  "consulta_maps": "ATLANTYQA SOVEREIGN SYSTEMS Huelva",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "SIN_DATOS",
-  "razones": [
-   "consentimiento no resuelto",
-   "no equivale a cerrado: reintentar"
-  ],
-  "nombre_en_maps": "",
-  "place_id": null,
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": null,
-  "cerrado_permanente": null,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": null,
-  "reviews": [],
-  "error": "consentimiento no resuelto",
-  "segundos": 97.2,
-  "fecha_verificacion": "2026-09-25"
- },
- {
   "id": "sin-0010",
   "nombre": "ATLANTYQA SOVEREIGN SYSTEMS SL.",
   "consulta_maps": "ATLANTYQA SOVEREIGN SYSTEMS Isla Cristina",
@@ -301,33 +274,6 @@
   "reviews": [],
   "error": null,
   "segundos": 42.9,
-  "fecha_verificacion": "2026-09-25"
- },
- {
-  "id": "sin-0012",
-  "nombre": "Avr Soft",
-  "consulta_maps": "Avr Soft Lepe Huelva",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "REVISAR",
-  "razones": [
-   "sin reseñas con fecha (¿negocio sin volumen de reseñas?)",
-   "señales: web"
-  ],
-  "nombre_en_maps": "AVR Soft",
-  "place_id": "ChIJhRM4b6IxEA0R9joYAw5OcGw",
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": "avrsoft.es",
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": null,
-  "reviews": [],
-  "error": null,
-  "segundos": 47.9,
   "fecha_verificacion": "2026-09-25"
  },
  {
@@ -1233,33 +1179,6 @@
   "fecha_verificacion": "2026-09-25"
  },
  {
-  "id": "sin-0044",
-  "nombre": "NCYNA SYSTEMS SL.",
-  "consulta_maps": "NCYNA SYSTEMS Aracena",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "REVISAR",
-  "razones": [
-   "sin reseñas con fecha (¿negocio sin volumen de reseñas?)",
-   "señales: web"
-  ],
-  "nombre_en_maps": "NCYNA Systems",
-  "place_id": "ChIJBTMJKFh7EQ0RyVDmfGAzd5c",
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": "ncyna.com",
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": null,
-  "reviews": [],
-  "error": null,
-  "segundos": 43.7,
-  "fecha_verificacion": "2026-09-25"
- },
- {
   "id": "sin-0045",
   "nombre": "Nebulous Systems",
   "consulta_maps": "Nebulous Systems Huelva",
@@ -1802,33 +1721,6 @@
   ],
   "error": null,
   "segundos": 44.1,
-  "fecha_verificacion": "2026-09-25"
- },
- {
-  "id": "sin-0063",
-  "nombre": "RmV Software",
-  "consulta_maps": "RmV Software Bollullos Par Del Condado Huelva",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "REVISAR",
-  "razones": [
-   "sin reseñas con fecha (¿negocio sin volumen de reseñas?)",
-   "señales: web"
-  ],
-  "nombre_en_maps": "RMV Software",
-  "place_id": "ChIJK1vox2PxEQ0ReOiJUBpR-xU",
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": "rmvsoftware.com",
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": null,
-  "reviews": [],
-  "error": null,
-  "segundos": 50.0,
   "fecha_verificacion": "2026-09-25"
  },
  {
@@ -9052,34 +8944,6 @@
   "fecha_verificacion": "2026-09-25"
  },
  {
-  "id": "sev-0002",
-  "nombre": "Accenture",
-  "consulta_maps": "Accenture Sevilla",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "REVISAR",
-  "razones": [
-   "sin reseñas con fecha (¿negocio sin volumen de reseñas?)",
-   "señales: telefono, resenas, categoria",
-   "recuperado por maps_http (sin navegador)"
-  ],
-  "nombre_en_maps": "Accenture",
-  "place_id": "ChIJGYult41rEg0Rn_2CCQiZPRM",
-  "maps_total": 112,
-  "rating": 4.4,
-  "categoria_maps": null,
-  "telefono_maps": "954 46 81 50",
-  "web_maps": null,
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": null,
-  "reviews": [],
-  "error": null,
-  "segundos": 55.7,
-  "fecha_verificacion": "2026-09-25"
- },
- {
   "id": "sev-0003",
   "nombre": "Acciparte",
   "consulta_maps": "Acciparte Sevilla",
@@ -11409,46 +11273,6 @@
   "fecha_verificacion": "2026-09-25"
  },
  {
-  "id": "sev-0095",
-  "nombre": "Michael Page",
-  "consulta_maps": "Michael Page Sevilla",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "OK",
-  "razones": [
-   "reseña hace ~1 meses",
-   "señales: web"
-  ],
-  "nombre_en_maps": "Michael Page",
-  "place_id": "ChIJ96W4FypsEg0Rk0W8cF4TJQo",
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": "michaelpage.es",
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": 30,
-  "reviews": [
-   {
-    "name": "Cristina OR",
-    "when": "a month ago"
-   },
-   {
-    "name": "Antonio Escribano",
-    "when": "7 months ago"
-   },
-   {
-    "name": "MANUEL ORDOÑEZ BOYER",
-    "when": "7 months ago"
-   }
-  ],
-  "error": null,
-  "segundos": 43.1,
-  "fecha_verificacion": "2026-09-25"
- },
- {
   "id": "sev-0096",
   "nombre": "Midway Technologies S.L.",
   "consulta_maps": "Midway Technologies Sevilla",
@@ -11973,46 +11797,6 @@
   "reviews": [],
   "error": null,
   "segundos": 46.3,
-  "fecha_verificacion": "2026-09-25"
- },
- {
-  "id": "sev-0118",
-  "nombre": "Pulsia Technology",
-  "consulta_maps": "Pulsia Technology Sevilla",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "REVISAR",
-  "razones": [
-   "reseña más reciente hace ~61 meses (> 4 años)",
-   "antigüedad de reseñas NO prueba cierre: falso negativo probable"
-  ],
-  "nombre_en_maps": "Pulsia Technology",
-  "place_id": "ChIJ__-_U5huEg0Rx-uqGOjqN7Y",
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": "pulsia.es",
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": 1825,
-  "reviews": [
-   {
-    "name": "Agustin Garcia Jimenez",
-    "when": "5 years ago"
-   },
-   {
-    "name": "Fotografía de Larriva",
-    "when": "5 years ago"
-   },
-   {
-    "name": "Luis Amigo",
-    "when": "8 years ago"
-   }
-  ],
-  "error": null,
-  "segundos": 44.4,
   "fecha_verificacion": "2026-09-25"
  },
  {
@@ -12672,33 +12456,6 @@
   ],
   "error": null,
   "segundos": 34.3,
-  "fecha_verificacion": "2026-09-25"
- },
- {
-  "id": "sev-0149",
-  "nombre": "T-Systems",
-  "consulta_maps": "T-Systems A Coruna",
-  "estado_dataset": "ACTIVO",
-  "veredicto": "REVISAR",
-  "razones": [
-   "sin reseñas con fecha (¿negocio sin volumen de reseñas?)",
-   "señales: web"
-  ],
-  "nombre_en_maps": "T-Systems",
-  "place_id": "ChIJlyK8MW59Lg0RdrR6LzY8JJw",
-  "maps_total": null,
-  "rating": null,
-  "categoria_maps": null,
-  "telefono_maps": null,
-  "web_maps": "t-systems.com",
-  "cerrado_permanente": false,
-  "mensaje_maps": null,
-  "telefono_coincide": null,
-  "web_coincide": null,
-  "dias_ultima_resena": null,
-  "reviews": [],
-  "error": null,
-  "segundos": 45.4,
   "fecha_verificacion": "2026-09-25"
  },
  {
