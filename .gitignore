@@ -5,4 +5,3 @@ __pycache__/
 *.pyc
 .playwright-cli/
 data/_consultadas.txt
-data/actividad_maps.json
