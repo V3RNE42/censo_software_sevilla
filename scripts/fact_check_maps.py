@@ -37,15 +37,20 @@ SCRIPTS_SKILL = os.path.expanduser(
 
 # --- parseo de fechas relativas de Google Maps ---------------------------------
 
-_UNIDAD_DIAS = [          # (raíz de 3 letras, días)
-    (("dia",), 1),
-    (("sem",), 7),
-    (("mes",), 30),
-    (("ano",), 365),
+_UNIDAD_DIAS = [          # (raíz de 3 letras, días) — ES + EN
+    (("dia", "day"), 1),
+    (("sem", "wee"), 7),
+    (("mes", "mon"), 30),
+    (("ano", "yea"), 365),
+    (("hor", "hou"), 1 / 24),   # Google usa 'hours ago' en reseñas del mismo día
 ]
 _NUMERO = {
+    # ES
     "un": 1, "una": 1, "uno": 1, "dos": 2, "tres": 3, "cuatro": 4, "cinco": 5,
     "seis": 6, "siete": 7, "ocho": 8, "nueve": 9, "diez": 10, "once": 11, "doce": 12,
+    # EN — 'a year ago' es 1; 'an hour ago' también.
+    "a": 1, "an": 1, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5,
+    "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10, "eleven": 11, "twelve": 12,
 }
 
 
@@ -55,7 +60,12 @@ def dias_desde(when):
         return None
     s = unicodedata.normalize("NFKD", when.lower())
     s = "".join(c for c in s if not unicodedata.combining(c)).replace("ñ", "n")
-    m = re.search(r"hace\s+(\d+|[a-zñ]+)\s+([a-zñ]+)", s)
+    # Google sirve las reseñas en el idioma del navegador: 'hace 2 años' (es)
+    # o '2 years ago' (en-US, locale por defecto de Playwright). Sin el 'ago'
+    # opcional, el parser devolvía None en TODAS las fichas y el veredicto
+    # caía siempre en REVISAR (verificado 2026-09-25: 69/69).
+    m = re.search(r"(?:hace\s+)?(\d+|[a-zñ]+)\s+([a-zñ]+)(?:\s+ago)?", s) or \
+        re.search(r"hace\s+(\d+|[a-zñ]+)\s+([a-zñ]+)", s)
     if not m:
         return None
     n_txt, unidad = m.group(1), m.group(2)
@@ -65,8 +75,8 @@ def dias_desde(when):
     for variantes, dias in _UNIDAD_DIAS:
         # 'meses' y 'mes' comparten raíz 'mes'; 'semanas'/'semana' la suya.
         # No vale rstrip('s'): de 'meses' quita una sola 's' -> 'mese' != 'mes'.
-        # Se corta a 3 letras, que es la raíz real de las cuatro unidades.
-        if unidad[:3] == variantes[0]:
+        # Se corta a 3 letras, que es la raíz real de las unidades (ES y EN).
+        if unidad[:3] in variantes:
             return n * dias
     return None
 
@@ -145,17 +155,31 @@ def cli_raw(expr, timeout=60, session=None):
 
 def acepta_consentimiento(session=None):
     """Rechaza el muro de cookies. Un click basta; reintentar no ayuda porque el
-    navegador se relanza en cada intento y vuelve al mismo muro."""
-    for _ in range(2):
+    navegador se relanza en cada intento y vuelve al mismo muro.
+
+    El botón llega en el idioma del navegador, y playwright-cli NO permite fijar
+    el locale (verificado 2026-09-25: no hay flag --locale ni clave en
+    cli.config.json; el paquete no contiene la cadena 'locale'). Por eso el
+    patrón es bilingüe y por submatch, no por nombre exacto.
+    """
+    for _ in range(3):
         if "consent.google.com" not in str(cli_raw("document.location.href",
                                                    session=session) or ""):
             return True
         snap = cli("--raw", "snapshot", session=session)
-        m = re.search(r'button "Rechazar todo".*?\[ref=(\w+)\]', snap, re.S)
+        # 'Rechazar todo' (es) | 'Reject all' (en) | variantes de Aceptar.
+        m = re.search(r'button "(?:Rechazar todo|Reject all|Aceptar todo|'
+                      r'Accept all)"[^\n]*?\[ref=(\w+)\]', snap)
         if not m:
-            time.sleep(3)          # el muro tarda en renderizar el botón
-            continue
-        cli("click", m.group(1), session=session)
+            m = re.search(r'button "([^"]*(?:Rechazar|Reject|Aceptar|Accept)[^"]*)"'
+                          r'[^\n]*?\[ref=(\w+)\]', snap)
+            if m:
+                cli("click", m.group(2), session=session)
+            else:
+                time.sleep(3)      # el muro tarda en renderizar el botón
+                continue
+        else:
+            cli("click", m.group(1), session=session)
         time.sleep(4)              # el redirect a Maps no es instantáneo
     return "consent.google.com" not in str(cli_raw("document.location.href",
                                                    session=session) or "")
@@ -475,6 +499,24 @@ def demo():
     assert dias_desde("Hace 2 meses") == 60
     assert dias_desde("hace 3 semanas") == 21
 
+    # regresión 2026-09-25: Google sirve las reseñas en INGLÉS con el locale por
+    # defecto de Playwright. El parser solo entendía 'hace N unidad' -> devolvía
+    # None en todas las fichas -> veredicto REVISAR en el 100% (69/69). Estas
+    # aserciones fallan si alguien vuelve a romper el soporte EN.
+    assert dias_desde("2 years ago") == 730
+    assert dias_desde("5 years ago") == 1825
+    assert dias_desde("6 months ago") == 180
+    assert dias_desde("3 weeks ago") == 21
+    assert dias_desde("5 days ago") == 5
+    assert dias_desde("a year ago") == 365
+    assert dias_desde("2 years ago ") == 730        # espacio sobrante
+    d_hora = dias_desde("an hour ago")
+    assert d_hora is not None and d_hora < 1      # 'hours ago' = mismo día
+    assert dias_desde("edited 3 months ago") == 90  # Google antepone 'edited'
+    # el caso mixto debe seguir funcionando o la corrección EN rompió el ES
+    assert dias_desde("hace 2 años") == 730
+    assert dias_desde("just now") is None
+
     f = {"nombre": "Emergya"}
     d = {"nombre_en_maps": "Emergya", "pid": "ChIJ", "total": 63, "tel": "954",
          "web": "x.es", "cat": "Software", "reviews": [{"when": "Hace 19 meses"}]}
@@ -489,6 +531,20 @@ def demo():
     # regresión: el muro de cookies renderiza un h1 y NO es un negocio
     assert veredicto(f, {"error": "consentimiento no resuelto",
                          "nombre_en_maps": "Antes de ir a Google"})[0] == "SIN_DATOS"
+    # regresión 2026-09-25: el botón del muro se buscaba SOLO en español
+    # ('Rechazar todo'). playwright-cli no permite fijar locale (no existe
+    # --locale ni clave en cli.config.json), así que el navegador negocia el
+    # idioma y el botón puede llegar como 'Reject all' -> nunca se encontraba
+    # -> 2 sleeps de 3s y SIN_DATOS. El patrón debe aceptar ambas lenguas.
+    for txt in ["Rechazar todo", "Reject all", "Aceptar todo", "Accept all"]:
+        snap = f'- button "{txt}" [ref=abc123] [cursor=pointer]'
+        mm = re.search(r'button "(?:Rechazar todo|Reject all|Aceptar todo|'
+                       r'Accept all)"[^\n]*?\[ref=(\w+)\]', snap)
+        assert mm and mm.group(1) == "abc123", f"no casa el boton {txt!r}"
+    # la vista degradada de Maps no trae datos: nombre correcto pero cero
+    # señales -> SIN_DATOS (no REVISAR, que es lo que da un nombre que no casa).
+    assert veredicto({"nombre": "AFP Informáticos"},
+                     {"nombre_en_maps": "AFP Informáticos"})[0] == "SIN_DATOS"
     # regresión: el navegador muerto no debe confundirse con un cierre
     assert veredicto(f, {"error": "navegador no abierto"})[0] == "SIN_DATOS"
     # regresión: 'no encuentra' es concluyente, no un fallo técnico
