@@ -77,6 +77,60 @@ def _rating(nod):
         return None
 
 
+def _sin_ciudad(consulta):
+    """'Aire Networks del Mediterráneo Málaga' -> 'Aire Networks del Mediterráneo'.
+
+    Las consultas del censo llevan la provincia pegada al nombre y Google
+    devuelve ficha vacia al no casar la cadena literal. Medido 2026-09-25:
+    recupera ATLANTYQA, Onlinehuelva y Aire Networks.
+    """
+    if not consulta:
+        return None
+    p = consulta.split("|")[0]          # 'Onlinehuelva | Diseño Web ... Huelva'
+    for ciudad in ("Huelva", "Sevilla", "Málaga", "Malaga", "Cádiz", "Cadiz",
+                   "Córdoba", "Cordoba", "Granada", "Almería", "Almeria",
+                   "Jaén", "Jaen", "Paterna del Campo", "Dos Hermanas"):
+        if p.endswith(" " + ciudad):
+            p = p[: -len(ciudad) - 1]
+            break
+    p = p.strip()
+    return p if p and p != consulta else None
+
+
+def _plausible(d, consulta):
+    """Descarta fichas de OTRA empresa que Google devuelve al soltar la ciudad.
+
+    Sin este filtro, 'ATLANTYQA SOVEREIGN SYSTEMS Huelva' sin ciudad devuelve
+    Sovereign Systems de Indiana (+1 317-409-5064) -- medido 2026-09-25.
+    Un dato de otra empresa es peor que ningun dato.
+
+    Endurecido tras ver los resultados del primer pase: cuando Google devuelve
+    el nodo sin `nombre_en_maps` solo trae ficha de homonimo ('Aiknow' ->
+    Hotel Alfonso XIII de Marriott, 'RENTIKAR' -> alquiler de coches). Sin
+    nombre que confirme la identidad, el fallback se RECHAZA: preferimos
+    SIN_DATOS a una ficha de otra empresa.
+    """
+    tel = (d.get("telefono") or "").replace(" ", "")
+    if tel.startswith("+") and not tel.startswith("+34"):
+        return False
+    nombre = (d.get("nombre_en_maps") or "").lower()
+    if not nombre:
+        return False                       # sin nombre no hay confirmacion
+    palabras = [w for w in re.split(r"[^a-z0-9]+", consulta.lower())
+                if len(w) > 3 and w not in
+                ("huelva", "sevilla", "malaga", "málaga", "andalucia",
+                 "andaluces", "software", "sociedad",
+                 # genericas: 'RentalPlus' colaba por 'plus' -- medido 2026-09-25
+                 "plus", "group", "grupo", "solutions", "soluciones",
+                 "technology", "technologies", "tecnologia", "tecnologias",
+                 "digital", "digitals", "systems", "sistemas", "global",
+                 "consulting", "consultoria", "internet", "servicios",
+                 "services", "informatica", "data", "tech", "labs", "net")]
+    if not palabras:
+        return False
+    return any(w in nombre for w in palabras)
+
+
 def extrae(consulta, intentos=2, pausa=0.4, con_volumen=False):
     """Datos de ficha por HTTP. ~0.5s por intento.
 
@@ -85,7 +139,34 @@ def extrae(consulta, intentos=2, pausa=0.4, con_volumen=False):
     `intentos` encarece cada ficha sin garantia. Por defecto OFF: rating,
     telefono, web y place_id vienen en ambas variantes, y el volumen es un
     extra, no el dato que decide el veredicto.
+
+    Si la consulta literal no trae ficha, reintenta una vez sin la ciudad
+    (pitfall medido: 'Nombre Provincia' no casa con Google). Todo resultado
+    pasa por `_plausible`, tambien el de la consulta literal: Google devuelve
+    homonimos por busqueda difusa ('GOSISACA' -> goysa.com, 'BEINCERT' ->
+    ecocert.com, 'RENTIKAR' -> rentalplus.es) -- medido 2026-09-25.
     """
+    datos = _extrae_una(consulta, intentos, pausa, con_volumen)
+    if not _vacio(datos) and not _plausible(datos, consulta):
+        datos["descarte"] = "ficha de otra empresa (homonimo)"
+        datos = {"consulta": consulta, "error": None}
+    if _vacio(datos):
+        alt = _sin_ciudad(consulta)
+        if alt:
+            d2 = _extrae_una(alt, 1, pausa, con_volumen)
+            if not _vacio(d2) and _plausible(d2, consulta):
+                d2["consulta"] = consulta
+                d2["consulta_efectiva"] = alt
+                return d2
+    return datos
+
+
+def _vacio(d):
+    return not any(d.get(k) for k in
+                   ("nombre_en_maps", "telefono", "web", "place_id", "rating"))
+
+
+def _extrae_una(consulta, intentos=2, pausa=0.4, con_volumen=False):
     datos = {"consulta": consulta, "error": None}
     for i in range(max(1, intentos)):
         try:

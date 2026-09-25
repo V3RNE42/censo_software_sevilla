@@ -22,7 +22,14 @@ SALIDA = os.path.join(RAIZ, "data", "actividad_maps.json")
 
 
 def a_datos_veredicto(h, fila):
-    """Traduce la salida de maps_http al dict que espera fc.veredicto()."""
+    """Traduce la salida de maps_http al dict que espera fc.veredicto().
+
+    `no_encontrado` va SIEMPRE en False: por HTTP no se puede afirmar que una
+    empresa no existe. El endpoint devuelve vacio tanto si la ficha no existe
+    como si el nombre del censo no casa, y `maps_http` descarta homonimos a
+    proposito. Marcarlo NO_ENCONTRADO daba de baja empresas reales -- medido
+    2026-09-25 con ATLANTYQA, Aiknow, BEINCERT y Cherrytel.
+    """
     return {
         "nombre_en_maps": h.get("nombre_en_maps"),
         "pid": h.get("place_id"),
@@ -31,9 +38,9 @@ def a_datos_veredicto(h, fila):
         "web": h.get("web"),
         "cat": (h.get("categorias") or [None])[0],
         "reviews": [],                # el HTTP no da fechas: sin reseñas datables
-        "error": h.get("error"),
+        "error": None if h.get("nombre_en_maps") or h.get("place_id") else "sin ficha por HTTP",
         "cerrado_permanente": False,
-        "no_encontrado": not h.get("nombre_en_maps"),
+        "no_encontrado": False,
     }
 
 
